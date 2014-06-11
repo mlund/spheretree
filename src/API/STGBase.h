@@ -47,7 +47,7 @@
 
 class STGBase{
   public:
-    virtual void constructTree(SphereTree *st) const = NULL;
+    virtual void constructTree(SphereTree *st) const = 0;
 };
 
 #endif

@@ -79,7 +79,8 @@ bool getFace(VoronoiFace *face, int c1, int c2, const Voronoi3D &vor){
     int currentV = face->vertices.index(numVerts-1);
     const Voronoi3D::Vertex *v = &vor.vertices.index(currentV);
 
-    for (int i = 0; i < 4; i++){
+    int i;
+    for (i = 0; i < 4; i++){
       int nI = v->n[i];
       if (!face->vertices.inList(nI) && commonVerts.inList(nI)){
         break;

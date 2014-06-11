@@ -116,7 +116,7 @@ bool SFRitter::makeSphere(Sphere *s, const Array<Point3D> &pts){
   float rC = sqrt(rCS);
 
   //  second pass - increment current sphere
-  for (i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++){
     Point3D p = pts.index(i);
 
     float oldToPS = pC.distanceSQR(p);

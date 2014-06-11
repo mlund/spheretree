@@ -158,7 +158,7 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
     }
 
   //  count/cover uncovered points
-  for (i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++){
     if (!covered.index(i)){
       //  get the point
       Point3D p = surPts->index(i).p;
@@ -181,7 +181,7 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
 
   //  store spheres & recurse to children 
   int childNum = firstChild;
-  for (i = 0; i < numChildren; i++){
+  for (int i = 0; i < numChildren; i++){
     if (subPts.index(i).getSize() > 1){
       //  recreate the sphere
       Sphere s = children.index(i);
@@ -210,7 +210,7 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
     }
 
   //  NULL out the rest of the spheres
-  for (i = childNum; i < st->degree; i++)
+  for (int i = childNum; i < st->degree; i++)
     st->initNode(firstChild+i, level+1);
 }
 
@@ -372,7 +372,7 @@ printf("DONE OPTIMISING...\n");
       int numChildren = children.getSize();
       int firstChild = st->getFirstChild(node);
       levelChildren += numChildren;
-      for (i = 0; i < numChildren; i++){
+      for (int i = 0; i < numChildren; i++){
         int childNum = firstChild + i;
 
         //  get sphere
@@ -403,7 +403,7 @@ printf("DONE OPTIMISING...\n");
 
       //  assign uncovered points
       if (numChildren > 0 && level < st->levels-2){
-        for (i = 0; i < numSelPts; i++){
+        for (int i = 0; i < numSelPts; i++){
           if (!covered.index(i)){
             //  get point
             Point3D pt = selPts.index(i).p;

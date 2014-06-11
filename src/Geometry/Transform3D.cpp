@@ -133,8 +133,9 @@ bool Transform3D::invertAffine(const Transform3D &tr){
   rotnT.data[3][3] = 1;
 
   Transform3D transI;
-  for (/*int*/ i = 0; i < 4; i++){
-    for (int j = 0; j < 3; j++)
+  for (int i = 0; i < 4; i++){
+    int j;
+    for (j = 0; j < 3; j++)
       if (i == j)
         transI.data[i][j] = 1;
       else

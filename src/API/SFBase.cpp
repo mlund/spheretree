@@ -120,7 +120,7 @@ double refitSphere(Sphere *s, const Array<Surface::Point> &pts, const Array<int>
   //  search for sphere with min error
   int minI = -1;
   double minErr = FLT_MAX;
-  for (i = 0; i < numC+1; i++){
+  for (int i = 0; i < numC+1; i++){
     double err = spheres[i].err;
     if (finite(err) && err < minErr){
       minI = i;

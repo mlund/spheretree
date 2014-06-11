@@ -49,7 +49,7 @@
 class SEBase{
   public:
     //  evaluate the fit of the given sphere
-    virtual float evalSphere(const Sphere &s) const = NULL;
+    virtual float evalSphere(const Sphere &s) const = 0;
 };
 
 #endif

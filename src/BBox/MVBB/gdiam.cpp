@@ -1447,7 +1447,7 @@ void   verify_convex_hull( vec_point_2d  & in, vec_point_2d  & ch )
     assert( Left( *( ch[ ch.size() - 1 ] ), *( ch[ 0 ] ),
                   *( ch[ 1 ] ) ) );
 
-    for  ( /*int*/  ind = 0; ind < (int)( in.size() - 2 ); ind++ ) {
+    for  ( int  ind = 0; ind < (int)( in.size() - 2 ); ind++ ) {
          for  ( int  jnd = 0; jnd < (int)( ch.size() - 1 ); jnd++ ) {
              if  ( ch[ jnd ]->equal_real( *( in[ ind ] ) ) )
                  continue;
@@ -1654,7 +1654,7 @@ struct bbox_2d_info
         for  ( int  ind = 0; ind < 4; ind++ )
             printf( "%d: (%g, %g)\n", ind, vertices[ ind ][0],
                     vertices[ ind ][1] );
-        for  ( /*int*/  ind = 0; ind < 4; ind++ ) {
+        for  ( int  ind = 0; ind < 4; ind++ ) {
             gdiam_point_2d_t  dir;
 
             get_dir( ind, dir );
@@ -2397,12 +2397,12 @@ gdiam_point  * gdiam_convex_sample( gdiam_point  * start, int  size,
     
     // No we stream the points registering them with the relevant
     // shaft in the grid.
-    for  ( /*int*/  ind = 0; ind < size; ind++ ) 
+    for  ( int  ind = 0; ind < size; ind++ ) 
         register_point( start[ ind ], tops, bottoms, 
                         grid_size, bb );
 
     out_count = 0;
-    for  ( /*int*/  ind = 0; ind < grid_entries; ind++ ) {
+    for  ( int  ind = 0; ind < grid_entries; ind++ ) {
         if  ( tops[ ind ] == NULL ) 
             continue;
 

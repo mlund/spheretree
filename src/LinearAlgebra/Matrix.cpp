@@ -187,7 +187,7 @@ bool Matrix::invert(const Matrix &other){
           tmpData[pass][col] /= pivot;
         }
 
-      for (row = 0; row < size; row++)          //  get each other orw to be 0
+      for (int row = 0; row < size; row++)          //  get each other orw to be 0
         if (row != pass){
           REAL factor = tmpData[row][pass];
           for (int col = 0; col < size; col++){
@@ -211,7 +211,7 @@ REAL Matrix::det() const{
     for (int row = 0; row < m; row++)
       det += data[row][(col+row)%n];
 
-  for (col = 0; col < n; col++){
+  for (int col = 0; col < n; col++){
     for (int row = 0; row < m; row++){
       int colI = col - row;
       if (colI < 0)

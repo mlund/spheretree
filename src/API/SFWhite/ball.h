@@ -14,11 +14,15 @@
 #endif
 
 #ifndef NDEBUG
-#include <iostream.h>
+#include <iostream>
 #define WARN_MSG(str) cerr << str
 #else
 #define WARN_MSG(str)
 #endif
+
+using std::cout;
+using std::cerr;
+using std::endl;
 
 // This should be a 32bit unsigned integer
 typedef unsigned long ulong;

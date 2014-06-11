@@ -48,7 +48,7 @@
 
 class VFBase{
   public:
-    virtual void fixVoronoi(Voronoi3D *vor) const = NULL;
+    virtual void fixVoronoi(Voronoi3D *vor) const = 0;
 };
 
 #endif

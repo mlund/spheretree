@@ -444,7 +444,7 @@ void SOSimplex::generateNewPointConfig(Array<Array<int>/**/> *newSphInd, Array<b
   //  to the closest of the other spheres
   const Array<int> *repPts = &sphInd.index(repInd);
   int numRepPts = repPts->getSize();
-  for (i = 0; i < numRepPts; i++){
+  for (int i = 0; i < numRepPts; i++){
     int ind = repPts->index(i);
     if (!cont.index(ind)){
       Point3D p = surPts->index(ind).p;
@@ -569,7 +569,7 @@ void SOSimplex::assignPointsAndGetErr(Array<Array<int>/**/> *sphInd, Array<doubl
     }
 
   //  for those unassigned points - assign to closest point
-  for (i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++){
     if (!used.index(i)){
       //  find the closest sphere
       int minJ = -1;
@@ -588,7 +588,7 @@ void SOSimplex::assignPointsAndGetErr(Array<Array<int>/**/> *sphInd, Array<doubl
     }
 
   //  do sphere refits
-  for (i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++){
     Sphere newS;
     Point3D pOld = sph->index(i).c;
     double err = myRefitSphere(&newS, *surPts, sphInd->index(i), pOld);

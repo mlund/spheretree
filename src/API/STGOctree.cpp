@@ -154,7 +154,7 @@ void STGOctree::getChildren(SphereTree *tree, const Surface &sur, int node, int 
 
   //  invalidate rest of child spheres
   int totChild = divs*divs*divs;
-  for (i = numChildren; i < totChild; i++){
+  for (int i = numChildren; i < totChild; i++){
     int childNum = firstChild+i;
     tree->initNode(childNum, level+1);
     }

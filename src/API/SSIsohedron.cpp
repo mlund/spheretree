@@ -66,7 +66,7 @@ void SSIsohedron::generateSamples(Array<Point3D> *pts, int levels){
     }
 
   //  construct by recursive sub division
-  for (i = 0; i < 20; i++) 
+  for (int i = 0; i < 20; i++) 
     subDivideIso(pts, tindices[i][0], tindices[i][1], tindices[i][2], levels-1);
 }
 
@@ -109,7 +109,8 @@ void SSIsohedron::subDivideIso(Array<Point3D> *pts, int v0, int v1, int v2, int 
 
     //  scan for close point
     int numVert = pts->getSize();
-    for (int j = 0; j < numVert; j++){
+    int j;
+    for (j = 0; j < numVert; j++){
       float d = pts->index(j).distance(newP);
       if (d < EPSILON_LARGE)
         break;            //  won't work for very fine tessellations

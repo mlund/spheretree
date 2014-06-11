@@ -48,7 +48,7 @@
 
 class SSBase {
   public:
-    virtual void generateSamples(Array<Point3D> *pts) const = NULL;
+    virtual void generateSamples(Array<Point3D> *pts) const = 0;
 };
 
 #endif

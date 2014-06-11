@@ -104,7 +104,8 @@ void VFGapCross::intersectFaceCluster(Array<int> *tris, const VoronoiFace &face,
     //  test against each triangle of face
     Point3D p0 = vor.vertices.index(face.vertices.index(0)).s.c;
     int numVert = face.vertices.getSize();
-    for (int j = 0; j < numVert; j++){
+    int j;
+    for (j = 0; j < numVert; j++){
       //  make triangle
       Point3D faceTri[3];
       faceTri[0] = p0;

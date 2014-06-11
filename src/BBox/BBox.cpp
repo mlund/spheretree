@@ -189,7 +189,7 @@ void computeInterialTensor(double **c, const Array<Surface::Point> &pts){
     }
 
   //  diagonals
-  for (j = 0; j < 3; j++){
+  for (int j = 0; j < 3; j++){
     float sum = 0;
     for (int i = 0; i < numVert; i++){
       //  get points
@@ -261,7 +261,8 @@ void computeMVBB(Vector3D v[3], const Array<Surface::Point> &pts){
   gdiam_real *ptr = p_arr;
   for (int i = 0; i < numPts; i++){
     const Point3D *p = &pts.index(i).p;
-    for (int j = 0; j < numUsed; j++){
+    int j;
+    for (j = 0; j < numUsed; j++){
       Point3D q = {p_arr[3*j], p_arr[3*j+1], p_arr[3*j+2]};
       if (p->distance(q) < EPSILON_LARGE)
         break;

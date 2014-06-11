@@ -55,7 +55,7 @@ class SOBase{
     SOBase();
 
     virtual void optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, float stopBelow = -1, 
-                          const Sphere *parSph = NULL, int level = 0) const = NULL;
+                          const Sphere *parSph = NULL, int level = 0) const = 0;
 };
 
 #endif

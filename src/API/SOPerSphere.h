@@ -65,7 +65,7 @@ class SOPerSphere : public SOBase{
       const SEBase *eval;
       const Array<Point3D> *selPts;
       };
-    static double SOPerSphere::fitFunc(double vals[], void *data, int *canFinish);
+    static double fitFunc(double vals[], void *data, int *canFinish);
 };
 
 #endif

@@ -88,7 +88,7 @@ void SOPerSphere::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, flo
       }
 
     //  assign uncovered points
-    for (i = 0; i < numPts; i++)
+    for (int i = 0; i < numPts; i++)
       if (!coveredPts.index(i)){
         Point3D p = surPts->index(i).p;
 
@@ -107,7 +107,7 @@ void SOPerSphere::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, flo
         }
 
     //  do optimisations
-    for (i = 0; i < numSpheres; i++){
+    for (int i = 0; i < numSpheres; i++){
       Sphere s = spheres->index(i);
       optimise(&s, pointsInSphere.index(i));
       spheres->index(i) = s;

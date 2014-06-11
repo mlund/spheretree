@@ -51,7 +51,8 @@ void getClusters(Array<Array<int>/**/> *clusters, const Surface &sur, float tol)
   int numUnclustered = numTri;
   while (numUnclustered){
     //  find the first unclustered triangle
-    for (int i = 0; i < numTri; i++)
+    int i;
+    for (i = 0; i < numTri; i++)
       if (!clustered.index(i))
         break;
 
@@ -86,7 +87,8 @@ void getClusters(Array<Array<int>/**/> *clusters, const Surface &sur, float tol)
       if (!clustered.index(triN)){
         //  do planar check
         const Surface::Triangle *tri = &sur.triangles.index(triN);
-        for (int j = 0; j < 3; j++)
+        int j;
+        for (j = 0; j < 3; j++)
           if (fabs(clusterPlane.dist(sur.vertices.index(tri->v[j]).p)) > tol)
             break;
 
@@ -156,7 +158,7 @@ void getClusterInfo(ClusterInfo *inf, const Surface &sur, float tol){
   for (int i = 0; i < numClusters; i++)
     inf->neighbours.index(i).setSize(0);
 
-  for (i = 0; i < numClusters; i++)
+  for (int i = 0; i < numClusters; i++)
     for (int j = i+1; j < numClusters; j++)
       if (areNeighbours(inf->clusters, sur, i, j)){
         inf->neighbours.index(i).addItem() = j;

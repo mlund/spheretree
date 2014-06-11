@@ -64,7 +64,7 @@ class MSRelaxation : public MSBase{
     void setSurface(const Surface &sur);
 
     //  sample
-    virtual void generateSamples(Array<Surface::Point> *pts, int numSamples) const = NULL;
+    virtual void generateSamples(Array<Surface::Point> *pts, int numSamples) const = 0;
     static void generateSamples(Array<Surface::Point> *pts, int numSamples, const Surface &sur, bool useVert, float edgeFrac = 0.1f, int maxIter = 50);
 
   private:

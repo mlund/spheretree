@@ -67,8 +67,8 @@ class SRStandOff : public SRBase{
     void getSpheres(Array<Sphere> *spheres, int numDest, const SurfaceRep &surRep, const Sphere *filterSphere = NULL, float parSphErr = -1) const;
 
     //  overload this to get the spheres
-    virtual bool generateStandOffSpheres(Array<Sphere> *spheres, float err, const SurfaceRep &surRep, int  maxNum = -1, int tryIter = 0, const Sphere *parSph = NULL) const = NULL;
-    virtual bool setupFilterSphere(const Sphere *filterSphere, float parSphErr, const SurfaceRep *surRep) const = NULL;
+    virtual bool generateStandOffSpheres(Array<Sphere> *spheres, float err, const SurfaceRep &surRep, int  maxNum = -1, int tryIter = 0, const Sphere *parSph = NULL) const = 0;
+    virtual bool setupFilterSphere(const Sphere *filterSphere, float parSphErr, const SurfaceRep *surRep) const = 0;
 };
 
 

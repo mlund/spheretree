@@ -105,7 +105,7 @@ class Voronoi3D{
     //  insert a new forming point
     class Tester{
       public:
-        virtual bool test(const Sphere &s) const = NULL;
+        virtual bool test(const Sphere &s) const = 0;
       };
 
     bool insertPoint(const Point3D &p, const Vector3D &n, int startVertex = -1, const Tester *tester = NULL);

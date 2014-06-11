@@ -64,7 +64,7 @@ int REMaxElim::selectSphere(const Array<int> &counts,
 
     //  count the spheres that will be removed
     int count = 0;
-    for (j = 0; j < numSph; j++){
+    for (int j = 0; j < numSph; j++){
       //  only do valid spheres
       if (j == i || counts.index(j) <= 0)
         continue;
@@ -78,7 +78,8 @@ int REMaxElim::selectSphere(const Array<int> &counts,
       //  check if the sphere will be redundent
       const Array<int> *list = &pointsPerSphere.index(j);
       int numList = list->getSize();
-      for (int k = 0; k < numList; k++){
+      int k;
+      for (k = 0; k < numList; k++){
         int num = list->index(k);
         if (!tmpCover.index(num))
           break;

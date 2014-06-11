@@ -123,7 +123,7 @@ void MSGrid::sampleTriangleGrid(Array<Point3D> *pts, int n, const Point3D p[3]){
     tr.transformTo2D(&q[i], p[i]);
 
   Line2D l[3];
-  for (i = 0; i < 3; i++){
+  for (int i = 0; i < 3; i++){
     Point2D p0 = q[i];
     Point2D p1 = q[(i+1)%3];
     l[i].assign(p0, p1);
@@ -132,7 +132,7 @@ void MSGrid::sampleTriangleGrid(Array<Point3D> *pts, int n, const Point3D p[3]){
   //  get bounding box
   Point2D pMin = Point2D::MAX;
   Point2D pMax = Point2D::MIN;
-  for (i = 0; i < 3; i++){
+  for (int i = 0; i < 3; i++){
     pMin.storeMin(q[i]);
     pMax.storeMax(q[i]);
     }
@@ -148,7 +148,7 @@ void MSGrid::sampleTriangleGrid(Array<Point3D> *pts, int n, const Point3D p[3]){
   //  step out grid
   float dX = (pMax.x - pMin.x) / cellsX * 0.99;
   float dY = (pMax.y - pMin.y) / cellsY * 0.99;
-  for (i = 0; i <= cellsY+1; i++)
+  for (int i = 0; i <= cellsY+1; i++)
     for (int j = 0; j <= cellsX+1; j++){
       Point2D q;
       q.x = pMin.x + dX*j;

@@ -69,7 +69,7 @@ class RESelect : public REBase{
     virtual int selectSphere(const Array<int> &counts, 
                              const Array<bool> &coveredPts, 
                              const Array<Array<int>/**/> &pointsPerSphere,
-                             double *selMet = NULL, double maxMet = -1) const = NULL;
+                             double *selMet = NULL, double maxMet = -1) const = 0;
   private:
     //  lists of spheres which cover each point
     Array<Array<int>/**/> spheresPerPoint;

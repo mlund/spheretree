@@ -56,7 +56,7 @@ class SFBase{
     bool fitSphere(Sphere *s, const Array<Surface::Point> &points, const Array<int> &inds) const;
 
     //  implementation
-    virtual bool fitSphere(Sphere *s, const Array<Point3D> &points) const = NULL;
+    virtual bool fitSphere(Sphere *s, const Array<Point3D> &points) const = 0;
 
   protected:
     //  utilities

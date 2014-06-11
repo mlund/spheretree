@@ -90,7 +90,8 @@ bool SRSpawn::generateSpheres(Array<Sphere> *sph, float err, const SurfaceRep &s
       }
     else{
       //  create initial sphere (guarantee it will be ok)
-      for (int i = 0; i < numPts; i++)
+      int i;
+      for (i = 0; i < numPts; i++)
         if (!cont.index(i) && !tried.index(i))
           break;
 

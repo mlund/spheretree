@@ -51,9 +51,9 @@
 
 class SRBase{
   public:
-    virtual void setupForLevel(int level, int degree, const SurfaceRep *surRep = NULL) const = NULL;
+    virtual void setupForLevel(int level, int degree, const SurfaceRep *surRep = NULL) const = 0;
 
-    virtual void getSpheres(Array<Sphere> *spheres, int n, const SurfaceRep &surRep, const Sphere *filterSphere = NULL, float parSphereErr = -1) const = NULL;
+    virtual void getSpheres(Array<Sphere> *spheres, int n, const SurfaceRep &surRep, const Sphere *filterSphere = NULL, float parSphereErr = -1) const = 0;
 };
 
 #endif

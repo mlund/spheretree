@@ -87,7 +87,7 @@ void SRMerge::getSpheres(Array<Sphere> *spheres, int numDest, const SurfaceRep &
     coverRep = &localCoverPts;
 
     //  replace point indices for the medial spheres
-    for (i = 0; i < numSpheres; i++){
+    for (int i = 0; i < numSpheres; i++){
       //  get medial sphere
       MedialSphere *ms = &medialSpheres.index(i);
 
@@ -145,7 +145,7 @@ void SRMerge::getSpheres(Array<Sphere> *spheres, int numDest, const SurfaceRep &
 
       //  try to find improvement to worst error
       float minCost = 0;      
-      for (i = 0; i < numMergers; i++){
+      for (int i = 0; i < numMergers; i++){
         const Merger *m = &mergers.index(i);
         const MedialSphere *ms1 = &medialSpheres.index(m->i1);
         const MedialSphere *ms2 = &medialSpheres.index(m->i2);
@@ -183,7 +183,7 @@ void SRMerge::getSpheres(Array<Sphere> *spheres, int numDest, const SurfaceRep &
     if (numSpheres < doRedundantCheckBelow){  //  shouldn't really be used with useForming
       Array<Sphere> srcSph;
       int numSph = medialSpheres.getSize();
-      for (i = 0; i < numSph; i++)
+      for (int i = 0; i < numSph; i++)
         if (medialSpheres.index(i).valid)
           srcSph.addItem() = medialSpheres.index(i).s;
 
@@ -201,7 +201,7 @@ void SRMerge::getSpheres(Array<Sphere> *spheres, int numDest, const SurfaceRep &
 
   spheres->setSize(0);
   int numSph = medialSpheres.getSize();
-  for (i = 0; i < numSph; i++)
+  for (int i = 0; i < numSph; i++)
     if (medialSpheres.index(i).valid)
       spheres->addItem() = medialSpheres.index(i).s;
 }
@@ -396,7 +396,8 @@ void SRMerge::mergeLists(Array<int> *dest, const Array<int> &l){
     int n = l.index(i);
 
     //  check for duplicate assumes dest list contained no dups
-    for (int j = 0; j < numDest; j++)
+    int j;
+    for (j = 0; j < numDest; j++)
       if (dest->index(j) == n)
         break;
 

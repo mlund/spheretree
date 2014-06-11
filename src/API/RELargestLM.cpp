@@ -57,7 +57,7 @@ bool RELargestLM::reduceSpheres(Array<int> *inds, int maxAllow, Array<int> *dest
     }
 
   //  check that all points are covered
-  for (i = 0; i < numPts; i++)
+  for (int i = 0; i < numPts; i++)
     if (!coveredPts.index(i))
       return false;           //  fail straight off
 
@@ -105,7 +105,7 @@ bool RELargestLM::reduceSpheres(Array<int> *inds, int maxAllow, Array<int> *dest
 
     //  test each point against the other spheres
     //  to decrement their counts
-    for (i = 0; i < numList; i++){
+    for (int i = 0; i < numList; i++){
       int pI = list.index(i);
       Point3D p = surPts->index(pI).p;
 

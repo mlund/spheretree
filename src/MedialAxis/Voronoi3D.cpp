@@ -327,7 +327,7 @@ bool Voronoi3D::insertPoint(const Point3D &p, const Vector3D &n, int startVertex
 
   //  need to clear the neighbours for the deletable vertices
   //  -- ADDED 13 NOV 2002 FOR STABILITY (GRB)
-  for (i = 0; i < numDeletable; i++){
+  for (int i = 0; i < numDeletable; i++){
     int vI = deletable.index(i);
     Voronoi3D::Vertex *vert = &vertices.index(vI);
     for (int j = 0; j < MAGICK_NUM; j++)
@@ -336,7 +336,7 @@ bool Voronoi3D::insertPoint(const Point3D &p, const Vector3D &n, int startVertex
 
 
   //  remove deletable vertices
-  for (i = 0; i < numDeletable; i++)
+  for (int i = 0; i < numDeletable; i++)
     deleteVertex(i, deletable);
 
   return true;
@@ -391,7 +391,7 @@ void Voronoi3D::dump(const char *fileName) const{
 
   fprintf(f, "Vertices Points\n");
   num = vertices.getSize();
-  for (i = 0; i < num; i++){
+  for (int i = 0; i < num; i++){
     const Vertex *v = &vertices.index(i);
     fprintf(f, "\t%d  %f %f %f\n", i, v->s.c.x, v->s.c.y, v->s.c.z);
     fprintf(f, "\t\t%d %d %d %d\n", v->f[0], v->f[1], v->f[2], v->f[3]);
@@ -535,7 +535,8 @@ void Voronoi3D::addNeighbour(Vertex *vert, int n){
   CHECK_DEBUG0(n < vertices.getSize());
 
   //  find the first unused neighbour
-  for (int i = 0; i < MAGICK_NUM; i++)
+  int i;
+  for (i = 0; i < MAGICK_NUM; i++)
     if (vert->n[i] < 0)
       break;
 
@@ -550,7 +551,8 @@ void Voronoi3D::addNeighbour(int dest, int n){
 
   //  find the first unused neighbour
   Vertex *vert = &vertices.index(dest);
-  for (int i = 0; i < MAGICK_NUM; i++)
+  int i;
+  for (i = 0; i < MAGICK_NUM; i++)
     if (vert->n[i] < 0)
       break;
 
@@ -672,8 +674,8 @@ void Voronoi3D::deleteVertex(int dI, Array<int> &deletable){
       OUTPUTINFO("Count = %d\n", count);
 */
     //  scan for n
-    int numForm = f->vertices.getSize();
-    for (int j = 0; j < numForm; j++){
+    int j, numForm = f->vertices.getSize();
+    for (j = 0; j < numForm; j++){
       if (f->vertices.index(j) == n)
         break;
       }
@@ -715,7 +717,7 @@ for (int b = 0; b < vertices.getSize(); b++){
       }
 
     //  remap neighbours
-    for (i = 0; i < MAGICK_NUM; i++){
+    for (int i = 0; i < MAGICK_NUM; i++){
       int nI = rV->n[i];
       if (nI < 0)       //  if node is to be delete then it will have -1 for neighbours
         continue;       //  so we won't call remap -- ADDED 13 NOV 2002 FOR STABILITY (GRB)
@@ -824,7 +826,8 @@ bool Voronoi3D::isConnected(const Array<int> &nodes) const{
         const Vertex *v = &vertices.index(vI);
 
         //  try to find neighbour in graph
-        for (int j = 0; j < numNodes; j++){
+        int j;
+        for (j = 0; j < numNodes; j++){
           if (i == j)
             continue;
 
@@ -968,7 +971,7 @@ void Voronoi3D::deletableSearch(Array<int> &deletable, Array<bool> &flags, const
 
         //  add positive neighbours to queue
         const Vertex *v = &vertices.index(pqI.i);
-        for (i = 0; i < MAGICK_NUM; i++){
+        for (int i = 0; i < MAGICK_NUM; i++){
           int vN = v->n[i];
           if (!used.index(vN)){
             float v = getValue(vN, p);
@@ -1121,6 +1124,7 @@ bool Voronoi3D::canAddNeighbour(int dest, int n){
       return false;
   
   //  find the first unused neighbour
+  int i;
   for (i = 0; i < MAGICK_NUM; i++)
     if (vert->n[i] < 0)
       break;
@@ -1145,7 +1149,7 @@ bool Voronoi3D::canReplaceNeighbour(Vertex *vert, int oldN, int newN){
       return false;
 
   //  need oldN to be neighbour
-  for (i = 0; i < MAGICK_NUM; i++){
+  for (int i = 0; i < MAGICK_NUM; i++){
     if (vert->n[i] == oldN)
       return true;
     }

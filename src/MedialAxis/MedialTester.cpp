@@ -149,7 +149,7 @@ int MedialTester::processMedial(Voronoi3D *vor, const SurfaceRep *surRep, const 
 
     //  mark covered points
     int numCover = 0;
-    for (i = 0; i < numVert; i++){
+    for (int i = 0; i < numVert; i++){
       //  get the vertex
       Voronoi3D::Vertex *vert = &vor->vertices.index(i);
       if (vert->flag == VOR_FLAG_INTERNAL /*|| vert->flag == VOR_FLAG_COVER*/){
@@ -162,6 +162,7 @@ int MedialTester::processMedial(Voronoi3D *vor, const SurfaceRep *surRep, const 
       }
 
     //  deal with the uncovered points
+    int i;
     for (i = 0; i < numPts; i++){
       if (covered.index(i))
         continue;

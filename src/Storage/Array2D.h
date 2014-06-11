@@ -148,7 +148,7 @@ template <class T> class Array2D{
       CHECK_DEBUG4(allocM >= other.m && allocN >= other.n, "Array Size (%d, %d) <- (%d, %d)", allocM, allocN, other.m, other.n);
 
       for (int i = 0; i < other.m; i++)
-        memcpy(a->data[i], other.data[i], other.n*sizeof(T));
+        memcpy(this->data[i], other.data[i], other.n*sizeof(T));
 
       m = other.m;
       n = other.n;

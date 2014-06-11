@@ -62,7 +62,7 @@ class REBase{
     virtual bool reduceSpheres(Array<int> *inds, int maxNum = -1, 
                                Array<int> *destCounts = NULL,
                                double maxMet = DBL_MAX, 
-                               Array<double> *mets = NULL) const = NULL;
+                               Array<double> *mets = NULL) const = 0;
 
     //  this is only needed to be virtual so VC6 will find it
     virtual bool reduceSpheres(Array<Sphere> *dest, const Array<Sphere> &src, 

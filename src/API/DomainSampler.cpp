@@ -89,14 +89,14 @@ void sampleDomain(Array<int> *counts, SamplerInfo infos[], int numVals, int numS
 
   //  get total of the domain values
   float total = 0.0f;
-  for (i = 0; i < numVals; i++){
+  for (int i = 0; i < numVals; i++){
     total += infos[i].val;
     }
 
 
   //   make cumulative and work out maxSamples
   float totalSofar = 0.0f;
-  for (i = 0; i < numVals; i++){
+  for (int i = 0; i < numVals; i++){
     SamplerInfo *s = &infos[i];
     s->maxSamples = numSamples*(s->val / total);
     totalSofar += s->val;
@@ -104,7 +104,7 @@ void sampleDomain(Array<int> *counts, SamplerInfo infos[], int numVals, int numS
     }
 
   //  generate samples
-  for (i = 0; i < numSamples; i++){
+  for (int i = 0; i < numSamples; i++){
     //  pick a random triangle
     float r = rand()/(float)RAND_MAX;
     int j = findInfo(infos, r*total, numVals);

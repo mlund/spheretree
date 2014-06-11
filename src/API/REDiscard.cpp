@@ -83,13 +83,13 @@ bool REDiscard::reduceSpheres(Array<int> *inds, int maxNum,
     }
 
   //  no point continuing if the points aren't all covered to start
-  for (i = 0; i < numPts; i++)
+  for (int i = 0; i < numPts; i++)
     if (!coveredPts.index(i))
       return false;
 
   //  make list of spheres that are removable
   Array<bool> removable(numSph);
-  for (i = 0; i < numSph; i++)
+  for (int i = 0; i < numSph; i++)
     removable.index(i) = isSphereRemovable(pointCounts, i);  
 
   //  flags for which spheres have been dumped
@@ -125,13 +125,13 @@ bool REDiscard::reduceSpheres(Array<int> *inds, int maxNum,
     Array<int> list;
     surRep->listContainedPoints(&list, NULL, srcSpheres->index(minI));
     int numList = list.getSize();
-    for (i = 0; i < numList; i++){
+    for (int i = 0; i < numList; i++){
       int pI = list.index(i);
       pointCounts.index(pI)--;
       }
     
     //  check the spheres for removability
-    for (i = 0; i < numSph; i++){
+    for (int i = 0; i < numSph; i++){
       bool *flag = &removable.index(i);
       if ((*flag) == true){
         (*flag) = isSphereRemovable(pointCounts, i);  
@@ -141,7 +141,7 @@ bool REDiscard::reduceSpheres(Array<int> *inds, int maxNum,
 
   //  generate indices
   inds->setSize(0);
-  for (i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++){
     if (!removed.index(i))
       inds->addItem() = i;
     }

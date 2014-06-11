@@ -56,7 +56,7 @@ class MSBase{
     void setSurface(const Surface &sur);
 
     //  sample
-    virtual void generateSamples(Array<Surface::Point> *pts, int numSamples) const = NULL;
+    virtual void generateSamples(Array<Surface::Point> *pts, int numSamples) const = 0;
 
   protected:
     const Surface *sur;

@@ -60,9 +60,9 @@ class ProcessorMonitor{
 
     //  progress
     bool setProgress(float prog);
-    virtual bool updateProgress(float absProg) = NULL;
+    virtual bool updateProgress(float absProg) = 0;
 
-    virtual bool sayHello() = NULL;  //  no progress report info available
+    virtual bool sayHello() = 0;  //  no progress report info available
 
     struct CancelledException{
       int dummy;

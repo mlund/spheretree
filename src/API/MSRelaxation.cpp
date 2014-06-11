@@ -113,7 +113,7 @@ void MSRelaxation::generateSamples(Array<Surface::Point> *pts, int numSamples, c
       relaxTriangle(&points, p, maxIter);
 
       //  store points
-      for (j = 0; j < num; j++){
+      for (int j = 0; j < num; j++){
         Surface::Point *p = &pts->addItem();
         p->p = points.index(j);
         p->n = n;
@@ -267,7 +267,7 @@ void MSRelaxation::relaxTriangle(Array<Point3D> *srcPts, const Point3D p[3], int
 
   Line2D l[3];
   LineSeg ls[3];
-  for (i = 0; i < 3; i++){
+  for (int i = 0; i < 3; i++){
     ls[i].p0 = q[i];
     ls[i].p1 = q[(i+1)%3];
     ls[i].getLine(&l[i]);
@@ -276,7 +276,7 @@ void MSRelaxation::relaxTriangle(Array<Point3D> *srcPts, const Point3D p[3], int
   // transform points to 2D
   Array<Point2D> pts;
   pts.allocate(numPts);
-  for (i = 0; i < numPts; i++)
+  for (int i = 0; i < numPts; i++)
     tr.transformTo2D(&pts.index(i), srcPts->index(i));
 
   //  translations to apply to points
@@ -303,7 +303,7 @@ void MSRelaxation::relaxTriangle(Array<Point3D> *srcPts, const Point3D p[3], int
       }
 
     //  apply translations
-    for (pt = 0; pt < numPts; pt++){
+    for (int pt = 0; pt < numPts; pt++){
       Vector2D v;
       v = vOff.index(pt);
 
@@ -349,7 +349,7 @@ void MSRelaxation::relaxTriangle(Array<Point3D> *srcPts, const Point3D p[3], int
   //  transform points back to 3D
   Transform3D trI;
   trI.invert(tr);
-  for (i = 0; i < numPts; i++)
+  for (int i = 0; i < numPts; i++)
     trI.transformFrom2D(&srcPts->index(i), pts.index(i));
 }
 
@@ -383,7 +383,7 @@ void MSRelaxation::sampleEdges(Array<Surface::Point> *pts, int numSamples, const
   //  generate edge lengths
   int numEdges = edges.getSize();
   SamplerInfo *infos = new SamplerInfo[numEdges];
-  for (i = 0; i < numEdges; i++){
+  for (int i = 0; i < numEdges; i++){
     const Edge *e = &edges.index(i);
     Point3D p0 = sur.vertices.index(e->v1).p;
     Point3D p1 = sur.vertices.index(e->v2).p;
@@ -396,7 +396,7 @@ void MSRelaxation::sampleEdges(Array<Surface::Point> *pts, int numSamples, const
   delete [] infos;
 
   //  sample edges
-  for (i = 0; i < numEdges; i++){
+  for (int i = 0; i < numEdges; i++){
     int n = counts.index(i);
     if (n != 0){
       //  get edge info

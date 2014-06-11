@@ -127,7 +127,7 @@ void makeSubHybrid(SphereTree *st, int node, int level, const Array<Surface::Poi
   selPts.resize(numChildren);
   Array<bool> covered(numPts);
   covered.clear();
-  for (i = 0; i < numChildren; i++){
+  for (int i = 0; i < numChildren; i++){
     //  get sphere
     Sphere s = children.index(i);
 
@@ -143,7 +143,7 @@ void makeSubHybrid(SphereTree *st, int node, int level, const Array<Surface::Poi
     }
 
   //  replace the spheres with minVolume bounding spheres
-  for (i = 0; i < numChildren; i++){
+  for (int i = 0; i < numChildren; i++){
     Array<Surface::Point> *surPts = &selPts.index(i);
     Sphere *sph = &children.index(i);
     if (surPts->getSize() == 0){
@@ -185,7 +185,7 @@ void makeSubHybrid(SphereTree *st, int node, int level, const Array<Surface::Poi
     }
 
   //  do children
-  for (i = 0; i < numChildren; i++){
+  for (int i = 0; i < numChildren; i++){
     //  get sphere
     Sphere s = children.index(i);
 

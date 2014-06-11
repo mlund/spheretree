@@ -116,7 +116,7 @@ void SRVoronoi::constructSphereSet(Array<MedialSphere> *medialSpheres, const Sur
     //  construct the spheres corresponding to internal spheres
     int numSpheres = 0;
     medialSpheres->setSize(0);
-    for (i = 0; i < numVert; i++){
+    for (int i = 0; i < numVert; i++){
       Voronoi3D::Vertex *vert = &vor->vertices.index(i);
       if (filterSphere && !filterSphere->overlap(vert->s))
           continue;
@@ -147,7 +147,7 @@ void SRVoronoi::constructSphereSet(Array<MedialSphere> *medialSpheres, const Sur
       }
 
     //  setup neighbour information
-    for (i = 0; i < numVert; i++){
+    for (int i = 0; i < numVert; i++){
       int mapsTo = vertexToSphereMap.index(i);
       if (mapsTo >= 0){
         //  get data structures
@@ -197,7 +197,7 @@ void SRVoronoi::constructSphereSet(Array<MedialSphere> *medialSpheres, const Sur
       }
 
     //  setup neighbour info
-    for (i = 0; i < numSph; i++)
+    for (int i = 0; i < numSph; i++)
       for (int j = i+1; j < numSph; j++)
         if (medialSpheres->index(i).s.overlap(medialSpheres->index(j).s)){
           medialSpheres->index(i).neighbours.addItem() = j;
@@ -250,7 +250,7 @@ void SRVoronoi::checkNoNeighbours(Array<MedialSphere> *medialSpheres) const{
 
   //  give ones without neighbours some neighbours
   int numNoNeigh = noNeigh.getSize();
-  for (i = 0; i < numNoNeigh; i++){
+  for (int i = 0; i < numNoNeigh; i++){
     int mI = noNeigh.index(i);
     MedialSphere *ms = &medialSpheres->index(mI);
 
@@ -275,7 +275,7 @@ void SRVoronoi::checkNoNeighbours(Array<MedialSphere> *medialSpheres) const{
 
   //  last resort - drop overlap test
   numNoNeigh = stillNoNeigh.getSize();
-  for (i = 0; i < numNoNeigh; i++){
+  for (int i = 0; i < numNoNeigh; i++){
     int mI = stillNoNeigh.index(i);
     MedialSphere *ms = &medialSpheres->index(mI);
 

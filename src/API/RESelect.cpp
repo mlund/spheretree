@@ -59,7 +59,7 @@ bool RESelect::setup(const Array<Sphere> &src, const SurfaceRep &surRep){
     spheresPerPoint.index(i).setSize(0);
 
   //  fill in lists
-  for (i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++){
     Sphere s = srcSpheres->index(i);
     Array<int> *ptsInSphere = &pointsPerSphere.index(i);
     ptsInSphere->setSize(0);
@@ -75,7 +75,7 @@ bool RESelect::setup(const Array<Sphere> &src, const SurfaceRep &surRep){
       }
     }
 
-  for (i = 0; i < numPts; i++)
+  for (int i = 0; i < numPts; i++)
     if (!coveredFlags.index(i))
       return false;
   return true;
@@ -138,7 +138,7 @@ bool RESelect::reduceSpheres(Array<int> *inds, int maxAllow, Array<int> *destCou
     //  flag points as contained and update counts for points
     const Array<int> *bestPts = &pointsPerSphere.index(maxI);
     int numBest = bestPts->getSize();
-    for (i = 0; i < numBest; i++){
+    for (int i = 0; i < numBest; i++){
       int ptNum = bestPts->index(i);
       if (!coveredPts.index(ptNum)){
         coveredPts.index(ptNum) = true;
