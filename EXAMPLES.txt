@@ -1,0 +1,17 @@
+##  use medial algorithms without optimiser
+makeTreeMedial -branch 8 -depth 1 -testerLevels 2 -numCover 10000 -minCover 5 -initSpheres 1000 -minSpheres 200 -erFact 2 -nopause -expand -merge %1
+
+##  use medial algorithms using optimiser for top level
+makeTreeMedial -branch 8 -depth 1 -testerLevels 2 -numCover 10000 -minCover 5 -initSpheres 1000 -minSpheres 200 -erFact 2 -nopause -expand -merge -optimise simplex -maxOptLevel 1 %1
+
+##  use spawn algorithm
+makeTreeSpawn -branch 8 -depth 3 -testerLevels 2 -numCover 10000 -minCover 5 -nopause %1
+
+##  use grid algorithm
+makeTreeGrid  -branch 8 -depth 3 -testerLevels 2 -numCover 10000 -minCover 5 -nopause  %1
+
+##  use Hubbard's algorithm
+makeTreeHubbard  -branch 8 -depth 3 -numSamples 500 -minSamples 1 -nopause  %1
+
+##  use octree algorithm
+makeTreeOctree -depth 3 -nopause %1

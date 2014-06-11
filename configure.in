@@ -1,0 +1,36 @@
+AC_INIT(src/makeTreeMedial.cpp)
+AM_INIT_AUTOMAKE(spheretree-dist, 1.0)
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+AM_PROG_LIBTOOL
+
+# ** Test for for scope **
+AC_LANG_CPLUSPLUS()
+if test "x${GCC}" = "xyes"
+then
+  OLDCXXFLAGS="$CXXFLAGS";
+  CXXFLAGS="-fno-for-scope"
+  AC_CACHE_CHECK("for g++ -fno-for-scope option", has_gxx_no_for_scope,
+    AC_TRY_COMPILE(, [
+        for (int i = 0; i < 2; i++);
+        i = 0;
+       ],
+       [has_gxx_no_for_scope="yes"],
+       [has_gxx_no_for_scope="no"])
+      )
+  CXXFLAGS="$OLDCXXFLAGS";
+  if test "$has_gxx_no_for_scope" = "yes"
+  then
+    CXXFLAGS="$CXXFLAGS -fno-for-scope"
+  fi
+fi
+AC_LANG_C()
+
+#CFLAGS="$CFLAGS -g -pg"
+#CXXFLAGS="$CXXFLAGS -g -pg"
+#LDFLAGS="$LDFLAGS -g -pg"
+#AC_SUBST(CXXFLAGS)
+#AC_SUBST(CFLAGS)
+
+AC_OUTPUT(Makefile src/Makefile src/Base/Makefile src/Exceptions/Makefile src/Geometry/Makefile src/Geometry/pcube/Makefile src/Storage/Makefile src/LinearAlgebra/Makefile src/MinMax/Makefile src/Surface/Makefile src/SphereTree/Makefile src/Export/Makefile src/BBox/Makefile src/BBox/qHull/Makefile src/MedialAxis/Makefile src/API/Makefile src/API/SFWhite/Makefile src/BBox/MVBB/Makefile)

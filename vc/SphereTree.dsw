@@ -1,0 +1,131 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "MakeTreeGrid"=.\MakeTreeGrid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SphereTreeLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MakeTreeHubbard"=.\MakeTreeHubbard.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SphereTreeLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MakeTreeMedial"=.\MakeTreeMedial.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SphereTreeLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MakeTreeOctree"=.\MakeTreeOctree.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SphereTreeLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MakeTreeSpawn"=.\MakeTreeSpawn.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SphereTreeLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "SphereTree"=.\SphereTree.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SphereTreeLibMFC
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "SphereTreeLib"=.\SphereTreeLib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SphereTreeLibMFC"=.\SphereTreeLibMFC.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
