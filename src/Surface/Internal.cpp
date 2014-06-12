@@ -107,7 +107,7 @@ double distanceToTriangle(ClosestPointInfo *inf, const Point3D &pTest, const Poi
       }
 
     //  test against each vertex
-    for (i = 0; i < 3; i++){
+    for (int i = 0; i < 3; i++){
       double d = P[i].distanceSQR(pTest);
       if (d < minD){
         inf->num = i;

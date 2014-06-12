@@ -68,7 +68,7 @@ bool Surface::loadMesh(const CRhinoMesh &mesh){
   //  load faces (creating vertices)
   Vector3D V1, V2;
   const int numFace = mesh.NumFaces();
-  for (i = 0; i < numFace; i++){
+  for (int i = 0; i < numFace; i++){
     int v0, v1, v2, v3;
     mesh.GetFace(i, v0, v1, v2, v3);
     Triangle *t = &triangles.addItem();
@@ -529,7 +529,8 @@ void Surface::findNeighbours(Array<int> *tris, int vertex, int startTri) const{
   //  find start triangle
   if (startTri < 0){
     int numTri = triangles.getSize();
-    for (int i = 0; i < numTri; i++){
+    int i;
+    for (i = 0; i < numTri; i++){
       const Triangle *tr = &triangles.index(i);
       if (tr->v[0] == vertex || tr->v[1] == vertex || tr->v[2] == vertex)
         break;
@@ -571,7 +572,7 @@ void Surface::setupNormals(int mn, int mx, int tn, int tx){
 
   //  sum up normals from faces
   int numTri = triangles.getSize();
-  for (i = tn; i < tx; i++){
+  for (int i = tn; i < tx; i++){
     Vector3D n;
     getTriangleNormal(&n, i);
 
@@ -585,7 +586,7 @@ void Surface::setupNormals(int mn, int mx, int tn, int tx){
     }
 
   //  normalise normals
-  for (i = mn; i < mx; i++)
+  for (int i = mn; i < mx; i++)
     vertices.index(i).n.norm();
 }
 
@@ -758,7 +759,7 @@ void Surface::getBoundingSphere(Sphere *s) const{
   float rC = sqrt(rCS);
 
   //  second pass - increment current sphere
-  for (i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++){
     Point3D p = vertices.index(i).p;
 
     float oldToPS = pC.distanceSQR(p);
@@ -832,7 +833,7 @@ void Surface::testSurface(int *badVerts, int *badNeighs, int *openEdges, int *mu
 
   //  check for multiple edges
   OUTPUTINFO("Testing Multi/Bad Edges...\n");
-  for (i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++){
     const Triangle *tri = &triangles.index(i);
     for (int j = 0; j < 3; j++){
       int e[2];
@@ -866,7 +867,7 @@ void Surface::testSurface(int *badVerts, int *badNeighs, int *openEdges, int *mu
 
   //  check each triangle for intersections
   OUTPUTINFO("Testing Intersecting Faces...\n");
-  for (i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++){
     const Triangle *tri = &triangles.index(i);
     Point3D t1[3];
     t1[0] = vertices.index(tri->v[0]).p;

@@ -62,7 +62,7 @@ void SurfaceRep::setup(const Array<Surface::Point> &pts, int divs){
   v.add(&pMax1, pMax, 0.1f);
 
   sh.setup(pMin1, pMax1, divs);     //  good resolution would depend on the number of points
-  for (i = 0; i < numPts; i++)
+  for (int i = 0; i < numPts; i++)
     sh.addPoint(i, pts.index(i).p);
 }
 

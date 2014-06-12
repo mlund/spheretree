@@ -63,7 +63,8 @@ bool loadOBJ(Surface *sur, const char *fileName, float boxSize){
     int len = strlen(buffer);
 
     //  trim off any leading spaces
-    for (int i = 0; i < len; i++){
+    int i;
+    for (i = 0; i < len; i++){
       if (buffer[i] != ' ' && buffer[i] != '\t')
         break;
       }
@@ -150,7 +151,7 @@ bool saveOBJ(Surface &sur, const char *fileName, float scale){
 
   //  write out the triangle
   int numTri = sur.triangles.getSize();
-  for (i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++){
     const Surface::Triangle *tri = &sur.triangles.index(i);
 
     fprintf(f, "f ");

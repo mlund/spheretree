@@ -187,7 +187,7 @@ void SpacialHash::addTriangle(const Surface &sur, int index){
 
   //  test each cell
   int numCells = 0;
-  for (i = xMin; i <= xMax; i++){
+  for (int i = xMin; i <= xMax; i++){
     for (int j = yMin; j <= yMax; j++){
       for (int k = zMin; k <= zMax; k++){
         //  get cell boundaries
