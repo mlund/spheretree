@@ -41,8 +41,6 @@ static int iminarg1,iminarg2;
 
 #define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
 
-#if defined(__STDC__) || defined(ANSI) || defined(NRANSI) /* ANSI */
-
 void nrerror(char error_text[]);
 float *vector(long nl, long nh);
 int *ivector(long nl, long nh);
@@ -68,34 +66,5 @@ void free_submatrix(float **b, long nrl, long nrh, long ncl, long nch);
 void free_convert_matrix(float **b, long nrl, long nrh, long ncl, long nch);
 void free_f3tensor(float ***t, long nrl, long nrh, long ncl, long nch,
 	long ndl, long ndh);
-
-#else /* ANSI */
-/* traditional - K&R */
-
-void nrerror();
-float *vector();
-float **matrix();
-float **submatrix();
-float **convert_matrix();
-float ***f3tensor();
-double *dvector();
-double **dmatrix();
-int *ivector();
-int **imatrix();
-unsigned char *cvector();
-unsigned long *lvector();
-void free_vector();
-void free_dvector();
-void free_ivector();
-void free_cvector();
-void free_lvector();
-void free_matrix();
-void free_submatrix();
-void free_convert_matrix();
-void free_dmatrix();
-void free_imatrix();
-void free_f3tensor();
-
-#endif /* ANSI */
 
 #endif /* _NR_UTILS_H_ */

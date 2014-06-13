@@ -85,7 +85,7 @@ bool constructTree(const char *file);
 /*
     MAINLINE
 */
-void main(int argc, const char *argv[]){
+int main(int argc, const char *argv[]){
   printf("MakeTreeMain - Gareth Bradshaw Feb 2003\n");
 
   /*

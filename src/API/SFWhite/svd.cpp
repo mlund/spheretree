@@ -7,6 +7,7 @@
 */
 
 #include "nrutil.h" 
+#include "svd.h"
 #include <cmath>
 
 void svbksb(float **u, float w[], float **v, int m, int n, float b[], float x[])   
