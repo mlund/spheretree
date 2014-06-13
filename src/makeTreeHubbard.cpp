@@ -129,7 +129,8 @@ bool constructTree(const char *file){
   char inputFile[1024];
   strcpy(inputFile, file);
   int len = strlen(inputFile);
-  for (int i = len-1; i >= 0; i--){
+  int i;
+  for (i = len-1; i >= 0; i--){
     if (inputFile[i] == '.')
       break;
     }

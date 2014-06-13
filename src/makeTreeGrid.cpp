@@ -91,7 +91,7 @@ bool constructTree(const char *file);
 /*
     MAINLINE
 */
-void main(int argc, const char *argv[]){
+int main(int argc, const char *argv[]){
   printf("MakeTreeGrid - Gareth Bradshaw Feb 2003\n");
 
   /*

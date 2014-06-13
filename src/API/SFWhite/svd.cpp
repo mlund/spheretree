@@ -6,9 +6,18 @@
 
 */
 
-#include "nrutil.h" 
+#include "nrutil.c" 
 #include "svd.h"
 #include <cmath>
+
+    float pythag(float a, float b) {
+              float absa,absb;
+              absa=fabs(a);
+              absb=fabs(b);
+              if (absa > absb) return absa*sqrt(1.0+SQR(absb/absa));
+              else return (absb == 0.0 ? 0.0 : absb*sqrt(1.0+SQR(absa/absb)));
+      }
+
 
 void svbksb(float **u, float w[], float **v, int m, int n, float b[], float x[])   
 {   
@@ -34,7 +43,6 @@ void svbksb(float **u, float w[], float **v, int m, int n, float b[], float x[])
 
 void svdcmp(float **a, int m, int n, float w[], float **v)   
 {   
-    float pythag(float a, float b);   
     int flag,i,its,j,jj,k,l,nm;   
     float anorm,c,f,g,h,s,scale,x,y,z,*rv1;   
    
