@@ -17,7 +17,7 @@ algorithm and HUBBARD's medial axis based algorithm.  Detailed descriptions of
 all the algorithms contained in this software can be found in the following
 thesis:
 
-   Bounding Volume Hierarchies for Level-of-Detail Collision Handling
+   [Bounding Volume Hierarchies for Level-of-Detail Collision Handling](http://hdl.handle.net/2262/86786)
    Bradshaw G., Dept. of Computer Science, Trinity College Dublin, May 2002.
 
 This thesis, example animations and the latest version of this distributution can
