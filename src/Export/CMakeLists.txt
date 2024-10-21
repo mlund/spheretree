@@ -1,7 +1,7 @@
 set(BOT_LIB_NAME Export)
-file(GLOB_RECURSE LibSource ./*.cpp)
+
 add_library(${BOT_LIB_NAME} STATIC
-        ${LibSource}
+        VRML.cpp POV.cpp
 )
 
 target_link_libraries(${BOT_LIB_NAME})

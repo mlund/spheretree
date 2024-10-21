@@ -1,7 +1,6 @@
 set(BOT_LIB_NAME MedialAxis)
-file(GLOB_RECURSE LibSource ./*.cpp)
 add_library(${BOT_LIB_NAME} STATIC
-        ${LibSource}
+        Clusters.cpp MedialTester.cpp Voronoi3D.cpp VoronoiFace.cpp
 )
 
 

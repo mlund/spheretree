@@ -1,7 +1,7 @@
 set(BOT_LIB_NAME MinMax)
-file(GLOB_RECURSE LibSource ./*.cpp)
+
 add_library(${BOT_LIB_NAME} STATIC
-        ${LibSource}
+        Simplex.cpp
 )
 
 

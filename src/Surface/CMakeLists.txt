@@ -1,7 +1,7 @@
 set(BOT_LIB_NAME Surface)
-file(GLOB_RECURSE LibSource ./*.cpp)
+
 add_library(${BOT_LIB_NAME} STATIC
-        ${LibSource}
+         Surface.cpp  SpacialHash.cpp  Internal.cpp  Voxel.cpp  SurfaceTester.cpp VolInt.cpp  SurfaceRep.cpp   InternalGem.cpp  OBJLoader.cpp
 )
 
 

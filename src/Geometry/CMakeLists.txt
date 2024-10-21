@@ -1,7 +1,6 @@
 set(BOT_LIB_NAME Geometry)
-file(GLOB_RECURSE LibSource ./*.cpp)
 add_library(${BOT_LIB_NAME} STATIC
-        ${LibSource}
+         Circle.cpp  CubeTri.cpp   Line2D.cpp  LineSeg.cpp  Plane.cpp  Point2D.cpp  Point3D.cpp  Sphere.cpp  Transform2D.cpp  Transform3D.cpp  TriTri.cpp  Vector2D.cpp  Vector3D.cpp  RayBox.c  Ray.cpp 
 )
 add_subdirectory(pcube)
 

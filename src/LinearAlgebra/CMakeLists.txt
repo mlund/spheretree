@@ -1,7 +1,6 @@
 set(BOT_LIB_NAME Matrix)
-file(GLOB_RECURSE LibSource ./*.cpp)
 add_library(${BOT_LIB_NAME} STATIC
-        ${LibSource}
+        Matrix.cpp
 )
 
 

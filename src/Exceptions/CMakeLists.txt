@@ -1,5 +1,5 @@
 set(BOT_LIB_NAME Exceptions)
-file(GLOB_RECURSE LibSource ./*.cpp)
+
 add_library(${BOT_LIB_NAME} STATIC
         ErrorLog.cpp
         ErrorLog.h

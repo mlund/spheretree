@@ -1,7 +1,7 @@
 set(BOT_LIB_NAME Storage)
-file(GLOB_RECURSE LibSource ./*.cpp ./*h )
+
 add_library(${BOT_LIB_NAME} STATIC
-        ${LibSource}
+        Array.h Array2D.h FreeArray.h LinkedList.h Queue.h Storage.h kTree.h null.cpp
 )
 
 
