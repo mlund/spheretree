@@ -9,11 +9,13 @@ In case of modern usage. I construct this CMAKE version to compile.
 
 ```sh
 cd spheretree && mkdir build
-cd build && cmake ..
+cd build && cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_SANITIZER=OFF
 make
 ```
 
 Anything comments or queries for this cmake-version can be directed to yixuanzhou@sjtu.edu.cn.
+
+cmake tools from [cmake-template](https://github.com/cpp-best-practices/cmake_template/tree/main) are utilized. Thanks to their fantastic works. 
 
 All rights are reserved by the original authors under the terms of the LICENSE.
 

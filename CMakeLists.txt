@@ -1,28 +1,25 @@
-cmake_minimum_required(VERSION 3.10)
-project(spheretree-dist VERSION 1.0 LANGUAGES CXX C)
+cmake_minimum_required(VERSION 3.16)
 
-# Set the required C/C++ standards
+# Define project
+project(spheretree-dist VERSION 1.0 LANGUAGES C CXX)
+
+# Set C/C++ standards
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pthread")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS}")
-set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG}")
+# Define options
+option(ENABLE_WARNINGS "Enable project warnings" ON)
+option(ENABLE_SANITIZER "Enable address and undefined behavior sanitizer" OFF)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-int-in-bool-context -Wsign-compare")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS}")
-    set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
-endif()
+# Set up modules path and include necessary scripts from cmake_template
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+# Include standard project settings
+include(StandardProjectSettings)
 
-SET(CMAKE_BUILD_TYPE "Release")
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -Wall -fPIC -DNDEBUG")
-
-# Include all subdirectories that are part of the project
+# Add subdirectories
 add_subdirectory(src/API)
 add_subdirectory(src/Base)
 add_subdirectory(src/BBox)
@@ -36,87 +33,92 @@ add_subdirectory(src/Storage)
 add_subdirectory(src/Surface)
 add_subdirectory(src/Export)
 
-# Add the static library equivalent to libSTG.la
-add_library(STG STATIC
-        src/null.c
-)
+# Create STG library
+add_library(STG STATIC src/null.c)
 
-# Link dependent libraries to libSTG
-target_link_libraries(STG
-        API
-        Base
-        BBox
-        Exceptions
-        Geometry
-        Matrix
-        MedialAxis
-        MinMax
-        SphereTree
-        Storage
-        Surface
-        Export
-)
+# Include compiler warnings module
+include(CompilerWarnings)
+if(ENABLE_WARNINGS)
+    myproject_set_project_warnings(STG OFF "" "" "" "")
+endif()
 
-# Define the list of programs to be built
-set(PROGRAMS
-        makeTreeMedial
-        makeTreeHubbard
-        makeTreeOctree
-        makeTreeGrid
-        makeTreeSpawn
+# Link dependent libraries to STG
+set(LIBS_TO_LINK
+    API
+    Base
+    BBox
+    Exceptions
+    Geometry
+    Matrix
+    MedialAxis
+    MinMax
+    SphereTree
+    Storage
+    Surface
+    Export
 )
+target_link_libraries(STG PUBLIC ${LIBS_TO_LINK})
 
-# Add each program and its respective source files
-foreach(PROGRAM ${PROGRAMS})
-    if(${PROGRAM} STREQUAL "makeTreeMedial")
-        add_executable(${PROGRAM}
-                src/makeTreeMedial.cpp
-                src/DecodeParam.cpp
-                src/DecodeParam.h
-                src/EvalTree.cpp
-                src/EvalTree.h
-                src/VerifyModel.cpp
-                src/VerifyModel.h
-        )
-    elseif(${PROGRAM} STREQUAL "makeTreeHubbard")
-        add_executable(${PROGRAM}
-                src/makeTreeHubbard.cpp
-                src/VerifyModel.cpp
-                src/VerifyModel.h
-                src/DecodeParam.cpp
-                src/DecodeParam.h
-        )
-    elseif(${PROGRAM} STREQUAL "makeTreeOctree")
-        add_executable(${PROGRAM}
-                src/makeTreeOctree.cpp
-                src/DecodeParam.cpp
-                src/DecodeParam.h
-        )
-    elseif(${PROGRAM} STREQUAL "makeTreeGrid")
-        add_executable(${PROGRAM}
-                src/makeTreeGrid.cpp
-                src/VerifyModel.cpp
-                src/VerifyModel.h
-                src/EvalTree.cpp
-                src/EvalTree.h
-                src/DecodeParam.cpp
-                src/DecodeParam.h
-        )
-    elseif(${PROGRAM} STREQUAL "makeTreeSpawn")
-        add_executable(${PROGRAM}
-                src/makeTreeSpawn.cpp
-                src/VerifyModel.cpp
-                src/VerifyModel.h
-                src/EvalTree.cpp
-                src/EvalTree.h
-                src/DecodeParam.cpp
-                src/DecodeParam.h
-        )
+
+# Enable sanitizers
+if(ENABLE_SANITIZER)
+    include(Sanitizers)
+    add_sanitizers(STG)
+endif()
+
+# Set common properties for executables
+function(add_custom_executable EXEC_NAME)
+    set(SOURCES)
+    foreach(_ARG IN LISTS ARGN)
+        list(APPEND SOURCES ${_ARG})
+    endforeach()
+    add_executable(${EXEC_NAME} ${SOURCES})
+    target_link_libraries(${EXEC_NAME} PRIVATE STG)
+    if(ENABLE_WARNINGS)
+        myproject_set_project_warnings(${EXEC_NAME} OFF "" "" "" "")
     endif()
+    if(ENABLE_SANITIZER)
+        add_sanitizers(${EXEC_NAME})
+    endif()
+endfunction()
 
-    # Link the libSTG static library to each executable
-    target_link_libraries(${PROGRAM} STG)
-endforeach()
+# Add executables
+add_custom_executable(makeTreeMedial
+    "src/makeTreeMedial.cpp"
+    "src/DecodeParam.cpp"
+    "src/EvalTree.cpp"
+    "src/VerifyModel.cpp"
+)
 
-# Installation rules for executables
-install(TARGETS ${PROGRAMS} RUNTIME DESTINATION bin)
+add_custom_executable(makeTreeHubbard
+    "src/makeTreeHubbard.cpp"
+    "src/DecodeParam.cpp"
+    "src/VerifyModel.cpp"
+)
+
+add_custom_executable(makeTreeOctree
+    "src/makeTreeOctree.cpp"
+    "src/DecodeParam.cpp"
+)
+
+add_custom_executable(makeTreeGrid
+    "src/makeTreeGrid.cpp"
+    "src/DecodeParam.cpp"
+    "src/VerifyModel.cpp"
+    "src/EvalTree.cpp"
+)
+
+add_custom_executable(makeTreeSpawn
+    "src/makeTreeSpawn.cpp"
+    "src/DecodeParam.cpp"
+    "src/VerifyModel.cpp"
+    "src/EvalTree.cpp"
+)
+
+# Include project-specific and external dependencies
+include(GNUInstallDirs)
+install(TARGETS STG makeTreeMedial makeTreeHubbard makeTreeOctree makeTreeGrid makeTreeSpawn
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+

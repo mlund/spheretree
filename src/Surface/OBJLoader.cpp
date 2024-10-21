@@ -68,6 +68,7 @@ bool loadOBJ(Surface *sur, const char *fileName, float boxSize){
       if (buffer[i] != ' ' && buffer[i] != '\t')
         break;
       }
+
     if (CAP(buffer[i]) == 'V' && buffer[i+1] == ' '){
       //  do new VERTEX
       float x, y, z;
