@@ -40,10 +40,6 @@
     Ported from Graphics Gems V Point in Polyhedron Testing using Sphereical Polygons
     Paulo Cezar Pinto Carvalho and Paulo Roma Cavalcanti (Pages 42-49)
 */
-//#ifndef max
-//#define max(a,b) ((a)>(b)?(a):(b))
-//#define min(a,b) ((a)<(b)?(a):(b))
-//#endif
 
 #define PI 3.141592653589793324
 

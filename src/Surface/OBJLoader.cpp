@@ -38,7 +38,7 @@
 
 #include "OBJLoader.h"
 #include <string.h>
-#include <iostream>
+
 char CAP(char c){
   if (c >= 'a' && c < 'z')
     return c + ('A' - 'a');
