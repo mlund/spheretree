@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <math.h>
 #include <assert.h>
+#include <iostream>
 
 // We want to use a fast version of sqrt if possible....
 #if defined(sgi)
