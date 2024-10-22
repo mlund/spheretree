@@ -320,13 +320,6 @@ IMsupport.h (you'll definitely need to know what you are doing with the librarie
 and headers for this one). The EXE files for the programs will be put in the
 build folder under either debug or release.
 
-### UNIX
-
-To compile the programs in a UNIX-like environment simply go into the directory
-where you extracted the archive, run the configure script using `./configure` and
-then build the programs using the command "make".  The command line programs will
-be built in the "src" directory.
-
 ### CMAKE
 
 In case of modern usage. A Cmake version is provided by yixuanzhou@sjtu.edu.cn. 
