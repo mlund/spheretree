@@ -38,6 +38,12 @@
 
 #ifndef _DEFS_H_
 #define _DEFS_H_
+
+#ifdef __cplusplus
+#include <cmath>
+#define finite(a) std::isfinite(a)
+#endif
+
 #include <stdio.h>
 
 #ifndef M_PI

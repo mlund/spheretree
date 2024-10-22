@@ -40,15 +40,11 @@
     Ported from Graphics Gems V Point in Polyhedron Testing using Sphereical Polygons
     Paulo Cezar Pinto Carvalho and Paulo Roma Cavalcanti (Pages 42-49)
 */
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#define min(a,b) ((a)<(b)?(a):(b))
-#endif
 
 #define PI 3.141592653589793324
 
 #include "InternalGem.h"
-
+#include <algorithm>
 /*=========================  geo_solid_angle  =========================
   Calculates the solid angle given by the spherical projection of 
   a 3D plane polygon
@@ -90,7 +86,7 @@ double geo_solid_angle (const Point3D &pTest, const Point3D p[3]){
     float l2 = n2.mag();
 
     float s = n1.dot(n2) / (l1*l2);
-    float ang = acos(max(-1.0, min(1.0,s)));
+    float ang = acos(std::max(-1.0f, std::min(1.0f,s)));
 
     tmp.cross(b, a);
     s = tmp.dot(plane);
