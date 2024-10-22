@@ -4,7 +4,7 @@ apt_tools:
   - python3-pip
   - jq #for auto installing extensions in container
 
-cpp_language-toolchain:
+apt_language-toolchain:
   - make
   - cmake
   - build-essential
