@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,10 +37,10 @@
 \**************************************************************************/
 
 /*
-    Sphere Evaluator which computed the ammount a sphere hangs outside the surface
-    using the closest surface point to the center of the sphere.
+    Sphere Evaluator which computed the ammount a sphere hangs outside the
+   surface using the closest surface point to the center of the sphere.
 
-    This is spot on for convex objects only.  The value returned will be an over 
+    This is spot on for convex objects only.  The value returned will be an over
     approximation of the true error for concave objects.
 */
 #ifndef _API_CONVEX_SPHERE_EVAL
@@ -49,20 +49,20 @@
 #include "SEBase.h"
 #include "../Surface/SurfaceTester.h"
 
-class SEConvex : public SEBase{
-  public:
-    //  constructor
-    SEConvex();
-    SEConvex(const SurfaceTester &st);
+class SEConvex : public SEBase {
+public:
+  //  constructor
+  SEConvex();
+  SEConvex(const SurfaceTester &st);
 
-    //  setup
-    void setTester(const SurfaceTester &st);
+  //  setup
+  void setTester(const SurfaceTester &st);
 
-    //  evaluate the fit of the given sphere
-    float evalSphere(const Sphere &s) const;
+  //  evaluate the fit of the given sphere
+  float evalSphere(const Sphere &s) const;
 
-  private:
-    const SurfaceTester *st;
+private:
+  const SurfaceTester *st;
 };
 
 #endif

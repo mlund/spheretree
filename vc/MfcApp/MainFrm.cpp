@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -56,65 +56,57 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
-	//{{AFX_MSG_MAP(CMainFrame)
-	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+//{{AFX_MSG_MAP(CMainFrame)
+ON_WM_CREATE()
+//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-static UINT indicators[] =
-{
-	ID_SEPARATOR,           // status line indicator
-	ID_INDICATOR_CAPS,
-	ID_INDICATOR_NUM,
-	ID_INDICATOR_SCRL,
+static UINT indicators[] = {
+    ID_SEPARATOR, // status line indicator
+    ID_INDICATOR_CAPS,
+    ID_INDICATOR_NUM,
+    ID_INDICATOR_SCRL,
 };
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame construction/destruction
 
-CMainFrame::CMainFrame()
-{
+CMainFrame::CMainFrame() {}
+
+CMainFrame::~CMainFrame() {}
+
+int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
+  if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1)
+    return -1;
+
+  if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT,
+                             WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER |
+                                 CBRS_TOOLTIPS | CBRS_FLYBY |
+                                 CBRS_SIZE_DYNAMIC) ||
+      !m_wndToolBar.LoadToolBar(IDR_MAINFRAME)) {
+    TRACE("Failed to create toolbar\n");
+    return -1; // fail to create
+  }
+
+  if (!m_wndStatusBar.Create(this) ||
+      !m_wndStatusBar.SetIndicators(indicators,
+                                    sizeof(indicators) / sizeof(UINT))) {
+    TRACE("Failed to create status bar\n");
+    return -1; // fail to create
+  }
+
+  m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+  EnableDocking(CBRS_ALIGN_ANY);
+  DockControlBar(&m_wndToolBar);
+
+  return 0;
 }
 
-CMainFrame::~CMainFrame()
-{
-}
-
-int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
-{
-	if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1)
-		return -1;
-	
-	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP
-		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
-		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
-	{
-		TRACE("Failed to create toolbar\n");
-		return -1;      // fail to create
-	}
-
-	if (!m_wndStatusBar.Create(this) ||
-		!m_wndStatusBar.SetIndicators(indicators,
-		  sizeof(indicators)/sizeof(UINT)))
-	{
-		TRACE("Failed to create status bar\n");
-		return -1;      // fail to create
-	}
-
-	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	EnableDocking(CBRS_ALIGN_ANY);
-	DockControlBar(&m_wndToolBar);
-
-	return 0;
-}
-
-BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
-{
-	if( !CMDIFrameWnd::PreCreateWindow(cs) )
-		return FALSE;
-	return TRUE;
+BOOL CMainFrame::PreCreateWindow(CREATESTRUCT &cs) {
+  if (!CMDIFrameWnd::PreCreateWindow(cs))
+    return FALSE;
+  return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame message handlers
-

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -43,22 +43,23 @@
 char errorLogDir[1024] = "./Errors";
 
 #ifdef _AFXDLL
-  #include "CallStack.h"
+#include "CallStack.h"
 #endif
 
-void writeErrorLog(const char *cond, const char *file, int line, const char *msg, ...){
+void writeErrorLog(const char *cond, const char *file, int line,
+                   const char *msg, ...) {
   char fileName[1024] = "";
 
-  long currentTime = time(NULL); 
+  long currentTime = time(NULL);
   char *now = asctime(localtime(&currentTime));
   if (now)
-    sprintf(fileName, "%s/%.6s %.4s.txt",errorLogDir, &now[4], &now[20]); 
+    sprintf(fileName, "%s/%.6s %.4s.txt", errorLogDir, &now[4], &now[20]);
 
   FILE *f = fopen(fileName, "a");
   if (!f)
     f = fopen("errors.txt", "a");
 
-  if (f){
+  if (f) {
     //  write out header
     if (now)
       fprintf(f, "Error Logged At %s", now);
@@ -68,13 +69,13 @@ void writeErrorLog(const char *cond, const char *file, int line, const char *msg
       fprintf(f, "\tFile\t\t\t:\t%s (%d)\n", file, line);
     if (cond)
       fprintf(f, "\tFailed Expression\t:\t%s\n", cond);
-    if (msg){
+    if (msg) {
       fprintf(f, "\tProgrammers Comment\t:\t", msg);
       va_list params;
       va_start(params, msg);
       vfprintf(f, msg, params);
       fprintf(f, "\n");
-      }
+    }
 
 #ifdef _AFXDLL
     //  dump call stack
@@ -87,5 +88,5 @@ void writeErrorLog(const char *cond, const char *file, int line, const char *msg
       fprintf(f, "/");
     fprintf(f, "\n");
     fclose(f);
-    }
+  }
 }

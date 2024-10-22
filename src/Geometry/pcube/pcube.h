@@ -44,16 +44,15 @@
  *  point to check in such a test.                                           *
  *                                                                           *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-								    
 
 #ifndef real
 #define real double
 #endif
 
 #ifdef __cplusplus
-  #define EXTERN extern "C"
+#define EXTERN extern "C"
 #else
-  #define EXTERN extern
+#define EXTERN extern
 #endif
 
 /*
@@ -89,12 +88,11 @@
  * vertex test below.  Normally one would call the fast_polygon_intersects_cube
  * utility instead which combines both of these tests.
  */
-EXTERN int
-polygon_intersects_cube(int nverts, const real verts[/* nverts */][3],
-			const real polynormal[3],
-			int already_know_verts_are_outside_cube,
-			int already_know_edges_are_outside_cube);
-
+EXTERN int polygon_intersects_cube(int nverts,
+                                   const real verts[/* nverts */][3],
+                                   const real polynormal[3],
+                                   int already_know_verts_are_outside_cube,
+                                   int already_know_edges_are_outside_cube);
 
 /*
  *                   FAST POLYGON INTERSECTS CUBE
@@ -107,10 +105,9 @@ polygon_intersects_cube(int nverts, const real verts[/* nverts */][3],
  */
 EXTERN int
 fast_polygon_intersects_cube(int nverts, const real verts[/* nverts */][3],
-			const real polynormal[3],
-			int already_know_verts_are_outside_cube,
-			int already_know_edges_are_outside_cube);
-
+                             const real polynormal[3],
+                             int already_know_verts_are_outside_cube,
+                             int already_know_edges_are_outside_cube);
 
 /*
  *                   TRIVIAL VERTEX TESTS
@@ -119,10 +116,8 @@ fast_polygon_intersects_cube(int nverts, const real verts[/* nverts */][3],
  * centered at the origin (trivial accept), 0 if all vertices are outside
  * of any testing plane (trivial reject), -1 otherwise (couldn't help).
  */
-EXTERN int
-trivial_vertex_tests(int nverts, const real verts[/* nverts */][3],
-			int already_know_verts_are_outside_cube);
-
+EXTERN int trivial_vertex_tests(int nverts, const real verts[/* nverts */][3],
+                                int already_know_verts_are_outside_cube);
 
 /*
  *                   SEGMENT INTERSECTS CUBE
@@ -130,9 +125,7 @@ trivial_vertex_tests(int nverts, const real verts[/* nverts */][3],
  * Returns 1 if the given line segment intersects the cube of edge length 1
  * centered at the origin, 0 otherwise.
  */
-EXTERN int
-segment_intersects_cube(const real v0[3], const real v1[3]);
-
+EXTERN int segment_intersects_cube(const real v0[3], const real v1[3]);
 
 /*
  *                   POLYGON CONTAINS POINT 3D
@@ -144,10 +137,8 @@ segment_intersects_cube(const real v0[3], const real v1[3]);
  * standard direction (towards the eye when looking at the polygon so that
  * it's CCW).
  */
-EXTERN int
-polygon_contains_point_3d(int nverts, const real verts[/* nverts */][3],
-			const real polynormal[3],
-			real point[3]);
+EXTERN int polygon_contains_point_3d(int nverts,
+                                     const real verts[/* nverts */][3],
+                                     const real polynormal[3], real point[3]);
 
 #endif
-

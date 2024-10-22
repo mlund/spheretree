@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -40,13 +40,15 @@
 #include "SurfaceDiv.h"
 #include "../MinMax/Simplex.h"
 
-SOPerSphere::SOPerSphere(){
+SOPerSphere::SOPerSphere() {
   eval = NULL;
   numIter = 1;
 }
 
 //  optimise
-void SOPerSphere::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, float stopBelow, const Sphere *parSph, int level) const{
+void SOPerSphere::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep,
+                           float stopBelow, const Sphere *parSph,
+                           int level) const {
   CHECK_DEBUG0(eval != NULL);
   CHECK_DEBUG0(spheres != NULL);
 
@@ -57,12 +59,12 @@ void SOPerSphere::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, flo
     return;
 
   //  setup optimise
-  Array<Array<Point3D>/**/> pointsInSphere(numSpheres);
+  Array<Array<Point3D> /**/> pointsInSphere(numSpheres);
   Array<bool> coveredPts(numPts);
 
   //  optimise
-  for (int l = 0; l < numIter; l++){
-    //OUTPUTINFO("Per Sphere Optimise Iter %d\n", l);
+  for (int l = 0; l < numIter; l++) {
+    // OUTPUTINFO("Per Sphere Optimise Iter %d\n", l);
 
     //  make the half spaces to segment the object
     SurfaceDivision surDiv;
@@ -72,50 +74,50 @@ void SOPerSphere::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, flo
     coveredPts.clear();
 
     //  assign points to each sphere
-    for (int i = 0; i < numSpheres; i++){
+    for (int i = 0; i < numSpheres; i++) {
       Sphere *s = &spheres->index(i);
       Array<Point3D> *pts = &pointsInSphere.index(i);
       pts->resize(0);
 
       Array<Point3D> selPts;
-      for (int j = 0; j < numPts; j++){
+      for (int j = 0; j < numPts; j++) {
         Point3D p = surPts->index(j).p;
-        if (!coveredPts.index(j) && surDiv.pointInRegion(p, i)){
+        if (!coveredPts.index(j) && surDiv.pointInRegion(p, i)) {
           coveredPts.index(j) = true;
           pts->addItem() = p;
-          }
         }
       }
+    }
 
     //  assign uncovered points
     for (int i = 0; i < numPts; i++)
-      if (!coveredPts.index(i)){
+      if (!coveredPts.index(i)) {
         Point3D p = surPts->index(i).p;
 
         int minJ = 0;
         float minD = FLT_MAX;
-        for (int j = 0; j < numSpheres; j++){
+        for (int j = 0; j < numSpheres; j++) {
           Sphere s = spheres->index(j);
           float d = s.c.distance(p) - s.r;
-          if (d < minD){
+          if (d < minD) {
             minD = d;
             minJ = j;
-            }
           }
-
-        pointsInSphere.index(minJ).addItem() = p;
         }
 
+        pointsInSphere.index(minJ).addItem() = p;
+      }
+
     //  do optimisations
-    for (int i = 0; i < numSpheres; i++){
+    for (int i = 0; i < numSpheres; i++) {
       Sphere s = spheres->index(i);
       optimise(&s, pointsInSphere.index(i));
       spheres->index(i) = s;
-      }
     }
+  }
 }
 
-void SOPerSphere::optimise(Sphere *s, const Array<Point3D> &pts) const{
+void SOPerSphere::optimise(Sphere *s, const Array<Point3D> &pts) const {
   CHECK_DEBUG0(eval != NULL);
   CHECK_DEBUG0(s != NULL);
 
@@ -137,16 +139,16 @@ void SOPerSphere::optimise(Sphere *s, const Array<Point3D> &pts) const{
   //  generate radius
   s->r = -1;
   int numPts = pts.getSize();
-  for (int i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++) {
     Point3D p = pts.index(i);
     float d = p.distance(s->c);
     if (d > s->r)
       s->r = d;
-    }
+  }
 }
 
-double SOPerSphere::fitFunc(double vals[], void *data, int *canFinish){
-  OptInfo *optInf = (OptInfo*) data;
+double SOPerSphere::fitFunc(double vals[], void *data, int *canFinish) {
+  OptInfo *optInf = (OptInfo *)data;
 
   Sphere s;
   s.c.x = vals[0];
@@ -156,14 +158,14 @@ double SOPerSphere::fitFunc(double vals[], void *data, int *canFinish){
 
   //  generate radius
   int numPts = optInf->selPts->getSize();
-  for (int i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++) {
     Point3D p = optInf->selPts->index(i);
     float d = p.distance(s.c);
     if (d > s.r)
       s.r = d;
-    }
- 
- if (!finite(s.r))
+  }
+
+  if (!finite(s.r))
     return DBL_MAX;
   else
     return optInf->eval->evalSphere(s);

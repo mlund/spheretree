@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -39,12 +39,12 @@
 #include "STGHubbard.h"
 #include "MergeHubbard.h"
 
-void STGHubbard::setup(Voronoi3D *vor, const MedialTester *mt){
+void STGHubbard::setup(Voronoi3D *vor, const MedialTester *mt) {
   this->vor = vor;
   this->mt = mt;
 }
 
-void STGHubbard::constructTree(SphereTree *st) const{
+void STGHubbard::constructTree(SphereTree *st) const {
   CHECK_DEBUG(vor != NULL && mt != NULL, "need to setup");
 
   //  setup merge
@@ -59,7 +59,8 @@ void STGHubbard::constructTree(SphereTree *st) const{
     buildTree(st, &merger, 0, 0, NULL);
 }
 
-void STGHubbard::buildTree(SphereTree *st, MergeHubbard *merger, int level, int node, const Array<int> *parSphInd) const{
+void STGHubbard::buildTree(SphereTree *st, MergeHubbard *merger, int level,
+                           int node, const Array<int> *parSphInd) const {
   //  temp
   printf("Doing Sphere Node %d (level %d) \n", node, level);
 
@@ -71,33 +72,33 @@ void STGHubbard::buildTree(SphereTree *st, MergeHubbard *merger, int level, int 
   merger->iterativeMerge(&medialSpheres, st->degree);
 
   //  fill in the tree and get the lists of spheres for children
-  Array<Array<int>/**/> inds;
+  Array<Array<int> /**/> inds;
   inds.resize(st->degree);
   int firstChild = st->getFirstChild(node);
   int numMedial = medialSpheres.getSize();
 
   int oI = 0;
-  for (int i = 0; i < numMedial; i++){
+  for (int i = 0; i < numMedial; i++) {
     MergeHubbard::MedialSphere *ms = &medialSpheres.index(i);
-    if (ms->valid){
-      st->nodes.index(firstChild+oI).c = ms->s.c;
-      st->nodes.index(firstChild+oI).r = ms->s.r;
+    if (ms->valid) {
+      st->nodes.index(firstChild + oI).c = ms->s.c;
+      st->nodes.index(firstChild + oI).r = ms->s.r;
 
-      if (level < st->levels-2)
+      if (level < st->levels - 2)
         inds.index(oI).clone(ms->vertices);
 
       oI++;
       if (oI > st->degree)
-        break;                //    no point continuing
-      }
+        break; //    no point continuing
     }
-  
+  }
+
   //  free up the medial spheres
   medialSpheres.free();
 
   //  recurse to do children
-  if (level < st->levels-2){
+  if (level < st->levels - 2) {
     for (int i = 0; i < oI; i++)
-      buildTree(st, merger, level+1, firstChild+i, &inds.index(i));
-    }
+      buildTree(st, merger, level + 1, firstChild + i, &inds.index(i));
+  }
 }

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,8 +37,8 @@
 \**************************************************************************/
 
 /*
-    ShpereTree Generator which specifically uses the Octree method - very simple and fast
-    but very poor approximation of the object.
+    ShpereTree Generator which specifically uses the Octree method - very simple
+   and fast but very poor approximation of the object.
 */
 #ifndef _API_OCTREE_SPHERETREE_GENERATOR_H_
 #define _API_OCTREE_SPHERETREE_GENERATOR_H_
@@ -47,29 +47,36 @@
 #include "../Surface/Surface.h"
 #include "../Surface/SurfaceTester.h"
 
-class STGOctree : public STGBase{
-  public:
-    //  set this surface tester if you want solid trees
-    SurfaceTester *surTester;
+class STGOctree : public STGBase {
+public:
+  //  set this surface tester if you want solid trees
+  SurfaceTester *surTester;
 
-    //  constructor
-    STGOctree();
-    STGOctree(const Surface &sur);
+  //  constructor
+  STGOctree();
+  STGOctree(const Surface &sur);
 
-    //  surface
-    void setSurface(const Surface &sur);
+  //  surface
+  void setSurface(const Surface &sur);
 
-    //  construct
-    void constructTree(SphereTree *st) const;
-    static void constructTree(SphereTree *st, const Surface &sur, const SurfaceTester *surTester = NULL);
-    static void getSpheres(SphereTree *tree, const Surface &sur, int divs, const SurfaceTester *surTester = NULL);
+  //  construct
+  void constructTree(SphereTree *st) const;
+  static void constructTree(SphereTree *st, const Surface &sur,
+                            const SurfaceTester *surTester = NULL);
+  static void getSpheres(SphereTree *tree, const Surface &sur, int divs,
+                         const SurfaceTester *surTester = NULL);
 
-  private:
-    const Surface *sur;
+private:
+  const Surface *sur;
 
-    //  internal
-    static void filterTriangles(Array<int> *selTris, const Array<int> &srcTris, const Surface &sur, const Point3D &pMin, float edgeLength);
-    static void getChildren(SphereTree *tree, const Surface &sur, int node, int level, int divs, const Point3D &pMin, float size, const Array<int> &tris, const SurfaceTester *surTester);
+  //  internal
+  static void filterTriangles(Array<int> *selTris, const Array<int> &srcTris,
+                              const Surface &sur, const Point3D &pMin,
+                              float edgeLength);
+  static void getChildren(SphereTree *tree, const Surface &sur, int node,
+                          int level, int divs, const Point3D &pMin, float size,
+                          const Array<int> &tris,
+                          const SurfaceTester *surTester);
 };
 
 #endif

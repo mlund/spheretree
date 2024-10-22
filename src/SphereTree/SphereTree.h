@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -45,24 +45,25 @@
 #include "../Geometry/Sphere.h"
 #include "../Storage/kTree.h"
 
-struct STSphere : Sphere{
+struct STSphere : Sphere {
   bool hasAux;
   Sphere sAux;
   float errDec;
   float occupancy;
 };
 
-class SphereTree : public kTree<STSphere>{
-  public:
-    bool loadSphereTree(const char *fileName, float scale = 1.0f);
-    bool saveSphereTree(const char *fileName, float scale = 1.0f);
-    void initNode(int node, int level = -1);
-    void getLevel(Array<Sphere> *spheres, int level) const;
+class SphereTree : public kTree<STSphere> {
+public:
+  bool loadSphereTree(const char *fileName, float scale = 1.0f);
+  bool saveSphereTree(const char *fileName, float scale = 1.0f);
+  void initNode(int node, int level = -1);
+  void getLevel(Array<Sphere> *spheres, int level) const;
 
-    void growTree(int levs);
-    void setupTree(int deg, int levs);
+  void growTree(int levs);
+  void setupTree(int deg, int levs);
 
-    static bool saveSpheres(const Array<Sphere> &spheres, const char *fileName, float scale = 1.0f);
+  static bool saveSpheres(const Array<Sphere> &spheres, const char *fileName,
+                          float scale = 1.0f);
 };
 
 #endif

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -47,45 +47,43 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-class CMainFrame : public CMDIFrameWnd
-{
-	DECLARE_DYNAMIC(CMainFrame)
+class CMainFrame : public CMDIFrameWnd {
+  DECLARE_DYNAMIC(CMainFrame)
 public:
-	CMainFrame();
+  CMainFrame();
 
-// Attributes
+  // Attributes
 public:
-
-// Operations
+  // Operations
 public:
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CMainFrame)
+  virtual BOOL PreCreateWindow(CREATESTRUCT &cs);
+  //}}AFX_VIRTUAL
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	//}}AFX_VIRTUAL
-
-// Implementation
+  // Implementation
 public:
-	virtual ~CMainFrame();
+  virtual ~CMainFrame();
 #ifdef _DEBUG
 #endif
 
-protected:  // control bar embedded members
-	CStatusBar  m_wndStatusBar;
-	CToolBar    m_wndToolBar;
+protected: // control bar embedded members
+  CStatusBar m_wndStatusBar;
+  CToolBar m_wndToolBar;
 
-// Generated message map functions
+  // Generated message map functions
 protected:
-	//{{AFX_MSG(CMainFrame)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  //{{AFX_MSG(CMainFrame)
+  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////
 
 //{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+// Microsoft Visual C++ will insert additional declarations immediately before
+// the previous line.
 
 #endif // !defined(AFX_MAINFRM_H__87BBBDC8_AC0C_11D4_9A1C_00104B9D2B6D__INCLUDED_)

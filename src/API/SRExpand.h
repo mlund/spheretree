@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,14 +37,14 @@
 \**************************************************************************/
 
 /*
-    Sphere Reducer which expands the medial spheres out until they only the required number
-    are needed.
+    Sphere Reducer which expands the medial spheres out until they only the
+   required number are needed.
 
 
-    NOTE : when using numSpheresPerNode we only count spheres which cover the surface 
-           points in SurfaceRep.  This means that we will start with this number.
-           This means that 5-10 times the destination number of spheres should be more
-           than enough.
+    NOTE : when using numSpheresPerNode we only count spheres which cover the
+   surface points in SurfaceRep.  This means that we will start with this
+   number. This means that 5-10 times the destination number of spheres should
+   be more than enough.
 
 
     tryIter == 0 for no iteration
@@ -60,29 +60,34 @@
 #include "../MedialAxis/Voronoi3D.h"
 #include "../MedialAxis/MedialTester.h"
 
-class SRExpand : public SRStandOff{
-  public:
-    REBase *redElim;
-    VFAdaptive *vorAdapt;
-    int initSpheres, minSpheresPerNode, maxItersForVoronoi;
+class SRExpand : public SRStandOff {
+public:
+  REBase *redElim;
+  VFAdaptive *vorAdapt;
+  int initSpheres, minSpheresPerNode, maxItersForVoronoi;
 
-    float errorDecreaseFactor;
+  float errorDecreaseFactor;
 
-    //  constructor
-    SRExpand();
+  //  constructor
+  SRExpand();
 
-    //  setup
-    void setup(Voronoi3D *vor, const MedialTester *mt);
-    void setupForLevel(int level, int degree, const SurfaceRep *surRep) const;
+  //  setup
+  void setup(Voronoi3D *vor, const MedialTester *mt);
+  void setupForLevel(int level, int degree, const SurfaceRep *surRep) const;
 
-    //  overloaded
-    void generateExpandedSpheres(Array<Sphere> *dest, float err, const Sphere *parSph = NULL) const;
-    bool generateStandOffSpheres(Array<Sphere> *spheres, float err, const SurfaceRep &surRep, int  maxNum = -1, int tryIter = 0, const Sphere *parSph = NULL) const;
-    bool setupFilterSphere(const Sphere *filterSphere, float parSphErr, const SurfaceRep *surRep) const;
+  //  overloaded
+  void generateExpandedSpheres(Array<Sphere> *dest, float err,
+                               const Sphere *parSph = NULL) const;
+  bool generateStandOffSpheres(Array<Sphere> *spheres, float err,
+                               const SurfaceRep &surRep, int maxNum = -1,
+                               int tryIter = 0,
+                               const Sphere *parSph = NULL) const;
+  bool setupFilterSphere(const Sphere *filterSphere, float parSphErr,
+                         const SurfaceRep *surRep) const;
 
-  protected:
-    Voronoi3D *vor;
-    const MedialTester *mt;
+protected:
+  Voronoi3D *vor;
+  const MedialTester *mt;
 };
 
 #endif

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -41,21 +41,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-Exception::Exception(){
+Exception::Exception() {
   cond = file = NULL;
   line = 0;
 }
 
-Exception::Exception(const char *cond, const char *file, int line){
+Exception::Exception(const char *cond, const char *file, int line) {
   this->cond = cond;
   this->file = file;
   this->line = line;
 }
 
-bool Exception::getMessage(char *str, int maxSize) const{
-  static const char *message = "Unable to Complete Task Due to AN INTERNAL ERROR,\nIt Is Wise to Restart the Application...";
-  strncpy(str, message, maxSize-1);
-  str[maxSize-1] = '\0';
+bool Exception::getMessage(char *str, int maxSize) const {
+  static const char *message =
+      "Unable to Complete Task Due to AN INTERNAL ERROR,\nIt Is Wise to "
+      "Restart the Application...";
+  strncpy(str, message, maxSize - 1);
+  str[maxSize - 1] = '\0';
 
   return TRUE;
 }

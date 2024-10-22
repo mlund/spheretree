@@ -2,7 +2,9 @@
 #define _NR_COMPLEX_H_
 
 #ifndef _FCOMPLEX_DECLARE_T_
-typedef struct FCOMPLEX {float r,i;} fcomplex;
+typedef struct FCOMPLEX {
+  float r, i;
+} fcomplex;
 #define _FCOMPLEX_DECLARE_T_
 #endif /* _FCOMPLEX_DECLARE_T_ */
 

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -45,30 +45,30 @@
 #include <stdio.h>
 
 #ifdef USE_RHINO_IO
-bool Surface::loadMesh(const CRhinoMesh &mesh){
+bool Surface::loadMesh(const CRhinoMesh &mesh) {
   int baseV = vertices.getSize();
   int baseT = triangles.getSize();
 
   //  load vertices
   const int numVert = mesh.NumVertices();
   vertices.resize(baseV + numVert);
-  for (int i = 0; i < numVert; i++){
+  for (int i = 0; i < numVert; i++) {
     double x, y, z;
     mesh.GetVertex(i, x, y, z);
 
-    Point *p = &vertices.index(baseV+i);
+    Point *p = &vertices.index(baseV + i);
     p->p.x = x;
     p->p.y = y;
     p->p.z = z;
 
     pMin.storeMin(p->p);
     pMax.storeMax(p->p);
-    }
+  }
 
   //  load faces (creating vertices)
   Vector3D V1, V2;
   const int numFace = mesh.NumFaces();
-  for (int i = 0; i < numFace; i++){
+  for (int i = 0; i < numFace; i++) {
     int v0, v1, v2, v3;
     mesh.GetFace(i, v0, v1, v2, v3);
     Triangle *t = &triangles.addItem();
@@ -80,11 +80,11 @@ bool Surface::loadMesh(const CRhinoMesh &mesh){
     //  triangle normal
     V1.difference(vertices.index(t->v[1]).p, vertices.index(t->v[0]).p);
     V2.difference(vertices.index(t->v[2]).p, vertices.index(t->v[0]).p);
-    t->n.cross(V1,V2);
+    t->n.cross(V1, V2);
     t->n.norm();
 
     //  add second triangle
-    if (v2 != v3){
+    if (v2 != v3) {
       Triangle *t = &triangles.addItem();
       t->f[0] = t->f[1] = t->f[2] = -1;
       t->v[0] = v0 + baseV;
@@ -93,10 +93,10 @@ bool Surface::loadMesh(const CRhinoMesh &mesh){
 
       V1.difference(vertices.index(t->v[1]).p, vertices.index(t->v[0]).p);
       V2.difference(vertices.index(t->v[2]).p, vertices.index(t->v[0]).p);
-      t->n.cross(V1,V2);
+      t->n.cross(V1, V2);
       t->n.norm();
-      }
     }
+  }
 
   //  connection to other triangles
   setupAdjacent(baseT, triangles.getSize());
@@ -105,7 +105,8 @@ bool Surface::loadMesh(const CRhinoMesh &mesh){
 }
 #endif
 
-bool Surface::loadRhinoSurface(const char *fileName, char **err, float boxSize){
+bool Surface::loadRhinoSurface(const char *fileName, char **err,
+                               float boxSize) {
 #ifdef USE_RHINO_IO
   //  read rhino file
   FILE *f = fopen(fileName, "rb");
@@ -118,30 +119,28 @@ bool Surface::loadRhinoSurface(const char *fileName, char **err, float boxSize){
 
   //  load objects
   BOOL ok = TRUE;
-  try{
+  try {
     CRhinoFile RF(f, CRhinoFile::read);
     CRhinoFile::eStatus status = CRhinoFile::good;
 
-    for(;;){
+    for (;;) {
       CRhinoObject *obj = RF.Read(status);
-      if (status == CRhinoFile::good){
+      if (status == CRhinoFile::good) {
         //  load object
-        if (obj->TypeCode() == TCODE_MESH_OBJECT){
-          loadMesh(*(const CRhinoMesh*)obj);
-          }
+        if (obj->TypeCode() == TCODE_MESH_OBJECT) {
+          loadMesh(*(const CRhinoMesh *)obj);
+        }
 
-        //rhfree(obj);  --  doesn't work
+        // rhfree(obj);  --  doesn't work
         delete obj;
-        }
-      else{
+      } else {
         break;
-        }
       }
     }
-  catch(CRhinoException e){
+  } catch (CRhinoException e) {
     // if something goes wrong, catch the exception here
-    if (err){
-      switch ( e.m_type ) {
+    if (err) {
+      switch (e.m_type) {
       case CRhinoException::unable_to_write:
         *err = "unable_to_write";
         break;
@@ -169,10 +168,10 @@ bool Surface::loadRhinoSurface(const char *fileName, char **err, float boxSize){
       default:
         *err = "unknow exception";
         break;
-        }
       }
-    ok = FALSE;
     }
+    ok = FALSE;
+  }
   fclose(f);
 
   //  fix neighbours
@@ -191,16 +190,16 @@ bool Surface::loadRhinoSurface(const char *fileName, char **err, float boxSize){
 #endif
 }
 
-float Surface::fitIntoBox(float boxSize){
+float Surface::fitIntoBox(float boxSize) {
   //  calculate scale to fit into a 2*2*2 box
-  float sX = 	2.0/(pMax.x - pMin.x);
-  float sY = 	2.0/(pMax.y - pMin.y);
-  float sZ = 	2.0/(pMax.z - pMin.z);
+  float sX = 2.0 / (pMax.x - pMin.x);
+  float sY = 2.0 / (pMax.y - pMin.y);
+  float sZ = 2.0 / (pMax.z - pMin.z);
   float scale = sX;
   if (sY < scale)
-	  scale = sY;
+    scale = sY;
   if (sZ < scale)
-	  scale = sZ;
+    scale = sZ;
   scale *= boxSize;
 
   float cX = (pMax.x + pMin.x) / 2.0f;
@@ -208,63 +207,63 @@ float Surface::fitIntoBox(float boxSize){
   float cZ = (pMax.z + pMin.z) / 2.0f;
 
   int numVert = vertices.getSize();
-  for (int i = 0; i < numVert; i++){
+  for (int i = 0; i < numVert; i++) {
     //  pointer to vertex information
-    Point*p = &vertices.index(i);
-    p->p.x = (p->p.x-cX)*scale;
-    p->p.y = (p->p.y-cY)*scale;
-    p->p.z = (p->p.z-cZ)*scale;
-    }
+    Point *p = &vertices.index(i);
+    p->p.x = (p->p.x - cX) * scale;
+    p->p.y = (p->p.y - cY) * scale;
+    p->p.z = (p->p.z - cZ) * scale;
+  }
 
   //  update bounds
-  pMin.x = (pMin.x-cX)*scale;
-  pMin.y = (pMin.y-cY)*scale;
-  pMin.z = (pMin.z-cZ)*scale;
-  pMax.x = (pMax.x-cX)*scale;
-  pMax.y = (pMax.y-cY)*scale;
-  pMax.z = (pMax.z-cZ)*scale;
+  pMin.x = (pMin.x - cX) * scale;
+  pMin.y = (pMin.y - cY) * scale;
+  pMin.z = (pMin.z - cZ) * scale;
+  pMax.x = (pMax.x - cX) * scale;
+  pMax.y = (pMax.y - cY) * scale;
+  pMax.z = (pMax.z - cZ) * scale;
 
   return scale;
 }
 
-int Surface::findTriangle(int tri, int v1, int v2, int mn, int mx) const{
+int Surface::findTriangle(int tri, int v1, int v2, int mn, int mx) const {
   CHECK_DEBUG0(mn <= mx);
 
   Point3D p1 = vertices.index(v1).p;
   Point3D p2 = vertices.index(v2).p;
 
   for (int i = mn; i < mx; i++)
-    if (i != tri){
+    if (i != tri) {
       const Triangle *tr = &triangles.index(i);
-      for (int j = 0; j < 3; j++){
-        int u1 = j, u2 = (j+1)%3;
+      for (int j = 0; j < 3; j++) {
+        int u1 = j, u2 = (j + 1) % 3;
         Point3D q1 = vertices.index(tr->v[u1]).p;
         Point3D q2 = vertices.index(tr->v[u2]).p;
 
         if ((tr->v[u1] == v1 && tr->v[u2] == v2) ||
-            (tr->v[u1] == v2 && tr->v[u2] == v1)){
+            (tr->v[u1] == v2 && tr->v[u2] == v1)) {
           return i;
-          }
         }
       }
+    }
 
   return -1;
 }
 
-void Surface::setupAdjacent(int mn, int mx){
+void Surface::setupAdjacent(int mn, int mx) {
   CHECK_DEBUG0(mn <= mx);
 
-  for (int i = mn; i < mx; i++){
+  for (int i = mn; i < mx; i++) {
     Triangle *tr = &triangles.index(i);
-    for (int j = 0; j < 3; j++){
-      int v1 = j, v2 = (j+1)%3;
+    for (int j = 0; j < 3; j++) {
+      int v1 = j, v2 = (j + 1) % 3;
       tr->f[j] = findTriangle(i, tr->v[v1], tr->v[v2], mn, mx);
-      }
     }
+  }
 }
 
 //  our own format with edge adjacency
-bool Surface::loadSurface(const char *fileName, float boxSize){
+bool Surface::loadSurface(const char *fileName, float boxSize) {
   FILE *f = fopen(fileName, "r");
   if (!f)
     return FALSE;
@@ -277,7 +276,7 @@ bool Surface::loadSurface(const char *fileName, float boxSize){
   int numPts;
   fscanf(f, "%d", &numPts);
   vertices.resize(numPts);
-  for (int i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++) {
     Point *p = &vertices.index(i);
 
     float x, y, z;
@@ -293,13 +292,13 @@ bool Surface::loadSurface(const char *fileName, float boxSize){
     p->n.x = x;
     p->n.y = y;
     p->n.z = z;
-    }
+  }
 
   //  load triangle
   int numTri;
   fscanf(f, "%d", &numTri);
   triangles.resize(numTri);
-  for (int j = 0; j < numTri; j++){
+  for (int j = 0; j < numTri; j++) {
     Triangle *tri = &triangles.index(j);
 
     //  vertices
@@ -319,9 +318,9 @@ bool Surface::loadSurface(const char *fileName, float boxSize){
     Vector3D v1, v2;
     v1.difference(vertices.index(tri->v[1]).p, vertices.index(tri->v[0]).p);
     v2.difference(vertices.index(tri->v[2]).p, vertices.index(tri->v[0]).p);
-    tri->n.cross(v1,v2);
+    tri->n.cross(v1, v2);
     tri->n.norm();
-    }
+  }
 
   fclose(f);
 
@@ -331,7 +330,7 @@ bool Surface::loadSurface(const char *fileName, float boxSize){
   return TRUE;
 }
 
-bool Surface::loadMinimalSurface(const char *fileName, float boxSize){
+bool Surface::loadMinimalSurface(const char *fileName, float boxSize) {
   FILE *f = fopen(fileName, "r");
   if (!f)
     return FALSE;
@@ -344,7 +343,7 @@ bool Surface::loadMinimalSurface(const char *fileName, float boxSize){
   int numPts;
   fscanf(f, "%d", &numPts);
   vertices.resize(numPts);
-  for (int i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++) {
     Point *p = &vertices.index(i);
 
     //  load position
@@ -358,13 +357,13 @@ bool Surface::loadMinimalSurface(const char *fileName, float boxSize){
     pMax.storeMax(p->p);
 
     //  no normal info
-    }
+  }
 
   //  load triangle
   int numTri;
   fscanf(f, "%d", &numTri);
   triangles.resize(numTri);
-  for (int j = 0; j < numTri; j++){
+  for (int j = 0; j < numTri; j++) {
     Triangle *tri = &triangles.index(j);
 
     //  load vertices
@@ -375,7 +374,7 @@ bool Surface::loadMinimalSurface(const char *fileName, float boxSize){
     tri->v[2] = c;
 
     //  no neighbours
-    }
+  }
   fclose(f);
 
   //  work out vertex normals
@@ -390,7 +389,7 @@ bool Surface::loadMinimalSurface(const char *fileName, float boxSize){
   return TRUE;
 }
 
-bool Surface::saveSurface(const char *fileName, float scale){
+bool Surface::saveSurface(const char *fileName, float scale) {
   FILE *f = fopen(fileName, "w");
   if (!f)
     return FALSE;
@@ -398,30 +397,32 @@ bool Surface::saveSurface(const char *fileName, float scale){
   //  dump vertices
   int numPoints = vertices.getSize();
   fprintf(f, "%d\n", numPoints);
-  for (int i = 0; i < numPoints; i++){
+  for (int i = 0; i < numPoints; i++) {
     Point p = vertices.index(i);
-    if (!fprintf(f, "%f %f %f %f %f %f\n", p.p.x*scale, p.p.y*scale, p.p.z*scale, p.n.x, p.n.y, p.n.z)){
+    if (!fprintf(f, "%f %f %f %f %f %f\n", p.p.x * scale, p.p.y * scale,
+                 p.p.z * scale, p.n.x, p.n.y, p.n.z)) {
       fclose(f);
       return FALSE;
-      }
     }
+  }
 
   //  dump triangles
   int numTris = triangles.getSize();
   fprintf(f, "%d\n", numTris);
-  for (int j = 0; j < numTris; j++){
+  for (int j = 0; j < numTris; j++) {
     Triangle t = triangles.index(j);
-    if (!fprintf(f, "%d %d %d %d %d %d\n", t.v[0], t.v[1], t.v[2], t.f[0], t.f[1], t.f[2])){
+    if (!fprintf(f, "%d %d %d %d %d %d\n", t.v[0], t.v[1], t.v[2], t.f[0],
+                 t.f[1], t.f[2])) {
       fclose(f);
       return FALSE;
-      }
     }
+  }
 
   fclose(f);
   return TRUE;
 }
 
-bool Surface::saveHavokSurface(const char *fileName){
+bool Surface::saveHavokSurface(const char *fileName) {
   FILE *f = fopen(fileName, "w");
   if (!f)
     return FALSE;
@@ -429,51 +430,51 @@ bool Surface::saveHavokSurface(const char *fileName){
   //  dump vertices
   int numPoints = vertices.getSize();
   fprintf(f, "%d\n", numPoints);
-  for (int i = 0; i < numPoints; i++){
+  for (int i = 0; i < numPoints; i++) {
     Point p = vertices.index(i);
-    if (!fprintf(f, "%f %f %f\n", p.p.x, p.p.y, p.p.z)){
+    if (!fprintf(f, "%f %f %f\n", p.p.x, p.p.y, p.p.z)) {
       fclose(f);
       return FALSE;
-      }
     }
+  }
 
   //  dump triangles
   int numTris = triangles.getSize();
   fprintf(f, "%d\n", numTris);
-  for (int j = 0; j < numTris; j++){
+  for (int j = 0; j < numTris; j++) {
     Triangle t = triangles.index(j);
-    if (!fprintf(f, "3 %d %d %d\n", t.v[0], t.v[1], t.v[2])){
+    if (!fprintf(f, "3 %d %d %d\n", t.v[0], t.v[1], t.v[2])) {
       fclose(f);
       return FALSE;
-      }
     }
+  }
 
   fclose(f);
   return TRUE;
 }
 
-void Surface::getTriangleNormal(Vector3D *n, int trI) const{
+void Surface::getTriangleNormal(Vector3D *n, int trI) const {
   const Triangle *tri = &triangles.index(trI);
   *n = tri->n;
-/*
-  Point3D pts[3];
-  for (int j = 0; j < 3; j++)
-    pts[j] = vertices.index(tri->v[j]).p;
+  /*
+    Point3D pts[3];
+    for (int j = 0; j < 3; j++)
+      pts[j] = vertices.index(tri->v[j]).p;
 
-  Vector3D v1, v2, vC;
-  v1.difference(pts[1], pts[0]);
-  v2.difference(pts[2], pts[0]);
-  n->cross(v1, v2);
-  n->norm();
-*/
+    Vector3D v1, v2, vC;
+    v1.difference(pts[1], pts[0]);
+    v2.difference(pts[2], pts[0]);
+    n->cross(v1, v2);
+    n->norm();
+  */
 }
 
-void Surface::getVertexNormal(Vector3D *n, int vertex) const{
+void Surface::getVertexNormal(Vector3D *n, int vertex) const {
   *n = vertices.index(vertex).n;
 }
 
 //  get normal of point in triangle using bi-linear interpolation
-void Surface::getNormal(Vector3D *n, const Point3D &p, int tri) const{
+void Surface::getNormal(Vector3D *n, const Point3D &p, int tri) const {
   //  get points
   const Triangle *triangle = &triangles.index(tri);
   const Point *p0 = &vertices.index(triangle->v[0]);
@@ -503,18 +504,18 @@ void Surface::getNormal(Vector3D *n, const Point3D &p, int tri) const{
   //  interpolate pI's value between P0 & P1
   float d01 = pI.distance(P0) / P1.distance(P0);
   Vector3D vI;
-  vI.x = (1-d01)*p0->n.x + d01*p1->n.x;
-  vI.y = (1-d01)*p0->n.y + d01*p1->n.y;
-  vI.z = (1-d01)*p0->n.z + d01*p1->n.z;
+  vI.x = (1 - d01) * p0->n.x + d01 * p1->n.x;
+  vI.y = (1 - d01) * p0->n.y + d01 * p1->n.y;
+  vI.z = (1 - d01) * p0->n.z + d01 * p1->n.z;
 
   //  interpolate Pt's value from P2 and pI
   float d = Pt.distance(P2) / pI.distance(P2);
-  n->x = (1-d)*p2->n.x + d*vI.x;
-  n->y = (1-d)*p2->n.y + d*vI.y;
-  n->z = (1-d)*p2->n.z + d*vI.z;
+  n->x = (1 - d) * p2->n.x + d * vI.x;
+  n->y = (1 - d) * p2->n.y + d * vI.y;
+  n->z = (1 - d) * p2->n.z + d * vI.z;
 }
 
-void Surface::getEdgeNormal(Vector3D *n, int tri, int edge) const{
+void Surface::getEdgeNormal(Vector3D *n, int tri, int edge) const {
   const Triangle *tr = &triangles.index(tri);
 
   Vector3D n1, n2;
@@ -525,194 +526,194 @@ void Surface::getEdgeNormal(Vector3D *n, int tri, int edge) const{
   n->norm();
 }
 
-void Surface::findNeighbours(Array<int> *tris, int vertex, int startTri) const{
+void Surface::findNeighbours(Array<int> *tris, int vertex, int startTri) const {
   //  find start triangle
-  if (startTri < 0){
+  if (startTri < 0) {
     int numTri = triangles.getSize();
     int i;
-    for (i = 0; i < numTri; i++){
+    for (i = 0; i < numTri; i++) {
       const Triangle *tr = &triangles.index(i);
       if (tr->v[0] == vertex || tr->v[1] == vertex || tr->v[2] == vertex)
         break;
-      }
+    }
     if (i != numTri)
       startTri = i;
     else
       return;
-    }
+  }
 
   //  add start triangle to list
   tris->resize(0);
   tris->addItem() = startTri;
 
   int l = 0;
-  while (l < tris->getSize()){
+  while (l < tris->getSize()) {
     int tI = tris->index(l);
     const Triangle *tr = &triangles.index(tI);
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 3; i++) {
       int nI = tr->f[i];
-      if (nI >= 0 && !tris->inList(nI)){
+      if (nI >= 0 && !tris->inList(nI)) {
         const Triangle *trN = &triangles.index(nI);
         if (trN->v[0] == vertex || trN->v[1] == vertex || trN->v[2] == vertex)
           tris->addItem() = nI;
-        }
       }
-    l++;
     }
+    l++;
+  }
 }
 
-void Surface::setupNormals(int mn, int mx, int tn, int tx){
+void Surface::setupNormals(int mn, int mx, int tn, int tx) {
   //  init normals
-  for (int i = mn; i < mx; i++){
+  for (int i = mn; i < mx; i++) {
     Point *p = &vertices.index(i);
     p->n.x = 0;
     p->n.y = 0;
     p->n.z = 0;
-    }
+  }
 
   //  sum up normals from faces
   int numTri = triangles.getSize();
-  for (int i = tn; i < tx; i++){
+  for (int i = tn; i < tx; i++) {
     Vector3D n;
     getTriangleNormal(&n, i);
 
     const Triangle *t = &triangles.index(i);
-    for (int j = 0; j < 3; j++){
+    for (int j = 0; j < 3; j++) {
       Point *p = &vertices.index(t->v[j]);
       p->n.x += n.x;
       p->n.y += n.y;
       p->n.z += n.z;
-      }
     }
+  }
 
   //  normalise normals
   for (int i = mn; i < mx; i++)
     vertices.index(i).n.norm();
 }
 
-void Surface::stitchTriangles(){
+void Surface::stitchTriangles() {
   //  fix up triangles
   int numTri = triangles.getSize();
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     Triangle *t = &triangles.index(i);
-    for (int j = 0; j < 3; j++){
-      if (t->f[j] < 0){
+    for (int j = 0; j < 3; j++) {
+      if (t->f[j] < 0) {
         //  points from unmatched edge
-        int v0 = t->v[j], v1 = t->v[(j+1)%3];
+        int v0 = t->v[j], v1 = t->v[(j + 1) % 3];
         Point3D p0 = vertices.index(v0).p;
         Point3D p1 = vertices.index(v1).p;
 
         //  search for match
         REAL minD = REAL_MAX;
         int minT = -1, minV1 = -1, minV2 = -1, minE = -1;
-        for (int tri = 0; tri < numTri; tri++){
+        for (int tri = 0; tri < numTri; tri++) {
           if (tri == i)
             continue;
 
           //  candidate match
           Triangle *t1 = &triangles.index(tri);
-          for (int e = 0; e < 3; e++){
+          for (int e = 0; e < 3; e++) {
             if (t1->f[e] >= 0)
               continue;
 
             //  points from unmatched edge
             Point3D q0 = vertices.index(t1->v[e]).p;
-            Point3D q1 = vertices.index(t1->v[(e+1)%3]).p;
+            Point3D q1 = vertices.index(t1->v[(e + 1) % 3]).p;
 
             //  forward edge
             float d = p0.distance(q0) + p1.distance(q1);
-            if (d < minD){
+            if (d < minD) {
               minD = d;
               minT = tri;
               minV1 = t1->v[e];
-              minV2 = t1->v[(e+1)%3];
+              minV2 = t1->v[(e + 1) % 3];
               minE = e;
-              }
+            }
 
             //  reverse edge
             d = p0.distance(q1) + p1.distance(q0);
-            if (d < minD){
+            if (d < minD) {
               minD = d;
               minT = tri;
               minV2 = t1->v[e];
-              minV1 = t1->v[(e+1)%3];
+              minV1 = t1->v[(e + 1) % 3];
               minE = e;
-              }
             }
           }
-//      CHECK_DEBUG0(minT >= 0);
+        }
+        //      CHECK_DEBUG0(minT >= 0);
 
-        if (minT >= 0){        
-          //OUTPUTINFO("minD = %f\n", minD);
+        if (minT >= 0) {
+          // OUTPUTINFO("minD = %f\n", minD);
 
           //  link triangles
           t->f[j] = minT;
           triangles.index(minT).f[minE] = i;
 
           //  merge first vertex
-          if (minV1 != v0){
+          if (minV1 != v0) {
             remapVertex(minV1, v0);
 
-            int lastV = vertices.getSize()-1;
-            if (minV1 != lastV){
+            int lastV = vertices.getSize() - 1;
+            if (minV1 != lastV) {
               vertices.index(minV1) = vertices.index(lastV);
               remapVertex(lastV, minV1);
               if (minV2 == lastV)
                 minV2 = minV1;
               if (v1 == lastV)
                 v1 = minV1;
-              }
-            vertices.setSize(lastV);
             }
+            vertices.setSize(lastV);
+          }
 
-          if (minV2 != v1){
+          if (minV2 != v1) {
             remapVertex(minV2, v1);
-            int lastV = vertices.getSize()-1;
-            if (minV2 != lastV){
+            int lastV = vertices.getSize() - 1;
+            if (minV2 != lastV) {
               vertices.index(minV2) = vertices.index(lastV);
               remapVertex(lastV, minV2);
-              }
-            vertices.setSize(lastV);
             }
+            vertices.setSize(lastV);
           }
         }
       }
     }
+  }
 }
 
-void Surface::remapVertex(int s, int d){
+void Surface::remapVertex(int s, int d) {
   int numTri = triangles.getSize();
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     Triangle *t = &triangles.index(i);
 
-    for (int j = 0; j < 3; j++){
+    for (int j = 0; j < 3; j++) {
       if (t->v[j] == s)
         t->v[j] = d;
-      }
     }
+  }
 }
 
-bool Surface::vertexHasRef(int s){
+bool Surface::vertexHasRef(int s) {
   int numTri = triangles.getSize();
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     Triangle *t = &triangles.index(i);
 
-    for (int j = 0; j < 3; j++){
+    for (int j = 0; j < 3; j++) {
       if (t->v[j] == s)
         return true;
-      }
     }
+  }
   return false;
 }
 
-void Surface::getBoundingSphere(Sphere *s) const{
+void Surface::getBoundingSphere(Sphere *s) const {
   int numPts = vertices.getSize();
 
   //  first pass - find maxima/minima points for the 3 axes
   Point3D xMin, xMax, yMin, yMax, zMin, zMax;
   xMin.x = yMin.y = zMin.z = REAL_MAX;
   xMax.x = yMax.y = zMax.z = REAL_MIN;
-  for (int i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++) {
     Point3D p = vertices.index(i).p;
 
     if (p.x < xMin.x)
@@ -728,8 +729,8 @@ void Surface::getBoundingSphere(Sphere *s) const{
     if (p.z < zMin.z)
       zMin = p;
     if (p.z > zMax.z)
-      zMax = p; 
-    }
+      zMax = p;
+  }
 
   //  x-span is square distance between xmin & xmax
   float xspan = xMin.distanceSQR(xMax);
@@ -739,49 +740,49 @@ void Surface::getBoundingSphere(Sphere *s) const{
   //  dMin and dMax are the maximally separated pair
   float maxSpan = xspan;
   Point3D dMin = xMin, dMax = xMax;
-  if (yspan > maxSpan){
+  if (yspan > maxSpan) {
     maxSpan = yspan;
     dMin = yMin;
     dMax = yMax;
-    }
-  if (zspan > maxSpan){
+  }
+  if (zspan > maxSpan) {
     maxSpan = zspan;
     dMin = zMin;
     dMax = zMax;
-    }
+  }
 
   //  work out center and radius of sphere
   Point3D pC;
-  pC.x = (dMin.x + dMax.x)/2.0f;
-  pC.y = (dMin.y + dMax.y)/2.0f;
-  pC.z = (dMin.z + dMax.z)/2.0f;
+  pC.x = (dMin.x + dMax.x) / 2.0f;
+  pC.y = (dMin.y + dMax.y) / 2.0f;
+  pC.z = (dMin.z + dMax.z) / 2.0f;
   float rCS = pC.distanceSQR(dMax);
   float rC = sqrt(rCS);
 
   //  second pass - increment current sphere
-  for (int i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++) {
     Point3D p = vertices.index(i).p;
 
     float oldToPS = pC.distanceSQR(p);
-    if (oldToPS > rCS){
+    if (oldToPS > rCS) {
       //  this point is outside the sphere
       float oldToP = sqrt(oldToPS);
-      rC = (rC + oldToP)/2.0;
-      rCS = rC*rC;
+      rC = (rC + oldToP) / 2.0;
+      rCS = rC * rC;
       float oldToNew = oldToP - rC;
 
       //  new sphere center
-      pC.x = (rC*pC.x + oldToNew*p.x)/oldToP;
-      pC.y = (rC*pC.y + oldToNew*p.y)/oldToP;
-      pC.z = (rC*pC.z + oldToNew*p.z)/oldToP;
-      }
+      pC.x = (rC * pC.x + oldToNew * p.x) / oldToP;
+      pC.y = (rC * pC.y + oldToNew * p.y) / oldToP;
+      pC.z = (rC * pC.z + oldToNew * p.z) / oldToP;
     }
+  }
 
   s->c = pC;
   s->r = rC;
 }
 
-void Surface::copy(const Surface &other){
+void Surface::copy(const Surface &other) {
   pMin = other.pMin;
   pMax = other.pMax;
 
@@ -794,22 +795,23 @@ void Surface::copy(const Surface &other){
   triangles.copy(other.triangles);
 }
 
-bool Surface::hasEdge(const Triangle *tri, int e[2]){
+bool Surface::hasEdge(const Triangle *tri, int e[2]) {
   bool has[2] = {false, false};
-  for (int i = 0; i < 3; i++){
+  for (int i = 0; i < 3; i++) {
     if (tri->v[i] == e[0])
       has[0] = true;
     if (tri->v[i] == e[1])
       has[1] = true;
-    }
+  }
   return has[0] && has[1];
 }
 
-bool Surface::hasVertex(const Triangle *tri, int v){
+bool Surface::hasVertex(const Triangle *tri, int v) {
   return (tri->v[0] == v || tri->v[1] == v || tri->v[2] == v);
 }
 
-void Surface::testSurface(int *badVerts, int *badNeighs, int *openEdges, int *multEdges, int *badFaces) const{
+void Surface::testSurface(int *badVerts, int *badNeighs, int *openEdges,
+                          int *multEdges, int *badFaces) const {
   *badVerts = 0;
   *badNeighs = 0;
   *openEdges = 0;
@@ -821,62 +823,62 @@ void Surface::testSurface(int *badVerts, int *badNeighs, int *openEdges, int *mu
 
   //  check for open edges and bad vertices
   OUTPUTINFO("Testing Open Edges...\n");
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     const Triangle *tri = &triangles.index(i);
-    for (int j = 0; j < 3; j++){
+    for (int j = 0; j < 3; j++) {
       if (tri->v[j] < 0 || tri->v[j] >= numVert)
         (*badVerts)++;
       if (tri->f[j] < 0 || tri->f[j] >= numTri || tri->f[j] == i)
         (*openEdges)++;
-      }
     }
+  }
 
   //  check for multiple edges
   OUTPUTINFO("Testing Multi/Bad Edges...\n");
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     const Triangle *tri = &triangles.index(i);
-    for (int j = 0; j < 3; j++){
+    for (int j = 0; j < 3; j++) {
       int e[2];
       e[0] = tri->v[j];
-      e[1] = tri->v[(j+1)%3];
+      e[1] = tri->v[(j + 1) % 3];
 
       //  count triangles with this edge
       int numWithEdge = 0;
-      for (int k = 0; k < numTri; k++){
+      for (int k = 0; k < numTri; k++) {
         if (k == i)
           continue;
 
         const Triangle *tri = &triangles.index(k);
         if (hasEdge(tri, e))
           numWithEdge++;
-        }
+      }
 
       //  work out what is wrong
-      if (numWithEdge > 1){
+      if (numWithEdge > 1) {
         //  too many neighbours
         (*multEdges)++;
-        }
-      else if (numWithEdge == 1){
+      } else if (numWithEdge == 1) {
         //  check that the neighbour has a reference back to us
         const Triangle *tri1 = &triangles.index(tri->f[j]);
         if ((tri1->f[0] != i) && (tri1->f[1] != i) && (tri1->f[2] != i))
           (*badNeighs)++;
-        }
       }
     }
+  }
 
   //  check each triangle for intersections
   OUTPUTINFO("Testing Intersecting Faces...\n");
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     const Triangle *tri = &triangles.index(i);
     Point3D t1[3];
     t1[0] = vertices.index(tri->v[0]).p;
     t1[1] = vertices.index(tri->v[1]).p;
     t1[2] = vertices.index(tri->v[2]).p;
 
-    for (int j = i+1; j < numTri; j++){
+    for (int j = i + 1; j < numTri; j++) {
       const Triangle *tri1 = &triangles.index(j);
-      if (hasVertex(tri1, tri->v[0]) || hasVertex(tri1, tri->v[1]) || hasVertex(tri1, tri->v[2]))
+      if (hasVertex(tri1, tri->v[0]) || hasVertex(tri1, tri->v[1]) ||
+          hasVertex(tri1, tri->v[2]))
         continue;
 
       Point3D t2[3];
@@ -886,24 +888,25 @@ void Surface::testSurface(int *badVerts, int *badNeighs, int *openEdges, int *mu
 
       if (trianglesIntersect(t1, t2))
         (*badFaces)++;
-      }
     }
+  }
 }
 
 //  mass properties - taken from mirtich's code
-void Surface::computeMassProperties(REAL *mass, REAL com[3], REAL it[3][3]) const{
+void Surface::computeMassProperties(REAL *mass, REAL com[3],
+                                    REAL it[3][3]) const {
   ::computeMassProperties(mass, com, it, *this);
 }
 
 //  compute bounding box
-void Surface::setupBoundingBox(){
+void Surface::setupBoundingBox() {
   pMin = Point3D::MAX;
   pMax = Point3D::MIN;
 
   int numVert = vertices.getSize();
-  for (int i = 0; i < numVert; i++){
+  for (int i = 0; i < numVert; i++) {
     Point3D p = vertices.index(i).p;
     pMin.storeMin(p);
     pMax.storeMax(p);
-    }  
+  }
 }

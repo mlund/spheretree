@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,7 +37,7 @@
 \**************************************************************************/
 
 /*
-    Transformation  in 2D Euclidean space, 
+    Transformation  in 2D Euclidean space,
 
         [ROW][COL] indexing
 
@@ -52,47 +52,48 @@
 #include "Vector2D.h"
 #include "../Exceptions/CheckDebug.h"
 
-struct Transform2D{
-  protected:
-    REAL data[3][3];
+struct Transform2D {
+protected:
+  REAL data[3][3];
 
-  public:
-    //  indexing
-    __inline const REAL &index(unsigned int i, unsigned int j) const{
-      CHECK_DEBUG2(i < 3 && j < 3, "Transform Index (%d, %d)", i, j);
-      return data[i][j];
-      }
+public:
+  //  indexing
+  __inline const REAL &index(unsigned int i, unsigned int j) const {
+    CHECK_DEBUG2(i < 3 && j < 3, "Transform Index (%d, %d)", i, j);
+    return data[i][j];
+  }
 
-    __inline REAL &index(unsigned int i, unsigned int j){
-      CHECK_DEBUG2(i < 3 && j < 3, "Transform Index (%d, %d)", i, j);
-      return data[i][j];
-      }
+  __inline REAL &index(unsigned int i, unsigned int j) {
+    CHECK_DEBUG2(i < 3 && j < 3, "Transform Index (%d, %d)", i, j);
+    return data[i][j];
+  }
 
-    //  copy
-    void assign(const Transform2D &tr);
+  //  copy
+  void assign(const Transform2D &tr);
 
-    //  setup
-    void identity();
-    void setup(REAL ang, REAL tX, REAL tY);
-    void setAngle(REAL ang);
+  //  setup
+  void identity();
+  void setup(REAL ang, REAL tX, REAL tY);
+  void setAngle(REAL ang);
 
-    __inline void setTranslate(REAL x, REAL y){
-      data[0][2] = x;   data[1][2] = y;
-      }
+  __inline void setTranslate(REAL x, REAL y) {
+    data[0][2] = x;
+    data[1][2] = y;
+  }
 
-    //  application
-    void transform(Point2D *dest, const Point2D &src) const;
-    void transform(Vector2D *dest, const Vector2D &src) const;
+  //  application
+  void transform(Point2D *dest, const Point2D &src) const;
+  void transform(Vector2D *dest, const Vector2D &src) const;
 
-    //  this = t1 after t2
-    void compose(const Transform2D &t1, const Transform2D &t2);
+  //  this = t1 after t2
+  void compose(const Transform2D &t1, const Transform2D &t2);
 
-    //  this = t1 after this
-    void compose(const Transform2D &t1);
+  //  this = t1 after this
+  void compose(const Transform2D &t1);
 
-    //  reverse transform
-    bool invert(const Transform2D &t);
-    bool invertAffine(const Transform2D &t);
+  //  reverse transform
+  bool invert(const Transform2D &t);
+  bool invertAffine(const Transform2D &t);
 };
 
 #endif

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -38,8 +38,9 @@
 
 #include "RELargestLM.h"
 
-bool RELargestLM::reduceSpheres(Array<int> *inds, int maxAllow, Array<int> *destCounts,
-                                double maxMet, Array<double> *mets) const{
+bool RELargestLM::reduceSpheres(Array<int> *inds, int maxAllow,
+                                Array<int> *destCounts, double maxMet,
+                                Array<double> *mets) const {
   //  get surface points
   const Array<Surface::Point> *surPts = surRep->getSurPts();
   int numPts = surPts->getSize();
@@ -51,17 +52,17 @@ bool RELargestLM::reduceSpheres(Array<int> *inds, int maxAllow, Array<int> *dest
 
   //  generate counts and mark covered points
   Array<int> counts(numSph);
-  for (int i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++) {
     int count = surRep->flagContainedPoints(&coveredPts, srcSpheres->index(i));
     counts.index(i) = count;
-    }
+  }
 
   //  check that all points are covered
   for (int i = 0; i < numPts; i++)
     if (!coveredPts.index(i))
-      return false;           //  fail straight off
+      return false; //  fail straight off
 
-  //  clear the covered flags again 
+  //  clear the covered flags again
   //  not they are to be the points covered by the selected set of spheres
   coveredPts.clear();
 
@@ -71,21 +72,21 @@ bool RELargestLM::reduceSpheres(Array<int> *inds, int maxAllow, Array<int> *dest
   if (mets)
     mets->setSize(0);
 
-  while (numCov < numPts){
+  while (numCov < numPts) {
     if (maxAllow > 0 && inds->getSize() >= maxAllow)
-      return false;   //  still surface covered and no more spheres allowed
+      return false; //  still surface covered and no more spheres allowed
 
     //  find the sphere with the largest count
     int maxCount = 0, maxI = -1;
-    for (int i = 0; i < numSph; i++){
+    for (int i = 0; i < numSph; i++) {
       int count = counts.index(i);
-      if (count > maxCount){
+      if (count > maxCount) {
         maxCount = count;
         maxI = i;
-        }
       }
+    }
     if (maxI < 0)
-      return false;  //  no spheres to choose from
+      return false; //  no spheres to choose from
 
     //  store count
     if (destCounts)
@@ -93,29 +94,30 @@ bool RELargestLM::reduceSpheres(Array<int> *inds, int maxAllow, Array<int> *dest
 
     //  add sphere to selected set
     inds->addItem() = maxI;
-    counts.index(maxI) = -1;      //  make invalid
+    counts.index(maxI) = -1; //  make invalid
     if (mets)
       mets->addItem() = maxCount;
 
     //  list the points in the sphere
     Array<int> list;
-    surRep->listContainedPoints(&list, &coveredPts, srcSpheres->index(maxI), &coveredPts);
+    surRep->listContainedPoints(&list, &coveredPts, srcSpheres->index(maxI),
+                                &coveredPts);
     int numList = list.getSize();
     numCov += numList;
 
     //  test each point against the other spheres
     //  to decrement their counts
-    for (int i = 0; i < numList; i++){
+    for (int i = 0; i < numList; i++) {
       int pI = list.index(i);
       Point3D p = surPts->index(pI).p;
 
-      for (int j = 0; j < numSph; j++){
+      for (int j = 0; j < numSph; j++) {
         int *count = &counts.index(j);
         if (*count > 0 && srcSpheres->index(j).contains(p))
           (*count)--;
-        }
       }
     }
+  }
 
   return true;
 }

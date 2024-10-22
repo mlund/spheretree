@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -45,31 +45,30 @@
 #include "../Exceptions/CheckDebug.h"
 #include <math.h>
 
-struct Sphere{
+struct Sphere {
   Point3D c;
   REAL r;
 
-  __inline void assign(const Point3D &C, float R){
+  __inline void assign(const Point3D &C, float R) {
     c = C;
     r = R;
-    }
+  }
 
-  __inline bool contains(const Point3D &pt, float tol = EPSILON) const{
-    return (pt.distanceSQR(c) <= r*r + tol);
-    }
+  __inline bool contains(const Point3D &pt, float tol = EPSILON) const {
+    return (pt.distanceSQR(c) <= r * r + tol);
+  }
 
-  __inline bool overlap(const Sphere &s, float tol = EPSILON) const{
+  __inline bool overlap(const Sphere &s, float tol = EPSILON) const {
     double sR = s.r + r;
-    return s.c.distanceSQR(c) <= sR*sR + tol;
-    }
+    return s.c.distanceSQR(c) <= sR * sR + tol;
+  }
 
-  __inline double volume() const{
-    return 4.0/3.0*M_PI*r*r*r;
-    }
+  __inline double volume() const { return 4.0 / 3.0 * M_PI * r * r * r; }
 
   float overlapVolume(const Sphere &other) const;
 
-  int intersectRay(double t[2], const Point3D &rayOrigin, const Vector3D &rayDirn) const;
+  int intersectRay(double t[2], const Point3D &rayOrigin,
+                   const Vector3D &rayDirn) const;
 
   bool intersect(const Point3D &pMin, const Point3D &pMax) const;
 

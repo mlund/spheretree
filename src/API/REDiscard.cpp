@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -38,25 +38,25 @@
 
 #include "REDiscard.h"
 
-bool REDiscard::isSphereRemovable(const Array<int> &pointCounts, int sphereNum) const{
+bool REDiscard::isSphereRemovable(const Array<int> &pointCounts,
+                                  int sphereNum) const {
   Array<int> list;
   surRep->listContainedPoints(&list, NULL, srcSpheres->index(sphereNum));
   int numList = list.getSize();
 
-  for (int i = 0; i < numList; i++){
+  for (int i = 0; i < numList; i++) {
     int pI = list.index(i);
     if (pointCounts.index(pI) < 2)
       return false;
-    }
+  }
 
   return true;
 }
 
 //  implementation of RE algorithm
-bool REDiscard::reduceSpheres(Array<int> *inds, int maxNum, 
-                               Array<int> *destCounts,
-                               double maxMet, 
-                               Array<double> *mets) const{
+bool REDiscard::reduceSpheres(Array<int> *inds, int maxNum,
+                              Array<int> *destCounts, double maxMet,
+                              Array<double> *mets) const {
   //  get points
   const Array<Surface::Point> *surPts = surRep->getSurPts();
   int numPts = surPts->getSize();
@@ -69,18 +69,18 @@ bool REDiscard::reduceSpheres(Array<int> *inds, int maxNum,
   //  fill list
   Array<bool> coveredPts(numPts);
   coveredPts.clear();
-  for (int i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++) {
     Array<int> list;
     surRep->listContainedPoints(&list, &coveredPts, srcSpheres->index(i));
 
-    int numList = list.getSize(); 
-    for (int j = 0; j < numList; j++){
+    int numList = list.getSize();
+    for (int j = 0; j < numList; j++) {
       int pI = list.index(j);
       pointCounts.index(pI)++;
-      }
+    }
 
     sphereCount.index(i) = numList;
-    }
+  }
 
   //  no point continuing if the points aren't all covered to start
   for (int i = 0; i < numPts; i++)
@@ -90,28 +90,28 @@ bool REDiscard::reduceSpheres(Array<int> *inds, int maxNum,
   //  make list of spheres that are removable
   Array<bool> removable(numSph);
   for (int i = 0; i < numSph; i++)
-    removable.index(i) = isSphereRemovable(pointCounts, i);  
+    removable.index(i) = isSphereRemovable(pointCounts, i);
 
   //  flags for which spheres have been dumped
   Array<bool> removed(numSph);
   removed.clear();
 
   //  do reduction
-  while (true){
+  while (true) {
     //  find "smallest" removable sphere
     int minI = -1;
     int minCount = INT_MAX;
-    for (int i = 0; i < numSph; i++){
-      if (removable.index(i)){
+    for (int i = 0; i < numSph; i++) {
+      if (removable.index(i)) {
         int count = sphereCount.index(i);
-        if (count < minCount){
+        if (count < minCount) {
           minCount = count;
           minI = i;
-          }
         }
       }
+    }
 
-    //  did we find a removable sphere 
+    //  did we find a removable sphere
     if (minI < 0)
       break;
 
@@ -125,26 +125,26 @@ bool REDiscard::reduceSpheres(Array<int> *inds, int maxNum,
     Array<int> list;
     surRep->listContainedPoints(&list, NULL, srcSpheres->index(minI));
     int numList = list.getSize();
-    for (int i = 0; i < numList; i++){
+    for (int i = 0; i < numList; i++) {
       int pI = list.index(i);
       pointCounts.index(pI)--;
-      }
-    
+    }
+
     //  check the spheres for removability
-    for (int i = 0; i < numSph; i++){
+    for (int i = 0; i < numSph; i++) {
       bool *flag = &removable.index(i);
-      if ((*flag) == true){
-        (*flag) = isSphereRemovable(pointCounts, i);  
-        }
+      if ((*flag) == true) {
+        (*flag) = isSphereRemovable(pointCounts, i);
       }
     }
+  }
 
   //  generate indices
   inds->setSize(0);
-  for (int i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++) {
     if (!removed.index(i))
       inds->addItem() = i;
-    }
+  }
 
   OUTPUTINFO("%d Spheres left\n", inds->getSize());
 

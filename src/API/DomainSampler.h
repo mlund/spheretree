@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,15 +37,15 @@
 \**************************************************************************/
 
 /*
-    Attribute a number of samples to a set of areas in a domain.  Each areas has a
-    probability associated with it.
+    Attribute a number of samples to a set of areas in a domain.  Each areas has
+   a probability associated with it.
 */
 #ifndef _DOMAIN_SAMPLER_H_
 #define _DOMAIN_SAMPLER_H_
 
 #include "../Storage/Array.h"
 
-struct SamplerInfo{
+struct SamplerInfo {
   float val;
   int sourceI;
   float maxSamples;
@@ -54,7 +54,8 @@ struct SamplerInfo{
 int findInfo(const SamplerInfo infos[], float v, int n);
 int samplerInfoCompare(const void *elem1, const void *elem2);
 
-void sampleDomain(Array<int> *counts, SamplerInfo infos[], int numVals, int numSamples);
+void sampleDomain(Array<int> *counts, SamplerInfo infos[], int numVals,
+                  int numSamples);
 void sampleDomain(Array<int> *counts, const Array<float> &vals, int numSamples);
 
 #endif

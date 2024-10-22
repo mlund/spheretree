@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -36,7 +36,8 @@
 
 \**************************************************************************/
 
-#if !defined(AFX_OUTPUTDIALOG_H__153F66C1_4345_11D7_BEA8_00104B9D2B6D__INCLUDED_)
+#if !defined(                                                                  \
+    AFX_OUTPUTDIALOG_H__153F66C1_4345_11D7_BEA8_00104B9D2B6D__INCLUDED_)
 #define AFX_OUTPUTDIALOG_H__153F66C1_4345_11D7_BEA8_00104B9D2B6D__INCLUDED_
 
 #if _MSC_VER > 1000
@@ -47,52 +48,48 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // COutputDialog dialog
-class COutputDialog : public CDialog
-{
-// Construction
+class COutputDialog : public CDialog {
+  // Construction
 public:
-	COutputDialog(CWnd* pParent = NULL);   // standard constructor
+  COutputDialog(CWnd *pParent = NULL); // standard constructor
 
-// Dialog Data
-	//{{AFX_DATA(COutputDialog)
-	enum { IDD = IDD_OUTPUTDIALOG };
-	CEdit	c_outputBox;
-	CString	m_outputString;
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(COutputDialog)
+  enum { IDD = IDD_OUTPUTDIALOG };
+  CEdit c_outputBox;
+  CString m_outputString;
+  //}}AFX_DATA
 
-
-// Overrides
-	//{{AFX_VIRTUAL(COutputDialog)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
-
-// Implementation
+  // Overrides
+  //{{AFX_VIRTUAL(COutputDialog)
 protected:
+  virtual void DoDataExchange(CDataExchange *pDX); // DDX/DDV support
+                                                   //}}AFX_VIRTUAL
 
-	// Generated message map functions
-	//{{AFX_MSG(COutputDialog)
-	afx_msg void OnCancel();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-	afx_msg void OnHide();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  // Implementation
+protected:
+  // Generated message map functions
+  //{{AFX_MSG(COutputDialog)
+  afx_msg void OnCancel();
+  afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+  afx_msg void OnHide();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()
 
 public:
-   //  additional functions
-   void clearOutput();
-   void addText(const char *text);
-   void hideWindow();
+  //  additional functions
+  void clearOutput();
+  void addText(const char *text);
+  void hideWindow();
 
 private:
-   void updateAndShow();
-   void handleMessages();
-   bool inLoop; 
+  void updateAndShow();
+  void handleMessages();
+  bool inLoop;
 };
 
 //  exception that is thrown when the operation is to be cancelled
-class CancelException{
-};
+class CancelException {};
 
 //{{AFX_INSERT_LOCATION}}
 #endif // !defined(AFX_OUTPUTDIALOG_H__153F66C1_4345_11D7_BEA8_00104B9D2B6D__INCLUDED_)

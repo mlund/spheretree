@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -51,41 +51,39 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // COutputDialog dialog
-COutputDialog::COutputDialog(CWnd* pParent /*=NULL*/)
-	: CDialog(COutputDialog::IDD, pParent)
-{
+COutputDialog::COutputDialog(CWnd *pParent /*=NULL*/)
+    : CDialog(COutputDialog::IDD, pParent) {
   inLoop = false;
 
-	//{{AFX_DATA_INIT(COutputDialog)
-	m_outputString = _T("");
-	//}}AFX_DATA_INIT
+  //{{AFX_DATA_INIT(COutputDialog)
+  m_outputString = _T("");
+  //}}AFX_DATA_INIT
 }
 
-void COutputDialog::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COutputDialog)
-	DDX_Control(pDX, IDC_OUTPUTBOX, c_outputBox);
-	DDX_Text(pDX, IDC_OUTPUTBOX, m_outputString);
-	//}}AFX_DATA_MAP
+void COutputDialog::DoDataExchange(CDataExchange *pDX) {
+  CDialog::DoDataExchange(pDX);
+  //{{AFX_DATA_MAP(COutputDialog)
+  DDX_Control(pDX, IDC_OUTPUTBOX, c_outputBox);
+  DDX_Text(pDX, IDC_OUTPUTBOX, m_outputString);
+  //}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(COutputDialog, CDialog)
-	//{{AFX_MSG_MAP(COutputDialog)
-	ON_WM_SYSCOMMAND()
-	ON_BN_CLICKED(IDC_CANCEL, OnCancel)
-	ON_BN_CLICKED(IDC_HIDE, OnHide)
-	//}}AFX_MSG_MAP
+//{{AFX_MSG_MAP(COutputDialog)
+ON_WM_SYSCOMMAND()
+ON_BN_CLICKED(IDC_CANCEL, OnCancel)
+ON_BN_CLICKED(IDC_HIDE, OnHide)
+//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 //  additional functions
-void COutputDialog::clearOutput(){
+void COutputDialog::clearOutput() {
   m_outputString = "";
 
   updateAndShow();
 }
 
-void COutputDialog::addText(const char *text){
+void COutputDialog::addText(const char *text) {
   CString t(text);
   t.Replace("\n", "\r\n");
 
@@ -94,17 +92,17 @@ void COutputDialog::addText(const char *text){
   updateAndShow();
 }
 
-void COutputDialog::updateAndShow(){
-  if (!IsWindow(GetSafeHwnd())){
+void COutputDialog::updateAndShow() {
+  if (!IsWindow(GetSafeHwnd())) {
     //  create window
     Create(IDD_OUTPUTDIALOG);
 
     //  center window within parent
     CWnd *parent = GetParent();
     if (!parent)
-      parent = AfxGetMainWnd();  //  surrogate parent
+      parent = AfxGetMainWnd(); //  surrogate parent
     this->CenterWindow(parent);
-    }
+  }
 
   //  show window
   ShowWindow(SW_NORMAL);
@@ -120,33 +118,32 @@ void COutputDialog::updateAndShow(){
   handleMessages();
 }
 
-void COutputDialog::handleMessages(){
+void COutputDialog::handleMessages() {
   AfxGetMainWnd()->EnableWindow(FALSE); //  disable main window
   EnableWindow(TRUE);                   //  reenable this window
 
   //  pump messages for cancel button & redraws
   MSG msg;
-  inLoop = true; 
-  while (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)){
-    if (!PreTranslateMessage(&msg)){
-		  ::TranslateMessage(&msg);
-		  ::DispatchMessage(&msg);
-	    }
+  inLoop = true;
+  while (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
+    if (!PreTranslateMessage(&msg)) {
+      ::TranslateMessage(&msg);
+      ::DispatchMessage(&msg);
     }
+  }
   inLoop = false;
 
   AfxGetMainWnd()->EnableWindow(TRUE);
 }
 
-void COutputDialog::OnCancel() 
-{
-  if (inLoop){
+void COutputDialog::OnCancel() {
+  if (inLoop) {
     CancelException ex;
     throw ex;
-    }
+  }
 }
 
-void COutputDialog::hideWindow(){
+void COutputDialog::hideWindow() {
   m_outputString = "";
 
   ShowWindow(SW_HIDE);
@@ -155,14 +152,12 @@ void COutputDialog::hideWindow(){
   AfxGetMainWnd()->ShowWindow(SW_SHOW);
 }
 
-void COutputDialog::OnSysCommand(UINT nID, LPARAM lParam) 
-{
-  if (nID != SC_CLOSE)	
-	  CDialog::OnSysCommand(nID, lParam);
+void COutputDialog::OnSysCommand(UINT nID, LPARAM lParam) {
+  if (nID != SC_CLOSE)
+    CDialog::OnSysCommand(nID, lParam);
 }
 
-void COutputDialog::OnHide() 
-{
-	if (!inLoop)
+void COutputDialog::OnHide() {
+  if (!inLoop)
     hideWindow();
 }

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -39,37 +39,37 @@
 #include "SFRitter.h"
 #include "../Base/Defs.h"
 
-bool SFRitter::makeSphere(Sphere *s, const Array<Surface::Point> &points, const Array<int> &inds){
+bool SFRitter::makeSphere(Sphere *s, const Array<Surface::Point> &points,
+                          const Array<int> &inds) {
   Array<Point3D> pts;
   convertPoints(&pts, points, inds);
   return makeSphere(s, pts);
 }
 
-bool SFRitter::makeSphere(Sphere *s, const Array<Surface::Point> &points){
+bool SFRitter::makeSphere(Sphere *s, const Array<Surface::Point> &points) {
   Array<Point3D> pts;
   convertPoints(&pts, points);
   return makeSphere(s, pts);
 }
 
 //  algorithm implementation
-bool SFRitter::makeSphere(Sphere *s, const Array<Point3D> &pts){
+bool SFRitter::makeSphere(Sphere *s, const Array<Point3D> &pts) {
   int numPts = pts.getSize();
-  if (numPts == 1){
+  if (numPts == 1) {
     s->c = pts.index(0);
     s->r = 0;
     return true;
-    }
-  else if (numPts == 0){
+  } else if (numPts == 0) {
     s->c.x = s->c.y = s->c.z = 0;
     s->r = 0;
     return false;
-    }
+  }
 
   //  first pass - find maxima/minima points for the 3 axes
   Point3D xMin, xMax, yMin, yMax, zMin, zMax;
   xMin.x = yMin.y = zMin.z = REAL_MAX;
   xMax.x = yMax.y = zMax.z = REAL_MIN;
-  for (int i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++) {
     Point3D p = pts.index(i);
 
     if (p.x < xMin.x)
@@ -85,8 +85,8 @@ bool SFRitter::makeSphere(Sphere *s, const Array<Point3D> &pts){
     if (p.z < zMin.z)
       zMin = p;
     if (p.z > zMax.z)
-      zMax = p; 
-    }
+      zMax = p;
+  }
 
   //  x-span is square distance between xmin & xmax
   float xspan = xMin.distanceSQR(xMax);
@@ -96,43 +96,43 @@ bool SFRitter::makeSphere(Sphere *s, const Array<Point3D> &pts){
   //  dMin and dMax are the maximally separated pair
   float maxSpan = xspan;
   Point3D dMin = xMin, dMax = xMax;
-  if (yspan > maxSpan){
+  if (yspan > maxSpan) {
     maxSpan = yspan;
     dMin = yMin;
     dMax = yMax;
-    }
-  if (zspan > maxSpan){
+  }
+  if (zspan > maxSpan) {
     maxSpan = zspan;
     dMin = zMin;
     dMax = zMax;
-    }
+  }
 
   //  work out center and radius of sphere
   Point3D pC;
-  pC.x = (dMin.x + dMax.x)/2.0f;
-  pC.y = (dMin.y + dMax.y)/2.0f;
-  pC.z = (dMin.z + dMax.z)/2.0f;
+  pC.x = (dMin.x + dMax.x) / 2.0f;
+  pC.y = (dMin.y + dMax.y) / 2.0f;
+  pC.z = (dMin.z + dMax.z) / 2.0f;
   float rCS = pC.distanceSQR(dMax);
   float rC = sqrt(rCS);
 
   //  second pass - increment current sphere
-  for (int i = 0; i < numPts; i++){
+  for (int i = 0; i < numPts; i++) {
     Point3D p = pts.index(i);
 
     float oldToPS = pC.distanceSQR(p);
-    if (oldToPS > rCS){
+    if (oldToPS > rCS) {
       //  this point is outside the sphere
       float oldToP = sqrt(oldToPS);
-      rC = (rC + oldToP)/2.0;
-      rCS = rC*rC;
+      rC = (rC + oldToP) / 2.0;
+      rCS = rC * rC;
       float oldToNew = oldToP - rC;
 
       //  new sphere center
-      pC.x = (rC*pC.x + oldToNew*p.x)/oldToP;
-      pC.y = (rC*pC.y + oldToNew*p.y)/oldToP;
-      pC.z = (rC*pC.z + oldToNew*p.z)/oldToP;
-      }
+      pC.x = (rC * pC.x + oldToNew * p.x) / oldToP;
+      pC.y = (rC * pC.y + oldToNew * p.y) / oldToP;
+      pC.z = (rC * pC.z + oldToNew * p.z) / oldToP;
     }
+  }
 
   s->c = pC;
   s->r = rC;

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,8 +37,8 @@
 \**************************************************************************/
 
 /*
-    Generate a set of samples on a sphere by generating equally spaced points 
-    around a number of rings.  Size of the ring dictates the number of points 
+    Generate a set of samples on a sphere by generating equally spaced points
+    around a number of rings.  Size of the ring dictates the number of points
     to use.
 */
 #ifndef _API_RINGS_SPHERE_SAMPLER_H_
@@ -46,20 +46,20 @@
 
 #include "SSBase.h"
 
-class SSRings : public SSBase{
-  public :
-    //  constructor
-    SSRings(int numRings = 10);
+class SSRings : public SSBase {
+public:
+  //  constructor
+  SSRings(int numRings = 10);
 
-    //  setup
-    void setRings(int numRings);
+  //  setup
+  void setRings(int numRings);
 
-    //  generate the samples
-    virtual void generateSamples(Array<Point3D> *pts) const;
-    static void generateSamples(Array<Point3D> *pts, int numRings);
+  //  generate the samples
+  virtual void generateSamples(Array<Point3D> *pts) const;
+  static void generateSamples(Array<Point3D> *pts, int numRings);
 
-  private:
-    int numRings;
+private:
+  int numRings;
 };
 
 #endif

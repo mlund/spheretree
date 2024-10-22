@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -47,29 +47,29 @@
 
 #include <stdlib.h>
 
-class ProcessorMonitor{
-  public:
-    ProcessorMonitor();
-    void setup(float st, float sc);
+class ProcessorMonitor {
+public:
+  ProcessorMonitor();
+  void setup(float st, float sc);
 
-    //  scale
-    void setStart(float st);
-    void setScale(float sc);
-    float getStart() const;
-    float getScale() const;
+  //  scale
+  void setStart(float st);
+  void setScale(float sc);
+  float getStart() const;
+  float getScale() const;
 
-    //  progress
-    bool setProgress(float prog);
-    virtual bool updateProgress(float absProg) = 0;
+  //  progress
+  bool setProgress(float prog);
+  virtual bool updateProgress(float absProg) = 0;
 
-    virtual bool sayHello() = 0;  //  no progress report info available
+  virtual bool sayHello() = 0; //  no progress report info available
 
-    struct CancelledException{
-      int dummy;
-      };
+  struct CancelledException {
+    int dummy;
+  };
 
-  private:
-    float st, sc;
+private:
+  float st, sc;
 };
 
 #endif
