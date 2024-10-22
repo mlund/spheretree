@@ -331,14 +331,29 @@ be built in the "src" directory.
 
 In case of modern usage. A Cmake version is provided by yixuanzhou@sjtu.edu.cn. 
 
-```sh
-cd spheretree && mkdir build
-cd build && cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_SANITIZER=OFF
-make
-```
-
 cmake tools from [cmake-template](https://github.com/cpp-best-practices/cmake_template/tree/main) are utilized. Thanks to their fantastic works. 
 
 All rights are reserved by the original authors under the terms of the LICENSE.
 
 Warning: Tested under Ubuntu 20.04, cmake 3.26
+
+#### Release
+
+```sh
+cd spheretree && mkdir build
+cd build && cmake .. -DCMAKE_BUILD_TYPE=Release
+make
+```
+
+#### DEBUG
+
+```sh
+cd spheretree && mkdir build
+cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER=ON
+make
+```
+
+Note: The purpose of enabling sanitizers in a project is to detect and debug various kinds of runtime errors and issues during program execution. Sanitizers are a set of tools provided by compilers (like GCC and Clang) that instrument the code to catch memory-related, threading, and other runtime bugs which may not be easily detectable during regular testing. 
+
+When `ENABLE_SANITIZER` is enabled, `address`, `leak`, `undefined_behavior`, `memory` are enabled. If users wanna sanitize `thread`, try to modify the CMAKELISTS.txt 
+

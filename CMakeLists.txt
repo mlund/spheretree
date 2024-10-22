@@ -63,7 +63,7 @@ target_link_libraries(STG PUBLIC ${LIBS_TO_LINK})
 # Enable sanitizers
 if(ENABLE_SANITIZER)
     include(Sanitizers)
-    add_sanitizers(STG)
+    myproject_enable_sanitizers(STG ON ON ON OFF ON)
 endif()
 
 # Set common properties for executables
@@ -78,7 +78,7 @@ function(add_custom_executable EXEC_NAME)
         myproject_set_project_warnings(${EXEC_NAME} OFF "" "" "" "")
     endif()
     if(ENABLE_SANITIZER)
-        add_sanitizers(${EXEC_NAME})
+        myproject_enable_sanitizers(${EXEC_NAME} ON ON ON OFF ON)
     endif()
 endfunction()
 
