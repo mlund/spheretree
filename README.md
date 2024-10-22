@@ -1,3 +1,5 @@
+[![Build](https://github.com/mlund/spheretree/actions/workflows/cmake-single-platform.yml/badge.svg)](https://github.com/mlund/spheretree/actions/workflows/cmake-single-platform.yml)
+
 # SPHERE TREE CONSTRUCTION TOOLKIT
 
 Copyright 2003 Image Synthesis Group, Trinity College Dublin, Ireland.
