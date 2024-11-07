@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,9 +37,9 @@
 \**************************************************************************/
 
 /*
-    Base class for sphere set optimisers.  These basically take a set of spheres and
-    optimises each spheres so as to improve fit.  The sphere set must maintain coverage 
-    of the given set of surface samples.
+    Base class for sphere set optimisers.  These basically take a set of spheres
+   and optimises each spheres so as to improve fit.  The sphere set must
+   maintain coverage of the given set of surface samples.
 */
 #ifndef _API_SPHERE_OPTIMISER_BASE_H_
 #define _API_SPHERE_OPTIMISER_BASE_H_
@@ -48,14 +48,15 @@
 #include "../Surface/SurfaceRep.h"
 #include "SEBase.h"
 
-class SOBase{
-  public:
-    SEBase *sphereEval;
+class SOBase {
+public:
+  SEBase *sphereEval;
 
-    SOBase();
+  SOBase();
 
-    virtual void optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, float stopBelow = -1, 
-                          const Sphere *parSph = NULL, int level = 0) const = 0;
+  virtual void optimise(Array<Sphere> *spheres, const SurfaceRep &surRep,
+                        float stopBelow = -1, const Sphere *parSph = NULL,
+                        int level = 0) const = 0;
 };
 
 #endif

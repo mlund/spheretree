@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,9 +37,9 @@
 \**************************************************************************/
 
 /*
-    Base class for algorithms which use the StandOff distance for generating spheres
-    i.e. we need to search for the correct standoff distance to get the required number
-    of spheres.
+    Base class for algorithms which use the StandOff distance for generating
+   spheres i.e. we need to search for the correct standoff distance to get the
+   required number of spheres.
 */
 #ifndef _API_STANDOFF_SPHERE_REDUCER_H_
 #define _API_STANDOFF_SPHERE_REDUCER_H_
@@ -48,28 +48,37 @@
 #include "REBase.h"
 #include "SFBase.h"
 
-class SRStandOff : public SRBase{
-  public:
-    float relTol;
-    float startErr;
-    float errStep;
-    bool stopExact;
-    const SFBase *refitter;
-    float lastStandoff;    //  hack for generating graphs
-    bool useIterativeSelect;
+class SRStandOff : public SRBase {
+public:
+  float relTol;
+  float startErr;
+  float errStep;
+  bool stopExact;
+  const SFBase *refitter;
+  float lastStandoff; //  hack for generating graphs
+  bool useIterativeSelect;
 
-    //  constructor
-    SRStandOff();
+  //  constructor
+  SRStandOff();
 
-    //  reduction
-    void getSpheresA(Array<Sphere> *spheres, int numDest, const SurfaceRep &surRep, const Sphere *filterSphere = NULL, float parSphErr = -1) const;
-    void getSpheresB(Array<Sphere> *spheres, int numDest, const SurfaceRep &surRep, const Sphere *filterSphere = NULL, float parSphErr = -1) const;
-    void getSpheres(Array<Sphere> *spheres, int numDest, const SurfaceRep &surRep, const Sphere *filterSphere = NULL, float parSphErr = -1) const;
+  //  reduction
+  void getSpheresA(Array<Sphere> *spheres, int numDest,
+                   const SurfaceRep &surRep, const Sphere *filterSphere = NULL,
+                   float parSphErr = -1) const;
+  void getSpheresB(Array<Sphere> *spheres, int numDest,
+                   const SurfaceRep &surRep, const Sphere *filterSphere = NULL,
+                   float parSphErr = -1) const;
+  void getSpheres(Array<Sphere> *spheres, int numDest, const SurfaceRep &surRep,
+                  const Sphere *filterSphere = NULL,
+                  float parSphErr = -1) const;
 
-    //  overload this to get the spheres
-    virtual bool generateStandOffSpheres(Array<Sphere> *spheres, float err, const SurfaceRep &surRep, int  maxNum = -1, int tryIter = 0, const Sphere *parSph = NULL) const = 0;
-    virtual bool setupFilterSphere(const Sphere *filterSphere, float parSphErr, const SurfaceRep *surRep) const = 0;
+  //  overload this to get the spheres
+  virtual bool generateStandOffSpheres(Array<Sphere> *spheres, float err,
+                                       const SurfaceRep &surRep,
+                                       int maxNum = -1, int tryIter = 0,
+                                       const Sphere *parSph = NULL) const = 0;
+  virtual bool setupFilterSphere(const Sphere *filterSphere, float parSphErr,
+                                 const SurfaceRep *surRep) const = 0;
 };
-
 
 #endif

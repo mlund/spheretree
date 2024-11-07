@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -45,7 +45,7 @@
 #include "Vector3D.h"
 
 //  assign
-void Plane::assign(const Point3D &p1, const Point3D &p2, const Point3D &p3){
+void Plane::assign(const Point3D &p1, const Point3D &p2, const Point3D &p3) {
   Vector3D v1, v2;
   v1.difference(p3, p2);
   v2.difference(p1, p2);
@@ -57,7 +57,7 @@ void Plane::assign(const Point3D &p1, const Point3D &p2, const Point3D &p3){
   assign(vC, p1);
 }
 
-void Plane::transform(Plane *plT, const Transform3D tr) const{
+void Plane::transform(Plane *plT, const Transform3D tr) const {
   CHECK_DEBUG(plT != NULL, "NULL Destination");
 
   Point3D p, pT;
@@ -71,30 +71,28 @@ void Plane::transform(Plane *plT, const Transform3D tr) const{
   plT->a = vT.x;
   plT->b = vT.y;
   plT->c = vT.z;
-  plT->d = -(vT.x*pT.x + vT.y*pT.y + vT.z*pT.z);
+  plT->d = -(vT.x * pT.x + vT.y * pT.y + vT.z * pT.z);
 }
 
-void Plane::getPoint(Point3D *p, REAL u, REAL v) const{
+void Plane::getPoint(Point3D *p, REAL u, REAL v) const {
   CHECK_DEBUG(p != NULL, "NULL Destination");
 
-  if (c != 0){
+  if (c != 0) {
     p->x = u;
     p->y = v;
-    p->z = -(a*u + b*v + d)/c;
-    }
-  else if (b != 0){
+    p->z = -(a * u + b * v + d) / c;
+  } else if (b != 0) {
     p->x = u;
-    p->y = -(a*u + c*v + d)/b;
+    p->y = -(a * u + c * v + d) / b;
     p->z = v;
-    }
-  else{
-    p->x = -(b*u + c*v + d)/a;
+  } else {
+    p->x = -(b * u + c * v + d) / a;
     p->y = u;
     p->z = v;
-    }
+  }
 }
 
-void Plane::getNormal(Vector3D *v) const{
+void Plane::getNormal(Vector3D *v) const {
   CHECK_DEBUG(v != NULL, "NULL Destination");
 
   v->x = a;
@@ -103,7 +101,7 @@ void Plane::getNormal(Vector3D *v) const{
   v->norm();
 }
 
-void Plane::getTransformTo2D(Transform3D *tr) const{
+void Plane::getTransformTo2D(Transform3D *tr) const {
   CHECK_DEBUG(tr != NULL, "NULL Destination");
 
   Vector3D vN;
@@ -112,10 +110,10 @@ void Plane::getTransformTo2D(Transform3D *tr) const{
   tr->alignToZ(vN);
 }
 
-REAL Plane::projectOnto(Point3D *p, const Point3D &q, const Vector3D &v) const{
+REAL Plane::projectOnto(Point3D *p, const Point3D &q, const Vector3D &v) const {
   CHECK_DEBUG(p != NULL, "NULL Destination");
 
-  float t = -(q.x*a + q.y*b + q.z*c + d) / (v.x*a + b*v.y + c*v.z);
+  float t = -(q.x * a + q.y * b + q.z * c + d) / (v.x * a + b * v.y + c * v.z);
   p->x = q.x + t * v.x;
   p->y = q.y + t * v.y;
   p->z = q.z + t * v.z;
@@ -124,8 +122,8 @@ REAL Plane::projectOnto(Point3D *p, const Point3D &q, const Vector3D &v) const{
 }
 
 //  normalize
-void Plane::normalise(){
-  float mag = sqrt(a*a + b*b + c*c);
+void Plane::normalise() {
+  float mag = sqrt(a * a + b * b + c * c);
   a /= mag;
   b /= mag;
   c /= mag;

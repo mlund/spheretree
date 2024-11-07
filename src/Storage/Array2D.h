@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -55,139 +55,136 @@
 #include "../Exceptions/CheckDebug.h"
 #include "../Exceptions/CheckMemory.h"
 
-template <class T> class Array2D{
-  protected:
-    int m, n, allocM, allocN;
-    T **data;
+template <class T> class Array2D {
+protected:
+  int m, n, allocM, allocN;
+  T **data;
 
-  public:
-    //  constructor
-    Array2D(){
+public:
+  //  constructor
+  Array2D() {
+    data = NULL;
+    m = n = 0;
+    allocM = allocN = 0;
+  }
+
+  ~Array2D() {
+    if (data)
+      free();
+  }
+
+  //  allocation
+  void allocate(int m, int n) {
+    CHECK_DEBUG2(m > 0 && n > 0, "Array Size %d %d", m, n);
+
+    T **outerData = new T *[m];
+    CHECK_MEMORY1(outerData != NULL, "Array Allocate %d", m);
+
+    T *innerData = new T[m * n];
+    if (!innerData) {
+      delete outerData;
+      CHECK_MEMORY1(NULL, "Array Allocation", m * n);
+    }
+
+    this->m = m;
+    this->n = n;
+    allocM = m;
+    allocN = n;
+    data = outerData;
+    for (int i = 0; i < m; i++)
+      data[i] = &innerData[i * n];
+  }
+
+  void free() {
+    if (data) {
+      delete[] data[0];
+      delete[] data;
       data = NULL;
       m = n = 0;
       allocM = allocN = 0;
-      }
+    }
+  }
 
-    ~Array2D(){
-      if (data)
+  //  grow array or shrink if too large (DESTROYS contents)
+  void makeRoom(int nM, int nN, int scale = 4) {
+    if (allocM < nM || allocN < nN || (allocM * allocN) > (nM * nN * scale)) {
+      if (allocM)
         free();
-      }
+      allocate(nM, nN);
+    } else {
+      setSize(nM, nN);
+    }
+  }
 
-    //  allocation
-    void allocate(int m, int n){
-      CHECK_DEBUG2(m > 0 && n > 0, "Array Size %d %d", m, n);
+  //  index
+  __inline const T &index(int i, int j) const {
+    CHECK_DEBUG4((unsigned)i < m && (unsigned)j < n,
+                 "Array Index Size(%d,%d) Index(%d, %d)", m, n, i, j)
+    return data[i][j];
+  }
 
-      T **outerData = new T*[m];
-      CHECK_MEMORY1(outerData != NULL, "Array Allocate %d", m);
+  __inline T &index(int i, int j) {
+    CHECK_DEBUG4((unsigned)i < m && (unsigned)j < n,
+                 "Array Index Size(%d,%d) Index(%d, %d)", m, n, i, j)
+    return data[i][j];
+  }
 
-      T *innerData = new T[m*n];
-      if (!innerData){
-        delete outerData;
-        CHECK_MEMORY1(NULL, "Array Allocation", m*n);
-        }
+  //  clear
+  void clear() {
+    for (int i = 0; i < m; i++)
+      memset(data[i], 0, n * sizeof(T));
+  }
 
-      this->m = m;
-      this->n = n;
-      allocM = m;
-      allocN = n;
-      data = outerData;
-      for (int i = 0; i < m; i++)
-        data[i] = &innerData[i*n];
-      }
+  //  clear contents safe for all types objects must support cast from void
+  void clearSafe(Array2D<T> *a) {
+    T nullOne;
+    for (int i = 0; i < m; i++)
+      for (int j = 0; j < n; j++)
+        data[i][j] = nullOne;
+  }
 
-    void free(){
-      if (data){
-        delete [] data[0];
-        delete [] data;
-        data = NULL;
-        m = n = 0;
-        allocM = allocN = 0;
-        }
-      }
+  //  copy (use memcpy)
+  void copy(const Array2D<T> &other) {
+    CHECK_DEBUG4(allocM >= other.m && allocN >= other.n,
+                 "Array Size (%d, %d) <- (%d, %d)", allocM, allocN, other.m,
+                 other.n);
 
-    //  grow array or shrink if too large (DESTROYS contents)
-    void makeRoom(int nM, int nN, int scale = 4){
-      if (allocM < nM || allocN < nN || (allocM*allocN) > (nM*nN*scale)){
-        if (allocM)
-          free();
-        allocate(nM, nN);
-        }
-      else{
-        setSize(nM, nN);
-        }
-      }
+    for (int i = 0; i < other.m; i++)
+      memcpy(this->data[i], other.data[i], other.n * sizeof(T));
 
-    //  index
-    __inline const T& index(int i, int j) const{
-      CHECK_DEBUG4((unsigned)i < m && (unsigned)j < n, "Array Index Size(%d,%d) Index(%d, %d)", m, n, i, j)
-      return data[i][j];
-      }
+    m = other.m;
+    n = other.n;
+  }
 
+  //  copy safe - ok for objects
+  void copySafe(const Array2D<T> &other) {
+    CHECK_DEBUG4(allocM >= other.m && allocN >= other.n,
+                 "Array Size (%d, %d) <- (%d, %d)", allocM, allocN, other.m,
+                 other.n);
 
-    __inline T& index(int i, int j){
-      CHECK_DEBUG4((unsigned)i < m && (unsigned)j < n, "Array Index Size(%d,%d) Index(%d, %d)", m, n, i, j)
-      return data[i][j];
-      }
+    for (int i = 0; i < other.m; i++)
+      for (int j = 0; j < other.n; j++)
+        data[i][j] = other.data[i][j];
 
-    //  clear
-    void clear(){
-      for (int i = 0; i < m; i++)
-        memset(data[i], 0, n*sizeof(T));
-      }
+    m = other.m;
+    n = other.n;
+  }
 
-    //  clear contents safe for all types objects must support cast from void
-    void clearSafe(Array2D<T> *a){
-      T nullOne;
-      for (int i = 0; i < m; i++)
-        for (int j = 0; j < n; j++)
-          data[i][j] = nullOne;
-      }
+  //  size
+  __inline void setSize(int nM, int nN) {
+    CHECK_DEBUG4(nM <= allocM && nN <= allocN,
+                 "Array Size (%d, %d) <- (%d, %d)", allocM, allocN, nM, nN);
+    m = nM;
+    n = nN;
+  }
 
-    //  copy (use memcpy) 
-    void copy(const Array2D<T> &other){
-      CHECK_DEBUG4(allocM >= other.m && allocN >= other.n, "Array Size (%d, %d) <- (%d, %d)", allocM, allocN, other.m, other.n);
+  __inline int getM() const { return m; }
 
-      for (int i = 0; i < other.m; i++)
-        memcpy(this->data[i], other.data[i], other.n*sizeof(T));
+  __inline int getN() const { return n; }
 
-      m = other.m;
-      n = other.n;
-      }
+  __inline int getAllocM() const { return allocM; }
 
-    //  copy safe - ok for objects
-    void copySafe(const Array2D<T> &other){
-      CHECK_DEBUG4(allocM >= other.m && allocN >= other.n, "Array Size (%d, %d) <- (%d, %d)", allocM, allocN, other.m, other.n);
-
-      for (int i = 0; i < other.m; i++)
-        for (int j = 0; j < other.n; j++)
-          data[i][j] = other.data[i][j];
-
-      m = other.m;
-      n = other.n;
-      }
-
-    //  size
-    __inline void setSize(int nM, int nN){
-      CHECK_DEBUG4(nM <= allocM && nN <= allocN, "Array Size (%d, %d) <- (%d, %d)", allocM, allocN, nM, nN);
-      m = nM;
-      n = nN;
-      }
-
-    __inline int getM() const{
-      return m;
-      }
-
-    __inline int getN() const{
-      return n;
-      }
-
-    __inline int getAllocM() const{
-      return allocM;
-      }
-
-    __inline int getAllocN() const{
-      return allocN;
-      }
+  __inline int getAllocN() const { return allocN; }
 };
 
 #endif

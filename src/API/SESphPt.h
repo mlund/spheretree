@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,10 +37,10 @@
 \**************************************************************************/
 
 /*
-    Expensive Sphere Evaluator which finds the distance of a set of points from the
-    surface and returns the worst of these values.
+    Expensive Sphere Evaluator which finds the distance of a set of points from
+   the surface and returns the worst of these values.
 
-    Sphere samples are distrinbuted over a sphere of unit radius 
+    Sphere samples are distrinbuted over a sphere of unit radius
     centered about the origin.
 */
 #ifndef _API_SPHERE_POINT_SPHERE_EVALUATOR_H_
@@ -51,21 +51,21 @@
 #include "../Geometry/Point3D.h"
 #include "../Surface/SurfaceTester.h"
 
-class SESphPt : public SEBase{
-  public:
-    //  constructor
-    SESphPt();
-    SESphPt(const SurfaceTester &st, const Array<Point3D> &sphSamples);
+class SESphPt : public SEBase {
+public:
+  //  constructor
+  SESphPt();
+  SESphPt(const SurfaceTester &st, const Array<Point3D> &sphSamples);
 
-    //  setup
-    void setup(const SurfaceTester &st, const Array<Point3D> &sphSamples);
+  //  setup
+  void setup(const SurfaceTester &st, const Array<Point3D> &sphSamples);
 
-    //  evaluate the fit of the given sphere
-    float evalSphere(const Sphere &s) const;
+  //  evaluate the fit of the given sphere
+  float evalSphere(const Sphere &s) const;
 
-  private:
-    const SurfaceTester *st;
-    const Array<Point3D> *sphSamples;
+private:
+  const SurfaceTester *st;
+  const Array<Point3D> *sphSamples;
 };
 
 #endif

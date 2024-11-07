@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -49,30 +49,33 @@
 #include "MSBase.h"
 #include "SurfaceDiv.h"
 
-class STGGeneric /*: public STGBase*/{
-  public:
-    //  parameters
-    const SRBase *reducer;
-    const SOBase *optimiser;
-    const SEBase *eval;
-    bool useRefit;
-    int minLeaves;
-    int maxOptLevel;
+class STGGeneric /*: public STGBase*/ {
+public:
+  //  parameters
+  const SRBase *reducer;
+  const SOBase *optimiser;
+  const SEBase *eval;
+  bool useRefit;
+  int minLeaves;
+  int maxOptLevel;
 
-    //  constructor
-    STGGeneric();
-    void setSamples(const Array<Surface::Point> &surPts){ surfacePoints = &surPts; }
+  //  constructor
+  STGGeneric();
+  void setSamples(const Array<Surface::Point> &surPts) {
+    surfacePoints = &surPts;
+  }
 
-    //  generate
-    void constructTree(SphereTree *st) const;
-    void constructTreeRecursive(SphereTree *st) const;
+  //  generate
+  void constructTree(SphereTree *st) const;
+  void constructTreeRecursive(SphereTree *st) const;
 
-  private:
-    //  set of points for coverage
-    const Array<Surface::Point> *surfacePoints;
+private:
+  //  set of points for coverage
+  const Array<Surface::Point> *surfacePoints;
 
-    // recursive function
-    void makeChildren(SphereTree *st, int node, int level, const SurfaceRep &surRep) const;
+  // recursive function
+  void makeChildren(SphereTree *st, int node, int level,
+                    const SurfaceRep &surRep) const;
 };
 
 #endif

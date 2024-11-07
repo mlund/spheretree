@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,26 +37,29 @@
 \**************************************************************************/
 
 /*
-    Sphere Optimiser which tries to balance workload with the error of the approximation
+    Sphere Optimiser which tries to balance workload with the error of the
+   approximation
 */
 #ifndef _API_BALANCE_SPHERE_OPTIMISER_H_
 #define _API_BALANCE_SPHERE_OPTIMISER_H_
 
 #include "SOBase.h"
 
-class SOBalance : public SOBase{
-  public:
-    //  parameters
-    SOBase *optimiser;
-    float A, B, V;
+class SOBalance : public SOBase {
+public:
+  //  parameters
+  SOBase *optimiser;
+  float A, B, V;
 
-    SOBalance();
+  SOBalance();
 
-    //  optimise
-    void optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, float stopBelow = -1, const Sphere *parSph = NULL, int level = 0) const;
+  //  optimise
+  void optimise(Array<Sphere> *spheres, const SurfaceRep &surRep,
+                float stopBelow = -1, const Sphere *parSph = NULL,
+                int level = 0) const;
 
-  private:
-    float computeWorstErr(Array<Sphere> &sph) const;
+private:
+  float computeWorstErr(Array<Sphere> &sph) const;
 };
 
 #endif

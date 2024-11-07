@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -42,20 +42,23 @@
 #include "SFBase.h"
 #include "SEBase.h"
 
-class SFMinErr : public SFBase{
-  public:
-    const SEBase *eval;
-    SFMinErr();
+class SFMinErr : public SFBase {
+public:
+  const SEBase *eval;
+  SFMinErr();
 
-    //  implementation of SFBase
-    virtual bool fitSphere(Sphere *s, const Array<Point3D> &points) const{
-      return makeSphere(s, points, eval);
-      }
+  //  implementation of SFBase
+  virtual bool fitSphere(Sphere *s, const Array<Point3D> &points) const {
+    return makeSphere(s, points, eval);
+  }
 
-    //  algorithm implementation
-    static bool makeSphere(Sphere *s, const Array<Point3D> &points, const SEBase *eval = NULL);
-    static bool makeSphere(Sphere *s, const Array<Surface::Point> &pts, const SEBase *eval = NULL);
-    static bool makeSphere(Sphere *s, const Array<Surface::Point> &pts, const Array<int> &ind, const SEBase *eval = NULL);
+  //  algorithm implementation
+  static bool makeSphere(Sphere *s, const Array<Point3D> &points,
+                         const SEBase *eval = NULL);
+  static bool makeSphere(Sphere *s, const Array<Surface::Point> &pts,
+                         const SEBase *eval = NULL);
+  static bool makeSphere(Sphere *s, const Array<Surface::Point> &pts,
+                         const Array<int> &ind, const SEBase *eval = NULL);
 };
 
 #endif

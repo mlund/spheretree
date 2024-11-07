@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,8 +37,8 @@
 \**************************************************************************/
 
 /*
-    Interface for Mesh Samplers.  Generates a set of Surface Points distributed across
-    a Surface mesh.
+    Interface for Mesh Samplers.  Generates a set of Surface Points distributed
+   across a Surface mesh.
 */
 #ifndef _API_MESH_SAMPLER_H_
 #define _API_MESH_SAMPLER_H_
@@ -47,22 +47,25 @@
 #include "../Geometry/Point2D.h"
 #include "../Geometry/Line2D.h"
 
-class MSBase{
-  public:
-    //  constructor
-    MSBase();
+class MSBase {
+public:
+  //  constructor
+  MSBase();
 
-    // setup
-    void setSurface(const Surface &sur);
+  // setup
+  void setSurface(const Surface &sur);
 
-    //  sample
-    virtual void generateSamples(Array<Surface::Point> *pts, int numSamples) const = 0;
+  //  sample
+  virtual void generateSamples(Array<Surface::Point> *pts,
+                               int numSamples) const = 0;
 
-  protected:
-    const Surface *sur;
-    static float areaTriangle(const Point3D &p0, const Point3D &p1, const Point3D &p2);
-    static void attributeCountsToFaces(Array<int> *counts, const Surface &sur, int numSamples);
-    static bool inTriangle(const Point2D &p, const Line2D l[3]);
+protected:
+  const Surface *sur;
+  static float areaTriangle(const Point3D &p0, const Point3D &p1,
+                            const Point3D &p2);
+  static void attributeCountsToFaces(Array<int> *counts, const Surface &sur,
+                                     int numSamples);
+  static bool inTriangle(const Point2D &p, const Line2D l[3]);
 };
 
 #endif

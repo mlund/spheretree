@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -39,33 +39,33 @@
 #include "SRComposite.h"
 #include "SOPerSphere.h"
 
-SRComposite::SRComposite(){
+SRComposite::SRComposite() {
   eval = NULL;
   useRefit = true;
 }
 
-void SRComposite::resetReducers(){
-  reducers.setSize(0);
-}
+void SRComposite::resetReducers() { reducers.setSize(0); }
 
-void SRComposite::addReducer(SRBase *red){
-  reducers.addItem() = red;
-}
+void SRComposite::addReducer(SRBase *red) { reducers.addItem() = red; }
 
-void SRComposite::setupForLevel(int level, int degree, const SurfaceRep *surRep) const{
+void SRComposite::setupForLevel(int level, int degree,
+                                const SurfaceRep *surRep) const {
   //  pass call to the all the reducers
   int numRed = reducers.getSize();
-  for (int i = 0; i < numRed; i++){
+  for (int i = 0; i < numRed; i++) {
     SRBase *red = reducers.index(i);
     red->setupForLevel(level, degree, surRep);
-    }
+  }
 }
 
-void SRComposite::getSpheres(Array<Sphere> *spheres, int n, const SurfaceRep &surRep, const Sphere *filterSphere, float parSphereErr) const{
+void SRComposite::getSpheres(Array<Sphere> *spheres, int n,
+                             const SurfaceRep &surRep,
+                             const Sphere *filterSphere,
+                             float parSphereErr) const {
   CHECK_DEBUG0(eval != NULL);
   CHECK_DEBUG0(reducers.getSize() > 0);
 
-  //  setup the optimiser 
+  //  setup the optimiser
   SOPerSphere perSphere;
   perSphere.numIter = 3;
   perSphere.eval = eval;
@@ -75,7 +75,7 @@ void SRComposite::getSpheres(Array<Sphere> *spheres, int n, const SurfaceRep &su
   double bestErr = DBL_MAX;
   int numRed = reducers.getSize();
 
-  for (int i = 0; i < numRed; i++){
+  for (int i = 0; i < numRed; i++) {
     //  get the reducer
     SRBase *red = reducers.index(i);
 
@@ -90,19 +90,19 @@ void SRComposite::getSpheres(Array<Sphere> *spheres, int n, const SurfaceRep &su
     //  get the error in this approximation
     float maxErr = 0;
     int numSph = localSph.getSize();
-    for (int j = 0; j < numSph; j++){
+    for (int j = 0; j < numSph; j++) {
       double err = eval->evalSphere(localSph.index(j));
       if (err > maxErr)
         maxErr = err;
-      }
+    }
 
     //  decide if we should keep this set
-    if (maxErr < bestErr){
+    if (maxErr < bestErr) {
       bestReducer = i;
       bestErr = maxErr;
       spheres->clone(localSph);
-      }
     }
+  }
 
   OUTPUTINFO("Choose to use reducer number %d for this node\n", bestReducer);
 }

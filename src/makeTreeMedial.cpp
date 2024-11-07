@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -66,28 +66,30 @@
 /*
     options and their default values
 */
-int testerLevels = -1;      //  number of levels for NON-CONVEX, -1 uses CONVEX tester
-int branch = 8;             //  branching factor of the sphere-tree
-int depth = 3;              //  depth of the sphere-tree
-int numCoverPts = 5000;     //  number of test points to put on surface for coverage
-int minCoverPts = 5;        //  minimum number of points per triangle for coverage
-int initSpheres = 500;      //  initial spheres in Voronoi
-float erFact = 2;           //  error reduction factor for adaptive Voronoi
-int spheresPerNode = 100;   //  minimum number of spheres per node
-bool verify = false;        //  verify model before construction
-bool nopause = false;       //  will we pause before starting
-bool eval = false;          //  do we evaluate the sphere-tree after construction
-bool useMerge = false;      //  do we include the MERGE algorithm
-bool useBurst = false;      //  do we include the BURST algorithm
-bool useExpand = false;     //  do we include the EXPAND algorithm
+int testerLevels =
+    -1;         //  number of levels for NON-CONVEX, -1 uses CONVEX tester
+int branch = 8; //  branching factor of the sphere-tree
+int depth = 3;  //  depth of the sphere-tree
+int numCoverPts = 5000; //  number of test points to put on surface for coverage
+int minCoverPts = 5;    //  minimum number of points per triangle for coverage
+int initSpheres = 500;  //  initial spheres in Voronoi
+float erFact = 2;       //  error reduction factor for adaptive Voronoi
+int spheresPerNode = 100; //  minimum number of spheres per node
+bool verify = false;      //  verify model before construction
+bool nopause = false;     //  will we pause before starting
+bool eval = false;        //  do we evaluate the sphere-tree after construction
+bool useMerge = false;    //  do we include the MERGE algorithm
+bool useBurst = false;    //  do we include the BURST algorithm
+bool useExpand = false;   //  do we include the EXPAND algorithm
 
-enum Optimisers{NONE, SIMPLEX, BALANCE};
-int optimise = NONE;        //  which optimiser should we use
-float balExcess = 0.0;      //  % increase error allowed for BALANCE opt algorithm
-int maxOptLevel = -1;       //  maximum sphere-tree level to apply optimiser (0 does first set only)
+enum Optimisers { NONE, SIMPLEX, BALANCE };
+int optimise = NONE;   //  which optimiser should we use
+float balExcess = 0.0; //  % increase error allowed for BALANCE opt algorithm
+int maxOptLevel =
+    -1; //  maximum sphere-tree level to apply optimiser (0 does first set only)
 
-#define DO_ALL_BELOW branch*3
-#define MAX_ITERS_FOR_VORONOI 1.50*spheresPerNode;
+#define DO_ALL_BELOW branch * 3
+#define MAX_ITERS_FOR_VORONOI 1.50 * spheresPerNode;
 
 /*
     info for decoding parameters
@@ -99,12 +101,11 @@ const IntParam intParams[] = {{"testerLevels", &testerLevels},
                               {"numCover", &numCoverPts},
                               {"minCover", &minCoverPts},
                               {"initSpheres", &initSpheres},
-                              {"minSpheres", &spheresPerNode}, 
+                              {"minSpheres", &spheresPerNode},
                               {NULL, NULL}};
 
-const FloatParam floatParams[] = {{"erFact", &erFact},
-                                  {"balExcess", &balExcess},
-                                  {NULL, NULL}};
+const FloatParam floatParams[] = {
+    {"erFact", &erFact}, {"balExcess", &balExcess}, {NULL, NULL}};
 
 const BoolParam boolParams[] = {{"verify", &verify, TRUE},
                                 {"nopause", &nopause, TRUE},
@@ -126,7 +127,7 @@ bool constructTree(const char *file);
 /*
     MAINLINE
 */
-int main(int argc, const char *argv[]){
+int main(int argc, const char *argv[]) {
   printf("MakeTreeMedial - Gareth Bradshaw Feb 2003\n");
 
   /*
@@ -134,19 +135,19 @@ int main(int argc, const char *argv[]){
   */
   decodeOptions(argc, argv);
   if (!useMerge && !useBurst && !useExpand)
-    useMerge = useExpand = TRUE;        //  default to combined algorithm
+    useMerge = useExpand = TRUE; //  default to combined algorithm
   writeOptions(stdout);
 
   /*
      look for filenames and construct trees
   */
   int numFiles = 0;
-  for (int i = 1; i < argc; i++){
-    if (argv[i] != NULL){
+  for (int i = 1; i < argc; i++) {
+    if (argv[i] != NULL) {
       constructTree(argv[i]);
       numFiles++;
-      }
     }
+  }
 
   /*
      check we had a file name
@@ -160,7 +161,7 @@ int main(int argc, const char *argv[]){
 /*
     construct sphere-tree for the model
 */
-bool constructTree(const char *file){
+bool constructTree(const char *file) {
   printf("FileName : %s\n\n", file);
 
   /*
@@ -170,10 +171,10 @@ bool constructTree(const char *file){
   strcpy(inputFile, file);
   int len = strlen(inputFile);
   int i;
-  for (i = len-1; i >= 0; i--){
+  for (i = len - 1; i >= 0; i--) {
     if (inputFile[i] == '.')
       break;
-    }
+  }
 
   /*
       load the surface model
@@ -181,19 +182,18 @@ bool constructTree(const char *file){
   Surface sur;
 
   bool loaded = false;
-  if (strcompare("obj", &inputFile[len-3]) == 0){
+  if (strcompare("obj", &inputFile[len - 3]) == 0) {
     printf("Using OBJ loader\n");
     loaded = loadOBJ(&sur, inputFile);
-    }
-  else{
+  } else {
     printf("Using SUR loader\n");
     loaded = sur.loadSurface(inputFile);
-    }
+  }
 
-  if (!loaded){
+  if (!loaded) {
     printf("ERROR : Unable to load input file (%s)\n\n", inputFile);
     return false;
-    }
+  }
   if (i >= 0)
     inputFile[i] = '\0';
 
@@ -218,23 +218,23 @@ bool constructTree(const char *file){
 
   Array<Point3D> sphPts;
   SESphPt sphEval;
-  if (testerLevels > 0){   //  <= 0 will use convex tester
-    SSIsohedron::generateSamples(&sphPts, testerLevels-1);
+  if (testerLevels > 0) { //  <= 0 will use convex tester
+    SSIsohedron::generateSamples(&sphPts, testerLevels - 1);
     sphEval.setup(mt, sphPts);
     eval = &sphEval;
     printf("Using concave tester (%d)\n\n", sphPts.getSize());
-    }
+  }
 
   /*
       verify model
   */
-  if (verify){
+  if (verify) {
     bool ok = verifyModel(sur);
-    if (!ok){
+    if (!ok) {
       printf("ERROR : model is not usable\n\n");
       return false;
-      }
     }
+  }
 
   /*
       setup for the set of cover points
@@ -247,9 +247,9 @@ bool constructTree(const char *file){
      Setup voronoi diagram
   */
   Point3D pC;
-  pC.x = (sur.pMax.x + sur.pMin.x)/2.0f;  
-  pC.y = (sur.pMax.y + sur.pMin.y)/2.0f;  
-  pC.z = (sur.pMax.z + sur.pMin.z)/2.0f;  
+  pC.x = (sur.pMax.x + sur.pMin.x) / 2.0f;
+  pC.y = (sur.pMax.y + sur.pMin.y) / 2.0f;
+  pC.z = (sur.pMax.z + sur.pMin.z) / 2.0f;
 
   Voronoi3D vor;
   vor.initialise(pC, 1.5f * sur.pMin.distance(pC));
@@ -291,18 +291,17 @@ bool constructTree(const char *file){
   burster.doAllBelow = DO_ALL_BELOW;
   burster.setup(&vor, &mt);
 
-  if (!useBurst){
+  if (!useBurst) {
     //  setup adaptive algorithm
     burster.vorAdapt = &adaptive;
     burster.initSpheres = initSpheres;
     burster.errorDecreaseFactor = erFact;
     burster.minSpheresPerNode = spheresPerNode;
     burster.maxItersForVoronoi = MAX_ITERS_FOR_VORONOI;
-    }
-  else{
+  } else {
     // leave adaptive algorithm out as merge will do it for us
     burster.vorAdapt = NULL;
-    }
+  }
 
   /*
       setup EXPAND generator
@@ -314,18 +313,17 @@ bool constructTree(const char *file){
   expander.errStep = 100;
   expander.useIterativeSelect = false;
   expander.relTol = 1E-5;
-  if (!useMerge && !useBurst){
+  if (!useMerge && !useBurst) {
     //  setup adaptive algorithm
     expander.vorAdapt = &adaptive;
     expander.initSpheres = initSpheres;
     expander.errorDecreaseFactor = erFact;
     expander.minSpheresPerNode = spheresPerNode;
     expander.maxItersForVoronoi = MAX_ITERS_FOR_VORONOI;
-    }
-  else{
+  } else {
     // leave adaptive algorithm out as previous algs will do it for us
     expander.vorAdapt = NULL;
-    }
+  }
 
   /*
     setup the COMPOSITE algorithm
@@ -358,7 +356,7 @@ bool constructTree(const char *file){
   balOpt.B = balExcess;
 
   /*
-      setup SphereTree constructor - using dynamic construction 
+      setup SphereTree constructor - using dynamic construction
   */
   STGGeneric treegen;
   treegen.eval = eval;
@@ -375,7 +373,7 @@ bool constructTree(const char *file){
       make sphere-tree
   */
   SphereTree tree;
-  tree.setupTree(branch, depth+1);
+  tree.setupTree(branch, depth + 1);
 
   waitForKey();
   treegen.constructTree(&tree);
@@ -385,33 +383,32 @@ bool constructTree(const char *file){
   */
   char sphereFile[1024];
   sprintf(sphereFile, "%s-medial.sph", inputFile);
-  if (tree.saveSphereTree(sphereFile, 1.0f/boxScale)){
+  if (tree.saveSphereTree(sphereFile, 1.0f / boxScale)) {
     Array<LevelEval> evals;
-    if (eval){
+    if (eval) {
       evaluateTree(&evals, tree, eval);
       writeEvaluation(stdout, evals);
-      }
+    }
 
     FILE *f = fopen(sphereFile, "a");
-    if (f){
+    if (f) {
       fprintf(f, "\n\n");
       writeOptions(f);
       fprintf(f, "\n\n");
       writeEvaluation(f, evals);
       fclose(f);
-      }
+    }
 
     return true;
-    }
-  else{
+  } else {
     return false;
-    }
+  }
 }
 
 /*
     error handler
 */
-int error(const char *errorMsg, const char *errorMsg1){
+int error(const char *errorMsg, const char *errorMsg1) {
   if (errorMsg1)
     printf("ERROR : %s (%s)\n", errorMsg, errorMsg1);
   else
@@ -421,43 +418,44 @@ int error(const char *errorMsg, const char *errorMsg1){
   exit(-1);
 }
 
-void waitForKey(){
-  if (!nopause){
+void waitForKey() {
+  if (!nopause) {
     printf("Press ENTER to continue....\n");
     char buffer[2];
     fread(buffer, 1, 1, stdin);
-    }
+  }
 }
 
 /*
     command line parsing
 */
-void decodeOptions(int argc, const char *argv[]){
+void decodeOptions(int argc, const char *argv[]) {
   //  decode the normal parameters
   decodeIntParam(argc, argv, intParams);
   decodeFloatParam(argc, argv, floatParams);
   decodeBoolParam(argc, argv, boolParams);
 
   //  decode extra parameters
-  for (int i = 1; i < argc; i++){
-    if (argv[i] && strcompare(argv[i], "-optimise") == 0){
-      if (argv[i+1] == NULL)
+  for (int i = 1; i < argc; i++) {
+    if (argv[i] && strcompare(argv[i], "-optimise") == 0) {
+      if (argv[i + 1] == NULL)
         error("decoding parameter", "-optimise");
-      else if (strcompare(argv[i+1], "off") == 0)
+      else if (strcompare(argv[i + 1], "off") == 0)
         optimise = NONE;
-      else if (strcompare(argv[i+1], "on") == 0 || strcompare(argv[i+1], "simplex") == 0)
+      else if (strcompare(argv[i + 1], "on") == 0 ||
+               strcompare(argv[i + 1], "simplex") == 0)
         optimise = SIMPLEX;
-      else if (strcompare(argv[i+1], "balance") == 0)
+      else if (strcompare(argv[i + 1], "balance") == 0)
         optimise = BALANCE;
       else
         error("decoding parameter", "-optimise");
 
-      argv[i] = argv[i+1] = NULL;
-      }
+      argv[i] = argv[i + 1] = NULL;
     }
+  }
 }
 
-void writeOptions(FILE *f){
+void writeOptions(FILE *f) {
   fprintf(f, "Options :\n");
 
   //  write out standard parameters
@@ -465,14 +463,14 @@ void writeOptions(FILE *f){
   writeParam(f, floatParams);
   writeParam(f, boolParams);
 
-/*
-  if (testerLevels <= 0)
-    fprintf(f, "\ttesterLevels\t: Using CONVEX Tester\n");
-  else{
-    int numFaces = 20 * (int)pow(4, testerLevels-1);
-    int numVerts = numFaces/2 + 2;
-    fprintf(f, "\ttesterLevels\t: %d (%d points)\n", testerLevels, numVerts);
-    }*/
+  /*
+    if (testerLevels <= 0)
+      fprintf(f, "\ttesterLevels\t: Using CONVEX Tester\n");
+    else{
+      int numFaces = 20 * (int)pow(4, testerLevels-1);
+      int numVerts = numFaces/2 + 2;
+      fprintf(f, "\ttesterLevels\t: %d (%d points)\n", testerLevels, numVerts);
+      }*/
 
   //  write out extra parameters
   if (optimise == SIMPLEX)

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -40,26 +40,27 @@
 #include "SEConvex.h"
 #include "SOPerSphere.h"
 
-SFMinErr::SFMinErr(){
-  eval = NULL;  
-}
+SFMinErr::SFMinErr() { eval = NULL; }
 
-bool SFMinErr::makeSphere(Sphere *s, const Array<Surface::Point> &points, const Array<int> &inds, const SEBase *eval){
+bool SFMinErr::makeSphere(Sphere *s, const Array<Surface::Point> &points,
+                          const Array<int> &inds, const SEBase *eval) {
   Array<Point3D> pts;
   convertPoints(&pts, points, inds);
   return makeSphere(s, pts, eval);
 }
 
-bool SFMinErr::makeSphere(Sphere *s, const Array<Surface::Point> &points, const SEBase *eval){
+bool SFMinErr::makeSphere(Sphere *s, const Array<Surface::Point> &points,
+                          const SEBase *eval) {
   Array<Point3D> pts;
   convertPoints(&pts, points);
   return makeSphere(s, pts, eval);
 }
 
-bool SFMinErr::makeSphere(Sphere *s, const Array<Point3D> &points, const SEBase *eval){
+bool SFMinErr::makeSphere(Sphere *s, const Array<Point3D> &points,
+                          const SEBase *eval) {
   //  build point list
   int numInds = points.getSize();
-  if (numInds < 2){
+  if (numInds < 2) {
     if (numInds == 1)
       s->c = points.index(0);
     else
@@ -67,7 +68,7 @@ bool SFMinErr::makeSphere(Sphere *s, const Array<Point3D> &points, const SEBase 
 
     s->r = 0;
     return true;
-    }
+  }
 
   //  determine evaluator
   SEConvex evalConvex;
@@ -76,7 +77,7 @@ bool SFMinErr::makeSphere(Sphere *s, const Array<Point3D> &points, const SEBase 
     localEval = &evalConvex;
 
   SOPerSphere opt;
-  opt.eval = localEval; 
+  opt.eval = localEval;
   opt.optimise(s, points);
 
   return finite(s->r);

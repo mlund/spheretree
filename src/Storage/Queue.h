@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -41,52 +41,50 @@
 
 #include "LinkedList.h"
 
-template <class T> class Queue{
-  public:                   //  TEMP
-  //private:
-    struct Node{
-      T item;
-      Node *next, *prev;
-      };
-    LinkedList<Node> list;
-    Node *lastNode;
+template <class T> class Queue {
+public: //  TEMP
+        // private:
+  struct Node {
+    T item;
+    Node *next, *prev;
+  };
+  LinkedList<Node> list;
+  Node *lastNode;
 
-  public:
-    void addItem(const T &t){
-      Node *n = new Node;
-      list.initNode(n);
-      n->item = t;
+public:
+  void addItem(const T &t) {
+    Node *n = new Node;
+    list.initNode(n);
+    n->item = t;
 
-      if (!list.getFirst())
-        list.addNode(n);
-      else
-        list.insertNode(n, lastNode);
-      lastNode = n;
-      }
+    if (!list.getFirst())
+      list.addNode(n);
+    else
+      list.insertNode(n, lastNode);
+    lastNode = n;
+  }
 
-    T getItem(){
-      Node *n = list.getFirst();
-      CHECK_DEBUG(n != NULL, "Empty Queue");
+  T getItem() {
+    Node *n = list.getFirst();
+    CHECK_DEBUG(n != NULL, "Empty Queue");
 
-      T tmp = n->item;
-      list.removeNode(n);
-      delete n;
+    T tmp = n->item;
+    list.removeNode(n);
+    delete n;
 
-      return tmp;
-      }
+    return tmp;
+  }
 
-    void getItem(T *t){
-      Node *n = list.getFirst();
-      CHECK_DEBUG(n != NULL, "Empty Queue");
+  void getItem(T *t) {
+    Node *n = list.getFirst();
+    CHECK_DEBUG(n != NULL, "Empty Queue");
 
-      (*t) = n->item;
-      list.removeNode(n);
-      delete n;
-      }
+    (*t) = n->item;
+    list.removeNode(n);
+    delete n;
+  }
 
-    __inline bool hasItem() const{
-      return list.getFirst() != NULL;
-      }
+  __inline bool hasItem() const { return list.getFirst() != NULL; }
 };
 
 #endif

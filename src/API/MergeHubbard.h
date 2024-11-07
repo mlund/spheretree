@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -44,54 +44,61 @@
 #include "../MedialAxis/Voronoi3D.h"
 #include "../MedialAxis/MedialTester.h"
 
-class MergeHubbard{
-  public:
-    //  constructor
-    MergeHubbard();
+class MergeHubbard {
+public:
+  //  constructor
+  MergeHubbard();
 
-    //  setup
-    void setup(Voronoi3D *vor, const MedialTester *mt);
-    void getBoundingSphere(Sphere *s) const;
+  //  setup
+  void setup(Voronoi3D *vor, const MedialTester *mt);
+  void getBoundingSphere(Sphere *s) const;
 
-    //  reduce sphere set
-    void getSpheres(Array<Sphere> *spheres, int numDest, const Array<int> *filterInds = NULL) const;
+  //  reduce sphere set
+  void getSpheres(Array<Sphere> *spheres, int numDest,
+                  const Array<int> *filterInds = NULL) const;
 
-  private:
-    //  internals
-    struct Merger{
-      int i1, i2;
-      Sphere s;
-      float cost;
-      };
+private:
+  //  internals
+  struct Merger {
+    int i1, i2;
+    Sphere s;
+    float cost;
+  };
 
-    struct MedialSphere{
-      bool valid;
-      Sphere s;
-      Array<int> neighbours, pts;
-      Array<int> vertices;
-      float error;
-      };
+  struct MedialSphere {
+    bool valid;
+    Sphere s;
+    Array<int> neighbours, pts;
+    Array<int> vertices;
+    float error;
+  };
 
-    //  list of forming points
-    Array<Surface::Point> formingPoints;
+  //  list of forming points
+  Array<Surface::Point> formingPoints;
 
-    //  voronoi diagram etc.
-    Voronoi3D *vor;
-    const MedialTester *mt;
+  //  voronoi diagram etc.
+  Voronoi3D *vor;
+  const MedialTester *mt;
 
-    //  internals
-    void constructSphereSet(Array<MedialSphere> *medialSpheres, const Array<int> *filterInds) const;
-    void iterativeMerge(Array<MedialSphere> *medialSpheres, int numDest) const;
-    void constructMerger(Merger *merger, const Array<MedialSphere> &medialSpheres, int i1, int i2) const;
-    void constructMergers(Array<Merger> *mergers, const Array<MedialSphere> &medialSpheres) const;
-    void constructAllMergers(Array<Merger> *mergers, const Array<MedialSphere> &medialSpheres) const;
-    void applyMerger(Array<Merger> *mergers, Array<MedialSphere> *medialSpheres, int mergI, bool updateHouseKeeping) const;
+  //  internals
+  void constructSphereSet(Array<MedialSphere> *medialSpheres,
+                          const Array<int> *filterInds) const;
+  void iterativeMerge(Array<MedialSphere> *medialSpheres, int numDest) const;
+  void constructMerger(Merger *merger, const Array<MedialSphere> &medialSpheres,
+                       int i1, int i2) const;
+  void constructMergers(Array<Merger> *mergers,
+                        const Array<MedialSphere> &medialSpheres) const;
+  void constructAllMergers(Array<Merger> *mergers,
+                           const Array<MedialSphere> &medialSpheres) const;
+  void applyMerger(Array<Merger> *mergers, Array<MedialSphere> *medialSpheres,
+                   int mergI, bool updateHouseKeeping) const;
 
-    //  statics
-    static void mergeLists(Array<int> *dest, const Array<int> &l);
-    static void combineLists(Array<int> *dest, const Array<int> &l1, const Array<int> &l2);
+  //  statics
+  static void mergeLists(Array<int> *dest, const Array<int> &l);
+  static void combineLists(Array<int> *dest, const Array<int> &l1,
+                           const Array<int> &l2);
 
-    friend class STGHubbard;
+  friend class STGHubbard;
 };
 
 #endif

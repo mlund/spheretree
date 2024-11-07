@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -49,38 +49,46 @@
 #include "../Geometry/Line2D.h"
 #include "../Geometry/LineSeg.h"
 
-class MSRelaxation : public MSBase{
-  public:
-    //  parameters
-    bool useVert;
-    float edgeFrac;
-    int maxIters;
+class MSRelaxation : public MSBase {
+public:
+  //  parameters
+  bool useVert;
+  float edgeFrac;
+  int maxIters;
 
-    //  constructor
-    MSRelaxation();
-    MSRelaxation(const Surface &sur);
+  //  constructor
+  MSRelaxation();
+  MSRelaxation(const Surface &sur);
 
-    //  setup
-    void setSurface(const Surface &sur);
+  //  setup
+  void setSurface(const Surface &sur);
 
-    //  sample
-    virtual void generateSamples(Array<Surface::Point> *pts, int numSamples) const = 0;
-    static void generateSamples(Array<Surface::Point> *pts, int numSamples, const Surface &sur, bool useVert, float edgeFrac = 0.1f, int maxIter = 50);
+  //  sample
+  virtual void generateSamples(Array<Surface::Point> *pts,
+                               int numSamples) const = 0;
+  static void generateSamples(Array<Surface::Point> *pts, int numSamples,
+                              const Surface &sur, bool useVert,
+                              float edgeFrac = 0.1f, int maxIter = 50);
 
-  private:
-    //  internals for face relaxation
-    static void randomTriangleSample(Point3D *p, const Point3D &p0, const Point3D &p1, const Point3D &p2);
-    static float getWeight(const Vector2D &v, float rad);
-    static void accumulateForce(Vector2D *vDest, const Point2D &p, const Point2D &p1, float weight);
-    static void accumulateForce(Vector2D *vDest, const Point2D &p, const LineSeg &ls, const Line2D &l, float weight);
-    static void relaxTriangle(Array<Point3D> *srcPts, const Point3D p[3], int maxIter);
+private:
+  //  internals for face relaxation
+  static void randomTriangleSample(Point3D *p, const Point3D &p0,
+                                   const Point3D &p1, const Point3D &p2);
+  static float getWeight(const Vector2D &v, float rad);
+  static void accumulateForce(Vector2D *vDest, const Point2D &p,
+                              const Point2D &p1, float weight);
+  static void accumulateForce(Vector2D *vDest, const Point2D &p,
+                              const LineSeg &ls, const Line2D &l, float weight);
+  static void relaxTriangle(Array<Point3D> *srcPts, const Point3D p[3],
+                            int maxIter);
 
-    //  internals for edges
-    struct Edge{
-      int v1, v2;
-      Vector3D nE;
-      };
-   static void sampleEdges(Array<Surface::Point> *pts, int numPts, const Surface &surface);
+  //  internals for edges
+  struct Edge {
+    int v1, v2;
+    Vector3D nE;
+  };
+  static void sampleEdges(Array<Surface::Point> *pts, int numPts,
+                          const Surface &surface);
 };
 
 #endif

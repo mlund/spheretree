@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -43,24 +43,25 @@
 //  Graphics gems code uses a unit cube centered about the origin
 //  therefore we need to transform the triangle into this space
 
-bool overlapTest(/*const*/ Point3D /*&*/pMin, float edgeLength, const Point3D p[3], double growBy){
+bool overlapTest(/*const*/ Point3D /*&*/ pMin, float edgeLength,
+                 const Point3D p[3], double growBy) {
   //  make box slightly larger just to be safe
   pMin.x -= growBy;
   pMin.y -= growBy;
   pMin.z -= growBy;
-  edgeLength += 2*growBy;
+  edgeLength += 2 * growBy;
 
   Point3D pC;
-  pC.x = pMin.x + edgeLength/2.0;
-  pC.y = pMin.y + edgeLength/2.0;
-  pC.z = pMin.z + edgeLength/2.0;
+  pC.x = pMin.x + edgeLength / 2.0;
+  pC.y = pMin.y + edgeLength / 2.0;
+  pC.z = pMin.z + edgeLength / 2.0;
 
   real verts[3][3];
-  for (int i = 0; i < 3; i++){
+  for (int i = 0; i < 3; i++) {
     verts[i][0] = (p[i].x - pC.x) / edgeLength;
     verts[i][1] = (p[i].y - pC.y) / edgeLength;
     verts[i][2] = (p[i].z - pC.z) / edgeLength;
-    }
+  }
 
   //  compute the polygon normal
   Vector3D v1, v2, vC;
@@ -75,10 +76,11 @@ bool overlapTest(/*const*/ Point3D /*&*/pMin, float edgeLength, const Point3D p[
   norm[2] = vC.z;
 
   int res = fast_polygon_intersects_cube(3, verts, norm, 0, 0);
-  return (res != 0);  //  only ever returns 0/1 ??
+  return (res != 0); //  only ever returns 0/1 ??
 }
 
-bool overlapTest(/*const*/ Point3D /*&*/pMin, /*const*/ Point3D /*&*/pMax, const Point3D p[3], double growBy){
+bool overlapTest(/*const*/ Point3D /*&*/ pMin, /*const*/ Point3D /*&*/ pMax,
+                 const Point3D p[3], double growBy) {
   //  make box slightly larger just to be safe
   pMin.x -= growBy;
   pMin.y -= growBy;
@@ -88,19 +90,19 @@ bool overlapTest(/*const*/ Point3D /*&*/pMin, /*const*/ Point3D /*&*/pMax, const
   pMax.z += growBy;
 
   Point3D pC;
-  pC.x = (pMin.x + pMax.x)/2.0;
-  pC.y = (pMin.y + pMax.y)/2.0;
-  pC.z = (pMin.z + pMax.z)/2.0;
+  pC.x = (pMin.x + pMax.x) / 2.0;
+  pC.y = (pMin.y + pMax.y) / 2.0;
+  pC.z = (pMin.z + pMax.z) / 2.0;
 
   Vector3D v;
   v.difference(pMax, pMin);
 
   real verts[3][3];
-  for (int i = 0; i < 3; i++){
+  for (int i = 0; i < 3; i++) {
     verts[i][0] = (p[i].x - pC.x) / v.x;
     verts[i][1] = (p[i].y - pC.y) / v.y;
     verts[i][2] = (p[i].z - pC.z) / v.z;
-    }
+  }
 
   //  compute the polygon normal
   Vector3D v1, v2, vC;

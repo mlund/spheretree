@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -40,30 +40,26 @@
 #define PI 3.1415926535
 
 //  constructor
-SSRings::SSRings(int numRings){
-  setRings(numRings);
-}
+SSRings::SSRings(int numRings) { setRings(numRings); }
 
 //  setup
-void SSRings::setRings(int numRings){
-  this->numRings = numRings;
-}
+void SSRings::setRings(int numRings) { this->numRings = numRings; }
 
 //  generate the samples
-void SSRings::generateSamples(Array<Point3D> *pts) const{
+void SSRings::generateSamples(Array<Point3D> *pts) const {
   generateSamples(pts, numRings);
 }
 
-void SSRings::generateSamples(Array<Point3D> *pts, int numRings){
+void SSRings::generateSamples(Array<Point3D> *pts, int numRings) {
   //  work out number of stacks and slices
   int hemiStacks = numRings /= 2;
-  int slices = 2*hemiStacks + 1;
+  int slices = 2 * hemiStacks + 1;
 
   //  go down through the layers
   pts->setSize(0);
-  for (int stack = -hemiStacks; stack <= hemiStacks; stack++){
+  for (int stack = -hemiStacks; stack <= hemiStacks; stack++) {
     //  calculate the radius as fraction of unit radius
-    float phi = (stack*PI) / (2.0f*hemiStacks) + PI/2.0f;
+    float phi = (stack * PI) / (2.0f * hemiStacks) + PI / 2.0f;
     float radius = sin(phi);
 
     //  work out how many points to generate
@@ -74,16 +70,15 @@ void SSRings::generateSamples(Array<Point3D> *pts, int numRings){
     float sP = sin(phi);
     float cP = cos(phi);
 
-    for (int dot = 0; dot < numDots; dot++){
-      float theta = 2.0*PI*dot/(float)numDots;
+    for (int dot = 0; dot < numDots; dot++) {
+      float theta = 2.0 * PI * dot / (float)numDots;
       float sT = sin(theta);
       float cT = cos(theta);
 
       Point3D *p = &pts->addItem();
-      p->x = sT*sP;
-      p->y = cT*sP;
+      p->x = sT * sP;
+      p->y = cT * sP;
       p->z = cP;
-      }
     }
+  }
 }
-

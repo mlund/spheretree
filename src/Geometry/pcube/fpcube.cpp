@@ -33,84 +33,69 @@
  * to check in such a test.
  */
 
-
 #include "pcube.h"
 
 #ifndef __cplusplus
 #define inline
 #endif
 
-
-#define TEST_AGAINST_PARALLEL_PLANES(posbit, negbit, value, limit)	\
-	if (mask & (posbit|negbit)) {					\
-		register real temp = value;				\
-		if ((mask & posbit) && temp > limit)			\
-			outcode |= posbit;				\
-		else if ((mask & negbit) && temp < -limit)		\
-			outcode |= negbit;				\
-	}								\
-
+#define TEST_AGAINST_PARALLEL_PLANES(posbit, negbit, value, limit)             \
+  if (mask & (posbit | negbit)) {                                              \
+    register real temp = value;                                                \
+    if ((mask & posbit) && temp > limit)                                       \
+      outcode |= posbit;                                                       \
+    else if ((mask & negbit) && temp < -limit)                                 \
+      outcode |= negbit;                                                       \
+  }
 
 /*
  * Tells which of the six face-planes the given point is outside of.
  * Only tests faces not represented in "mask".
  */
 
-static inline unsigned long
-face_plane(const real p[3], unsigned long mask)
-{
-	register unsigned long outcode = 0L;
+static inline unsigned long face_plane(const real p[3], unsigned long mask) {
+  register unsigned long outcode = 0L;
 
-	TEST_AGAINST_PARALLEL_PLANES(0x001, 0x002, p[0], 0.5)
-	TEST_AGAINST_PARALLEL_PLANES(0x004, 0x008, p[1], 0.5)
-	TEST_AGAINST_PARALLEL_PLANES(0x010, 0x020, p[2], 0.5)
+  TEST_AGAINST_PARALLEL_PLANES(0x001, 0x002, p[0], 0.5)
+  TEST_AGAINST_PARALLEL_PLANES(0x004, 0x008, p[1], 0.5)
+  TEST_AGAINST_PARALLEL_PLANES(0x010, 0x020, p[2], 0.5)
 
-	return(outcode);
+  return (outcode);
 }
-
-
 
 /*
  * Tells which of the twelve edge planes the given point is outside of.
  * Only tests faces not represented in "mask".
  */
 
-static inline unsigned long
-bevel_2d(const real p[3], unsigned long mask)
-{
-	register unsigned long outcode = 0L;
+static inline unsigned long bevel_2d(const real p[3], unsigned long mask) {
+  register unsigned long outcode = 0L;
 
-	TEST_AGAINST_PARALLEL_PLANES(0x001, 0x002, p[0] + p[1], 1.0)
-	TEST_AGAINST_PARALLEL_PLANES(0x004, 0x008, p[0] - p[1], 1.0)
-	TEST_AGAINST_PARALLEL_PLANES(0x010, 0x020, p[0] + p[2], 1.0)
-	TEST_AGAINST_PARALLEL_PLANES(0x040, 0x080, p[0] - p[2], 1.0)
-	TEST_AGAINST_PARALLEL_PLANES(0x100, 0x200, p[1] + p[2], 1.0)
-	TEST_AGAINST_PARALLEL_PLANES(0x400, 0x800, p[1] - p[2], 1.0)
+  TEST_AGAINST_PARALLEL_PLANES(0x001, 0x002, p[0] + p[1], 1.0)
+  TEST_AGAINST_PARALLEL_PLANES(0x004, 0x008, p[0] - p[1], 1.0)
+  TEST_AGAINST_PARALLEL_PLANES(0x010, 0x020, p[0] + p[2], 1.0)
+  TEST_AGAINST_PARALLEL_PLANES(0x040, 0x080, p[0] - p[2], 1.0)
+  TEST_AGAINST_PARALLEL_PLANES(0x100, 0x200, p[1] + p[2], 1.0)
+  TEST_AGAINST_PARALLEL_PLANES(0x400, 0x800, p[1] - p[2], 1.0)
 
-	return(outcode);
+  return (outcode);
 }
-
-
 
 /*
  * Tells which of the eight corner planes the given point is outside of.
  * Only tests faces not represented in "mask".
  */
 
-static inline unsigned long
-bevel_3d(const real p[3], unsigned long mask)
-{
-	register unsigned long outcode = 0L;
+static inline unsigned long bevel_3d(const real p[3], unsigned long mask) {
+  register unsigned long outcode = 0L;
 
-	TEST_AGAINST_PARALLEL_PLANES(0x001, 0x002, p[0] + p[1] + p[2], 1.5)
-	TEST_AGAINST_PARALLEL_PLANES(0x004, 0x008, p[0] + p[1] - p[2], 1.5)
-	TEST_AGAINST_PARALLEL_PLANES(0x010, 0x020, p[0] - p[1] + p[2], 1.5)
-	TEST_AGAINST_PARALLEL_PLANES(0x040, 0x080, p[0] - p[1] - p[2], 1.5)
+  TEST_AGAINST_PARALLEL_PLANES(0x001, 0x002, p[0] + p[1] + p[2], 1.5)
+  TEST_AGAINST_PARALLEL_PLANES(0x004, 0x008, p[0] + p[1] - p[2], 1.5)
+  TEST_AGAINST_PARALLEL_PLANES(0x010, 0x020, p[0] - p[1] + p[2], 1.5)
+  TEST_AGAINST_PARALLEL_PLANES(0x040, 0x080, p[0] - p[1] - p[2], 1.5)
 
-	return(outcode);
+  return (outcode);
 }
-
-
 
 /*
  * Returns 1 if any of the vertices are inside the cube of edge length 1
@@ -118,71 +103,66 @@ bevel_3d(const real p[3], unsigned long mask)
  * of any testing plane (trivial reject), -1 otherwise (couldn't help).
  */
 
-EXTERN int
-trivial_vertex_tests(int nverts, const real verts[][3],
-			int already_know_verts_are_outside_cube)
-{
-	register unsigned long cum_and;  /* cumulative logical ANDs */
-	register int i;
+EXTERN int trivial_vertex_tests(int nverts, const real verts[][3],
+                                int already_know_verts_are_outside_cube) {
+  register unsigned long cum_and; /* cumulative logical ANDs */
+  register int i;
 
-	/*
-	 * Compare the vertices with all six face-planes.
-	 * If it's known that no vertices are inside the unit cube
-	 * we can exit the loop early if we run out of bounding
-	 * planes that all vertices might be outside of.  That simply means
-	 * that this test failed and we can go on to the next one.
-	 * If we must test for vertices within the cube, the loop is slightly
-	 * different in that we can trivially accept if we ever do find a
-	 * vertex within the cube, but we can't break the loop early if we run
-	 * out of planes to reject against because subsequent vertices might
-	 * still be within the cube.
-	 */
-	cum_and = ~0L;  /* Set to all "1" bits */
-	if(already_know_verts_are_outside_cube) {
-		for(i=0; i<nverts; i++)
-			if(0L == (cum_and = face_plane(verts[i], cum_and)))
-				break; /* No planes left to trivially reject */
-	}
-	else {
-		for(i=0; i<nverts; i++) {
-			/* Note the ~0L mask below to always test all planes */
-			unsigned long face_bits = face_plane(verts[i], ~0L);
-			if(0L == face_bits)  /* vertex is inside the cube */
-				return 1; /* trivial accept */
-			cum_and &= face_bits;
-		}
-	}
-	if(cum_and != 0L)  /* All vertices outside some face plane. */
-		return 0;  /* Trivial reject */
+  /*
+   * Compare the vertices with all six face-planes.
+   * If it's known that no vertices are inside the unit cube
+   * we can exit the loop early if we run out of bounding
+   * planes that all vertices might be outside of.  That simply means
+   * that this test failed and we can go on to the next one.
+   * If we must test for vertices within the cube, the loop is slightly
+   * different in that we can trivially accept if we ever do find a
+   * vertex within the cube, but we can't break the loop early if we run
+   * out of planes to reject against because subsequent vertices might
+   * still be within the cube.
+   */
+  cum_and = ~0L; /* Set to all "1" bits */
+  if (already_know_verts_are_outside_cube) {
+    for (i = 0; i < nverts; i++)
+      if (0L == (cum_and = face_plane(verts[i], cum_and)))
+        break; /* No planes left to trivially reject */
+  } else {
+    for (i = 0; i < nverts; i++) {
+      /* Note the ~0L mask below to always test all planes */
+      unsigned long face_bits = face_plane(verts[i], ~0L);
+      if (0L == face_bits) /* vertex is inside the cube */
+        return 1;          /* trivial accept */
+      cum_and &= face_bits;
+    }
+  }
+  if (cum_and != 0L) /* All vertices outside some face plane. */
+    return 0;        /* Trivial reject */
 
-	/*
-	 * Now do the just the trivial reject test against the 12 edge planes.
-	 */
-	cum_and = ~0L;  /* Set to all "1" bits */
-	for(i=0; i<nverts; i++)
-		if(0L == (cum_and = bevel_2d(verts[i], cum_and)))
-			break; /* No planes left that might trivially reject */
-	if(cum_and != 0L)  /* All vertices outside some edge plane. */
-		return 0;  /* Trivial reject */
+  /*
+   * Now do the just the trivial reject test against the 12 edge planes.
+   */
+  cum_and = ~0L; /* Set to all "1" bits */
+  for (i = 0; i < nverts; i++)
+    if (0L == (cum_and = bevel_2d(verts[i], cum_and)))
+      break;         /* No planes left that might trivially reject */
+  if (cum_and != 0L) /* All vertices outside some edge plane. */
+    return 0;        /* Trivial reject */
 
-	/*
-	 * Now do the trivial reject test against the 8 corner planes.
-	 */
-	cum_and = ~0L;  /* Set to all "1" bits */
-	for(i=0; i<nverts; i++)
-		if(0L == (cum_and = bevel_3d(verts[i], cum_and)))
-			break; /* No planes left that might trivially reject */
-	if(cum_and != 0L)  /* All vertices outside some corner plane. */
-		return 0;  /* Trivial reject */
+  /*
+   * Now do the trivial reject test against the 8 corner planes.
+   */
+  cum_and = ~0L; /* Set to all "1" bits */
+  for (i = 0; i < nverts; i++)
+    if (0L == (cum_and = bevel_3d(verts[i], cum_and)))
+      break;         /* No planes left that might trivially reject */
+  if (cum_and != 0L) /* All vertices outside some corner plane. */
+    return 0;        /* Trivial reject */
 
-	/*
-	 * By now we know that the polygon is not to the outside of any of the
-	 * test planes and can't be trivially accepted *or* rejected.
-	 */
-	return -1;
+  /*
+   * By now we know that the polygon is not to the outside of any of the
+   * test planes and can't be trivially accepted *or* rejected.
+   */
+  return -1;
 }
-
-
 
 /*
  * This is a version of the same polygon-cube intersection that first calls
@@ -194,15 +174,14 @@ trivial_vertex_tests(int nverts, const real verts[][3],
  */
 EXTERN int
 fast_polygon_intersects_cube(int nverts, const real verts[][3],
-                        const real polynormal[3],
-			int already_know_verts_are_outside_cube,
-			int already_know_edges_are_outside_cube)
-{
-	int quick_test = trivial_vertex_tests(nverts, verts,
-				already_know_verts_are_outside_cube);
-	if(-1 == quick_test)
-		return polygon_intersects_cube(nverts, verts, polynormal, 1,
-				already_know_edges_are_outside_cube);
-	else
-		return quick_test;
+                             const real polynormal[3],
+                             int already_know_verts_are_outside_cube,
+                             int already_know_edges_are_outside_cube) {
+  int quick_test =
+      trivial_vertex_tests(nverts, verts, already_know_verts_are_outside_cube);
+  if (-1 == quick_test)
+    return polygon_intersects_cube(nverts, verts, polynormal, 1,
+                                   already_know_edges_are_outside_cube);
+  else
+    return quick_test;
 }

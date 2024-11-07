@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -47,97 +47,93 @@
 #include "../Exceptions/CheckDebug.h"
 #include "Point2D.h"
 
-struct Vector2D{
+struct Vector2D {
   REAL x, y;
 
-  __inline void difference(const Point2D &p, const Point2D &q){
+  __inline void difference(const Point2D &p, const Point2D &q) {
     x = p.x - q.x;
     y = p.y - q.y;
-    }
+  }
 
   //  assignment
-  __inline void assign(REAL xN, REAL yN){
+  __inline void assign(REAL xN, REAL yN) {
     x = xN;
     y = yN;
-    }
+  }
 
-  __inline void assign(const Vector2D &v){
+  __inline void assign(const Vector2D &v) {
     x = v.x;
     y = v.y;
-    }
+  }
 
   //  comparison
-  __inline bool equals(const Vector2D &v) const{
+  __inline bool equals(const Vector2D &v) const {
     return (fabs(v.x - x) < EPSILON && fabs(v.y - y) < EPSILON);
-    }
+  }
 
   //  application to point (should be in point ??)
-  __inline void add(Point2D *p) const{
+  __inline void add(Point2D *p) const {
     CHECK_DEBUG(p != NULL, "NULL Destination");
 
     p->x += x;
     p->y += y;
-    }
+  }
 
-  __inline void add(Point2D *p, const Point2D &q, REAL mult = 1.0f) const{
+  __inline void add(Point2D *p, const Point2D &q, REAL mult = 1.0f) const {
     CHECK_DEBUG(p != NULL, "NULL Destination");
 
-    p->x = q.x + x*mult;
-    p->y = q.y + y*mult;
-    }
+    p->x = q.x + x * mult;
+    p->y = q.y + y * mult;
+  }
 
-  __inline void sub(Point2D *p) const{
+  __inline void sub(Point2D *p) const {
     CHECK_DEBUG(p != NULL, "NULL Destination");
 
     p->x -= x;
     p->y -= y;
-    }
+  }
 
-  __inline void sub(Point2D *p, const Point2D &q) const{
+  __inline void sub(Point2D *p, const Point2D &q) const {
     CHECK_DEBUG(p != NULL, "NULL Destination");
 
     p->x = q.x - x;
     p->y = q.y - y;
-    }
+  }
 
-  __inline void add(const Vector2D &v){
+  __inline void add(const Vector2D &v) {
     x += v.x;
     y += v.y;
-    }
+  }
 
-  __inline void add(const Vector2D &v1, const Vector2D &v2){
+  __inline void add(const Vector2D &v1, const Vector2D &v2) {
     x = v1.x + v2.x;
     y = v1.y + v2.y;
-    }
+  }
 
-  __inline void sub(const Vector2D &v){
+  __inline void sub(const Vector2D &v) {
     x -= v.x;
     y -= v.y;
-    }
+  }
 
-  __inline void sub(const Vector2D &v, const Vector2D &v1){
+  __inline void sub(const Vector2D &v, const Vector2D &v1) {
     x = v.x - v1.x;
     y = v.y - v1.y;
-    }
+  }
 
-  __inline void scale(REAL s){
+  __inline void scale(REAL s) {
     x *= s;
     y *= s;
-    }
+  }
 
-  __inline void scale(const Vector2D &v, REAL s){
+  __inline void scale(const Vector2D &v, REAL s) {
     x = v.x * s;
     y = v.y * s;
-    }
+  }
 
   //  DOT
-  __inline REAL dot(const Vector2D &v) const{
-    return x*v.x + y*v.y;
-    }
+  __inline REAL dot(const Vector2D &v) const { return x * v.x + y * v.y; }
 
-  __inline REAL mag() const{
-    return (REAL)sqrt(x*x + y*y);
-    }
+  __inline REAL mag() const { return (REAL)sqrt(x * x + y * y); }
 
   //  angles
   REAL angle(const Vector2D &v) const;

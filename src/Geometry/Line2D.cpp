@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -42,33 +42,32 @@
 #include <stdlib.h>
 
 //  intersection
-bool Line2D::intersect(Point2D *p, const Line2D &l) const{
+bool Line2D::intersect(Point2D *p, const Line2D &l) const {
   CHECK_DEBUG(p != NULL, "NULL Destination");
 
-  REAL div = l.a*b - a*l.b;
+  REAL div = l.a * b - a * l.b;
   if (fabs(div) < EPSILON)
     return false;
 
-  p->x = (c*l.b - b*l.c) / div;
-  p->y = (a*l.c - c*l.a) / div;
+  p->x = (c * l.b - b * l.c) / div;
+  p->y = (a * l.c - c * l.a) / div;
 
   return true;
 }
 
 //  projection
-void Line2D::project(Point2D *p, const Point2D &q) const{
+void Line2D::project(Point2D *p, const Point2D &q) const {
   CHECK_DEBUG(p != NULL, "NULL Destination");
 
   //  point on line
   Point2D pLine;
-  if (fabs(a) > fabsl(b)){
+  if (fabs(a) > fabsl(b)) {
     pLine.y = 0;
-    pLine.x = -c/a;
-    }
-  else{
+    pLine.x = -c / a;
+  } else {
     pLine.x = 0;
-    pLine.y = -c/b;
-    }
+    pLine.y = -c / b;
+  }
 
   Vector2D v;
   v.difference(q, pLine);
@@ -83,7 +82,6 @@ void Line2D::project(Point2D *p, const Point2D &q) const{
 
   //  dot product projects point onto line
   REAL dt = v.dot(vLine);
-  p->x = pLine.x + dt*vLine.x * magV;
-  p->y = pLine.y + dt*vLine.y * magV;
+  p->x = pLine.x + dt * vLine.x * magV;
+  p->y = pLine.y + dt * vLine.y * magV;
 }
-

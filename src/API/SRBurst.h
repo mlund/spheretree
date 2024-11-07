@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,10 +37,10 @@
 \**************************************************************************/
 
 /*
-    Sphere Reducer which replaces the merging from Hubbard's algorithm with a 
+    Sphere Reducer which replaces the merging from Hubbard's algorithm with a
     bursting strategy.
 
-    Beneficial Merges (i.e. those with reduce error) work well for the burst 
+    Beneficial Merges (i.e. those with reduce error) work well for the burst
     algorithm and therefore is the default
 */
 #ifndef _API_BURST_SPHERE_REDUCER_H_
@@ -51,44 +51,59 @@
 #include "SRVoronoi.h"
 #include "REBase.h"
 
-class SRBurst : public SRVoronoi{
-  public:
-    //  parameters
-    const SFBase *sphereFitter;
-    const SEBase *sphereEval;
+class SRBurst : public SRVoronoi {
+public:
+  //  parameters
+  const SFBase *sphereFitter;
+  const SEBase *sphereEval;
 
-    //  use forming points instead of surRep for coverage (for comparisons)
-    bool useFormingPoints;
+  //  use forming points instead of surRep for coverage (for comparisons)
+  bool useFormingPoints;
 
-    //  consider ALL pairs below this number of spheres
-    int doAllBelow;
+  //  consider ALL pairs below this number of spheres
+  int doAllBelow;
 
-    //  eliminate redundent spheres during merge (will affect later processing)
-    int doRedundantCheckBelow;
-    REBase *redElim;                      //  uses RELargest if none given
+  //  eliminate redundent spheres during merge (will affect later processing)
+  int doRedundantCheckBelow;
+  REBase *redElim; //  uses RELargest if none given
 
-    //  use beneficial merges first
-    bool useBeneficial;
+  //  use beneficial merges first
+  bool useBeneficial;
 
-    //  constructor
-    SRBurst();
+  //  constructor
+  SRBurst();
 
-    //  reduce
-    void getSpheres(Array<Sphere> *spheres, int n, const SurfaceRep &surRep, const Sphere *filterSphere = NULL, float parSphereErr = -1) const;
+  //  reduce
+  void getSpheres(Array<Sphere> *spheres, int n, const SurfaceRep &surRep,
+                  const Sphere *filterSphere = NULL,
+                  float parSphereErr = -1) const;
 
-  private:
-    struct SphereRemove{
-      Array<int> pointMap;
-      float cost;
-      };
-    void constructRemoval(SphereRemove *removal, const Array<MedialSphere> &medialSpheres, int i, const Array<Surface::Point> &surPts) const;
-    void constructRemovals(Array<SphereRemove> *removals, const Array<MedialSphere> &medialSpheres, const Array<Surface::Point> &surPts) const;
-    float costOfRemoval(SphereRemove &removal, const Array<MedialSphere> &medialSpheres, int sI, const Array<Surface::Point> &surPts) const;
-    void applyRemoval(Array<SphereRemove> *removals, Array<MedialSphere> *medialSpheres, int sI, const Array<Surface::Point> &surPts, bool updateHouseKeeping) const;
-    void makeAllNeighbours(Array<SphereRemove> *removals, Array<MedialSphere> *medialSpheres, const Array<Surface::Point> &surPts) const;
+private:
+  struct SphereRemove {
+    Array<int> pointMap;
+    float cost;
+  };
+  void constructRemoval(SphereRemove *removal,
+                        const Array<MedialSphere> &medialSpheres, int i,
+                        const Array<Surface::Point> &surPts) const;
+  void constructRemovals(Array<SphereRemove> *removals,
+                         const Array<MedialSphere> &medialSpheres,
+                         const Array<Surface::Point> &surPts) const;
+  float costOfRemoval(SphereRemove &removal,
+                      const Array<MedialSphere> &medialSpheres, int sI,
+                      const Array<Surface::Point> &surPts) const;
+  void applyRemoval(Array<SphereRemove> *removals,
+                    Array<MedialSphere> *medialSpheres, int sI,
+                    const Array<Surface::Point> &surPts,
+                    bool updateHouseKeeping) const;
+  void makeAllNeighbours(Array<SphereRemove> *removals,
+                         Array<MedialSphere> *medialSpheres,
+                         const Array<Surface::Point> &surPts) const;
 
-    void saveImagePre(const Array<MedialSphere> &medialSpheres, const Array<int> &ptList, int remNum, int maxNum) const;
-    void saveImagePost(const Array<MedialSphere> &medialSpheres, const Array<int> &ptList, int remNum, int maxNum) const;
+  void saveImagePre(const Array<MedialSphere> &medialSpheres,
+                    const Array<int> &ptList, int remNum, int maxNum) const;
+  void saveImagePost(const Array<MedialSphere> &medialSpheres,
+                     const Array<int> &ptList, int remNum, int maxNum) const;
 };
 
 #endif

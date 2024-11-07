@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -47,25 +47,26 @@
 
 #include "SSBase.h"
 
-class SSIsohedron : public SSBase{
-  public:
-    //  constructor
-    SSIsohedron(int level = 0);
-    
-    //  setup
-    void setLevel(int level);
+class SSIsohedron : public SSBase {
+public:
+  //  constructor
+  SSIsohedron(int level = 0);
 
-    //  sample
-    void generateSamples(Array<Point3D> *pts) const;
-    static void generateSamples(Array<Point3D> *pts, int levels);
+  //  setup
+  void setLevel(int level);
 
-  private:
-    int levels;
+  //  sample
+  void generateSamples(Array<Point3D> *pts) const;
+  static void generateSamples(Array<Point3D> *pts, int levels);
 
-    //  data for initial isohedron
-    static float vdata[12][3];
-    static int tindices[20][3];
-    static void subDivideIso(Array<Point3D> *pts, int v0, int v1, int v2, int depth);
+private:
+  int levels;
+
+  //  data for initial isohedron
+  static float vdata[12][3];
+  static int tindices[20][3];
+  static void subDivideIso(Array<Point3D> *pts, int v0, int v1, int v2,
+                           int depth);
 };
 
 #endif

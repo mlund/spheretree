@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -44,17 +44,18 @@
 #include "../MedialAxis/Voronoi3D.h"
 #include "../MedialAxis/MedialTester.h"
 
-class STGHubbard : public STGBase{
-  public:
-    void setup(Voronoi3D *vor, const MedialTester *mt);
+class STGHubbard : public STGBase {
+public:
+  void setup(Voronoi3D *vor, const MedialTester *mt);
 
-    void constructTree(SphereTree *st) const;
+  void constructTree(SphereTree *st) const;
 
-  protected:
-    Voronoi3D *vor;
-    const MedialTester *mt;
+protected:
+  Voronoi3D *vor;
+  const MedialTester *mt;
 
-    void buildTree(SphereTree *st, MergeHubbard *merger, int level, int node, const Array<int> *parSph) const;
+  void buildTree(SphereTree *st, MergeHubbard *merger, int level, int node,
+                 const Array<int> *parSph) const;
 };
 
 #endif

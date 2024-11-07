@@ -23,97 +23,81 @@
 // This should be a 32bit unsigned integer
 typedef unsigned long ulong;
 #ifndef __GNUC__
-//typedef short bool;
+// typedef short bool;
 #endif
 
 #ifdef DONT_INLINE_CALCDIST
 
-float
-CalcDistSqrd(ulong num_dim, const float* v1, const float* v2);
-float
-CalcDistSqrd(ulong num_dim, const float* v1, const float* v2,
-	     const float* ww);
-float
-CalcDist(ulong num_dim, const float* v1, const float* v2);
-float
-CalcDist(ulong num_dim, const float* v1, const float* v2,
-	 const float* ww);
+float CalcDistSqrd(ulong num_dim, const float *v1, const float *v2);
+float CalcDistSqrd(ulong num_dim, const float *v1, const float *v2,
+                   const float *ww);
+float CalcDist(ulong num_dim, const float *v1, const float *v2);
+float CalcDist(ulong num_dim, const float *v1, const float *v2,
+               const float *ww);
 
 #else
-inline float
-CalcDistSqrd(ulong num_dim, const float* v1, const float* v2)
-{
-    assert(num_dim > 1);
-    assert(v1 != NULL && v2 != NULL);
-    float dist;
+inline float CalcDistSqrd(ulong num_dim, const float *v1, const float *v2) {
+  assert(num_dim > 1);
+  assert(v1 != NULL && v2 != NULL);
+  float dist;
 
-    ulong jj;
-    float diff;
-    diff = v1[0] - v2[0];
-    dist = diff * diff;
-    for ( jj = 1; jj < num_dim; jj++ )
-    {
-	diff = v1[jj] - v2[jj];
-	dist += diff * diff;
-    }
-    return dist;
+  ulong jj;
+  float diff;
+  diff = v1[0] - v2[0];
+  dist = diff * diff;
+  for (jj = 1; jj < num_dim; jj++) {
+    diff = v1[jj] - v2[jj];
+    dist += diff * diff;
+  }
+  return dist;
 }
 
 //
 // This calculates a weighted quadratic distance between vectors
 //
-inline float
-CalcDistSqrd(ulong num_dim, const float* v1, const float* v2,
-	     const float* ww)
-{
-    if (ww == NULL) return CalcDistSqrd(num_dim, v1, v2);
-    assert(num_dim > 1);
-    assert(v1 != NULL && v2 != NULL);
+inline float CalcDistSqrd(ulong num_dim, const float *v1, const float *v2,
+                          const float *ww) {
+  if (ww == NULL)
+    return CalcDistSqrd(num_dim, v1, v2);
+  assert(num_dim > 1);
+  assert(v1 != NULL && v2 != NULL);
 
-    ulong jj;
-    float dist, diff;
+  ulong jj;
+  float dist, diff;
 
-    diff = v1[0] - v2[0];
-    dist = ww[0] * diff * diff;
-    for ( jj = 1; jj < num_dim; jj++ )
-    {
-	diff = v1[jj] - v2[jj];
-	dist += ww[jj] * diff * diff;
-    }
-    return dist;
+  diff = v1[0] - v2[0];
+  dist = ww[0] * diff * diff;
+  for (jj = 1; jj < num_dim; jj++) {
+    diff = v1[jj] - v2[jj];
+    dist += ww[jj] * diff * diff;
+  }
+  return dist;
 }
 
-inline float
-CalcDist(ulong num_dim, const float* v1, const float* v2)
-{
-    return sqrt(CalcDistSqrd(num_dim, v1, v2));
+inline float CalcDist(ulong num_dim, const float *v1, const float *v2) {
+  return sqrt(CalcDistSqrd(num_dim, v1, v2));
 }
 
-inline float
-CalcDist(ulong num_dim, const float* v1, const float* v2,
-	 const float* ww)
-{
-    return sqrt(CalcDistSqrd(num_dim, v1, v2, ww));
+inline float CalcDist(ulong num_dim, const float *v1, const float *v2,
+                      const float *ww) {
+  return sqrt(CalcDistSqrd(num_dim, v1, v2, ww));
 }
 
 #endif // #ifdef CANT_INLINE_CALCDIST
 
 // This is only for debugging purposes, and can be removed if desired
-void
-NRprmat(ulong rows, ulong cols, float** matrix, bool isone=0);
+void NRprmat(ulong rows, ulong cols, float **matrix, bool isone = 0);
 
-void
-BallFromBoundaryPoints(ulong num_dim, ulong num_points,
-		       const float*const* centers, float* out_center,
-		       float& radius_sqrd, const float* weights=NULL,
-		       void* work=NULL, ulong work_size=0);
+void BallFromBoundaryPoints(ulong num_dim, ulong num_points,
+                            const float *const *centers, float *out_center,
+                            float &radius_sqrd, const float *weights = NULL,
+                            void *work = NULL, ulong work_size = 0);
 
-void
-BallFromBoundaryBalls(ulong num_dim, ulong num_points,
-		      const float*const* centers, const float* radii,
-		      float* out_center, float& radius,
-		      const float* weights=NULL,
-		      void* work=NULL, ulong work_size=0);
+void BallFromBoundaryBalls(ulong num_dim, ulong num_points,
+                           const float *const *centers, const float *radii,
+                           float *out_center, float &radius,
+                           const float *weights = NULL, void *work = NULL,
+                           ulong work_size = 0);
 
 //
 // void EnclosingBall(---)
@@ -150,13 +134,10 @@ BallFromBoundaryBalls(ulong num_dim, ulong num_points,
 //   work_size: Size of that block of memory.  If it is not enough memory,
 //              then the work memory is ignored and more memory is allocated.
 //
-void
-EnclosingBall(ulong num_dim, ulong num_points,
-	      const float*const* centers, const float* radii,
-	      float* out_center, float& radius,
-	      const float* weights=NULL, ulong* boundary_arr=NULL, 
-	      ulong in_boundary_size = 0, ulong* out_boundary_size=NULL,
-	      void* work=NULL, ulong work_size=0);
-
+void EnclosingBall(ulong num_dim, ulong num_points, const float *const *centers,
+                   const float *radii, float *out_center, float &radius,
+                   const float *weights = NULL, ulong *boundary_arr = NULL,
+                   ulong in_boundary_size = 0, ulong *out_boundary_size = NULL,
+                   void *work = NULL, ulong work_size = 0);
 
 #endif // #ifndef _BALL_H

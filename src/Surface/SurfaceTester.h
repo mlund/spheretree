@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -44,33 +44,36 @@
 #include "Voxel.h"
 #include "../Geometry/Plane.h"
 
-class SurfaceTester{
-  public:
-    SurfaceTester();
+class SurfaceTester {
+public:
+  SurfaceTester();
 
-    // surface
-    void setSurface(const Surface &sur, int shDiv = 20, int vtLevel = 5);
-    bool hasSurface() const;
+  // surface
+  void setSurface(const Surface &sur, int shDiv = 20, int vtLevel = 5);
+  bool hasSurface() const;
 
-    //  inout / closest point
-    bool insideSurface(const Point3D &q) const;
-    bool insideSurface(Point3D *p, const Point3D &q) const;
-    void getClosestPoint(Point3D *p, const Point3D &q) const;
-    bool getClosestPointConditional(Point3D *p, const Point3D &q, bool internal, float stopBelow = -FLT_MAX) const;
+  //  inout / closest point
+  bool insideSurface(const Point3D &q) const;
+  bool insideSurface(Point3D *p, const Point3D &q) const;
+  void getClosestPoint(Point3D *p, const Point3D &q) const;
+  bool getClosestPointConditional(Point3D *p, const Point3D &q, bool internal,
+                                  float stopBelow = -FLT_MAX) const;
 
-    //  ray tester returns, -1 for no hit
-    float getFirstIntersectPositive(Point3D *p, const Point3D &o, const Vector3D &v) const;
-    float getFirstIntersect(Point3D *p, const Point3D &o, const Vector3D &v) const; //NaN for no hit
+  //  ray tester returns, -1 for no hit
+  float getFirstIntersectPositive(Point3D *p, const Point3D &o,
+                                  const Vector3D &v) const;
+  float getFirstIntersect(Point3D *p, const Point3D &o,
+                          const Vector3D &v) const; // NaN for no hit
 
-    //  bits and pieces
-    const Surface* getSurface() const { return sur; }
-    const VoxelTree& getVoxelTree()const {return vt;}
-    const SpacialHash& getFaceHash()const {return faceHash;}
+  //  bits and pieces
+  const Surface *getSurface() const { return sur; }
+  const VoxelTree &getVoxelTree() const { return vt; }
+  const SpacialHash &getFaceHash() const { return faceHash; }
 
-  protected:
-    const Surface *sur;
-    SpacialHash faceHash, faceHashHiRes;
-    VoxelTree vt;
+protected:
+  const Surface *sur;
+  SpacialHash faceHash, faceHashHiRes;
+  VoxelTree vt;
 };
 
 #endif

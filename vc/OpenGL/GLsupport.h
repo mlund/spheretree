@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -50,57 +50,57 @@
 #include "../../src/Geometry/Transform3D.h"
 
 //  color
-struct GLcolor{
+struct GLcolor {
   GLfloat r, g, b;
 
-  GLcolor(float gI = 0){
-    r = g = b = gI;
-    }
+  GLcolor(float gI = 0) { r = g = b = gI; }
 
-  GLcolor(float rI, float gI, float bI){
+  GLcolor(float rI, float gI, float bI) {
     r = rI;
     g = gI;
     b = bI;
-    }
+  }
 };
 
-#define MAKE_GLCOLOR(c, l) {            \
-          c.r = GetRValue(l) / 255.0f;  \
-          c.g = GetGValue(l) / 255.0f;  \
-          c.b = GetBValue(l) / 255.0f;  }
+#define MAKE_GLCOLOR(c, l)                                                     \
+  {                                                                            \
+    c.r = GetRValue(l) / 255.0f;                                               \
+    c.g = GetGValue(l) / 255.0f;                                               \
+    c.b = GetBValue(l) / 255.0f;                                               \
+  }
 
 // context
-struct GLInfo{
+struct GLInfo {
   HGLRC hRC;
   HPALETTE hPal;
 };
 
 //  setup and destroy context info
 BOOL setWindowPixelFormat(HDC hDC, BOOL doubleBuf, BOOL depthBuf, BOOL stencil);
-GLInfo createOpenGL(CWnd *wnd, BOOL doubleBuf, BOOL depthBif, BOOL stencil = FALSE);
+GLInfo createOpenGL(CWnd *wnd, BOOL doubleBuf, BOOL depthBif,
+                    BOOL stencil = FALSE);
 void destroyOpenGL(GLInfo &inf, CWnd *wnd);
 HPALETTE createGLPalette(HDC hDC);
 void init(GLInfo *inf);
 
 //  MACROS for managing GL contexts
-#define SELECT_CONTEXT()            \
-  HDC hDCold = wglGetCurrentDC();   \
-  HGLRC hRCold = wglGetCurrentContext(); \
-  HWND hWnd = GetSafeHwnd();        \
-  HDC hDC = ::GetDC(hWnd);          \
-  if (glInfo.hPal){                 \
-    SelectPalette(hDC, glInfo.hPal, FALSE); \
-    RealizePalette(hDC);            \
-    }                               \
-  if (hRCold != glInfo.hRC){        \
-    wglMakeCurrent(hDC, glInfo.hRC);\
-    }                               \
+#define SELECT_CONTEXT()                                                       \
+  HDC hDCold = wglGetCurrentDC();                                              \
+  HGLRC hRCold = wglGetCurrentContext();                                       \
+  HWND hWnd = GetSafeHwnd();                                                   \
+  HDC hDC = ::GetDC(hWnd);                                                     \
+  if (glInfo.hPal) {                                                           \
+    SelectPalette(hDC, glInfo.hPal, FALSE);                                    \
+    RealizePalette(hDC);                                                       \
+  }                                                                            \
+  if (hRCold != glInfo.hRC) {                                                  \
+    wglMakeCurrent(hDC, glInfo.hRC);                                           \
+  }
 
-#define UNSELECT_CONTEXT()          \
-  if (hRCold != glInfo.hRC)         \
-    wglMakeCurrent(hDCold, hRCold); \
-  ::ReleaseDC(hWnd, hDC);           \
-
+#define UNSELECT_CONTEXT()                                                     \
+  if (hRCold != glInfo.hRC)                                                    \
+    wglMakeCurrent(hDCold, hRCold);                                            \
+  ::ReleaseDC(hWnd, hDC);
 
 //  converting between transforms
 void getGlTransform(GLfloat tm[16], const Transform2D &tr);

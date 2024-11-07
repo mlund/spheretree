@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -38,33 +38,25 @@
 
 #include "ProcMon.h"
 
-ProcessorMonitor::ProcessorMonitor(){
+ProcessorMonitor::ProcessorMonitor() {
   st = 0;
   sc = 1;
 }
 
-void ProcessorMonitor::setup(float st, float sc){
+void ProcessorMonitor::setup(float st, float sc) {
   this->st = st;
   this->sc = sc;
 }
 
-float ProcessorMonitor::getStart() const{
-  return st;
-}
+float ProcessorMonitor::getStart() const { return st; }
 
-float ProcessorMonitor::getScale() const{
-  return sc;
-}
+float ProcessorMonitor::getScale() const { return sc; }
 
-void ProcessorMonitor::setStart(float st){
-  this->st = st;
-}
+void ProcessorMonitor::setStart(float st) { this->st = st; }
 
-void ProcessorMonitor::setScale(float sc){
-  this->sc = sc;
-}
+void ProcessorMonitor::setScale(float sc) { this->sc = sc; }
 
-bool ProcessorMonitor::setProgress(float prog){
-  float absProg = st + sc*prog;
+bool ProcessorMonitor::setProgress(float prog) {
+  float absProg = st + sc * prog;
   return updateProgress(absProg);
 }

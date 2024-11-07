@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,7 +37,7 @@
 \**************************************************************************/
 
 /*
-    Surface Sampler which samples a mesh using simple grid placement of 
+    Surface Sampler which samples a mesh using simple grid placement of
     points within triangles.
 */
 #ifndef _API_GRID_MESH_SAMPLER_H_
@@ -45,23 +45,28 @@
 
 #include "MSBase.h"
 
-class MSGrid : public MSBase{
-  public:
-    //  parameters
-    bool useVert;
-    int minPerTriangle;
+class MSGrid : public MSBase {
+public:
+  //  parameters
+  bool useVert;
+  int minPerTriangle;
 
-    //  constructor
-    MSGrid();
+  //  constructor
+  MSGrid();
 
-    //  generate
-    virtual void generateSamples(Array<Surface::Point> *pts, int numSamples) const;
-    static void generateSamples(Array<Surface::Point> *pts, int numSamples, const Surface &sur, bool useVert, int minPerTriangle = 0);
+  //  generate
+  virtual void generateSamples(Array<Surface::Point> *pts,
+                               int numSamples) const;
+  static void generateSamples(Array<Surface::Point> *pts, int numSamples,
+                              const Surface &sur, bool useVert,
+                              int minPerTriangle = 0);
 
-  private:
-    static void generateSamplesInternal(Array<Surface::Point> *pts, int numSamples, const Surface &sur, bool useVert, int minPerTriangle);
-    static void sampleTriangleGrid(Array<Point3D> *pts, int n, const Point3D p[3]);
-
+private:
+  static void generateSamplesInternal(Array<Surface::Point> *pts,
+                                      int numSamples, const Surface &sur,
+                                      bool useVert, int minPerTriangle);
+  static void sampleTriangleGrid(Array<Point3D> *pts, int n,
+                                 const Point3D p[3]);
 };
 
 #endif

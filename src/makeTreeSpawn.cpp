@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -57,14 +57,15 @@
 /*
     options and their default values
 */
-int testerLevels = -1;      //  number of levels for NON-CONVEX, -1 uses CONVEX tester
-int branch = 8;             //  branching factor of the sphere-tree
-int depth = 3;              //  depth of the sphere-tree
-int numCoverPts = 5000;     //  number of test points to put on surface for coverage
-int minCoverPts = 5;        //  minimum number of points per triangle for coverage
-bool verify = false;        //  verify model before construction
-bool nopause = false;       //  will we pause before starting
-bool eval = false;          //  do we evaluate the sphere-tree after construction
+int testerLevels =
+    -1;         //  number of levels for NON-CONVEX, -1 uses CONVEX tester
+int branch = 8; //  branching factor of the sphere-tree
+int depth = 3;  //  depth of the sphere-tree
+int numCoverPts = 5000; //  number of test points to put on surface for coverage
+int minCoverPts = 5;    //  minimum number of points per triangle for coverage
+bool verify = false;    //  verify model before construction
+bool nopause = false;   //  will we pause before starting
+bool eval = false;      //  do we evaluate the sphere-tree after construction
 
 /*
     info for decoding parameters
@@ -91,7 +92,7 @@ bool constructTree(const char *file);
 /*
     MAINLINE
 */
-int main(int argc, const char *argv[]){
+int main(int argc, const char *argv[]) {
   printf("MakeTreeSpawn - Gareth Bradshaw Feb 2003\n");
 
   /*
@@ -107,12 +108,12 @@ int main(int argc, const char *argv[]){
      look for filenames and construct trees
   */
   int numFiles = 0;
-  for (int i = 1; i < argc; i++){
-    if (argv[i] != NULL){
+  for (int i = 1; i < argc; i++) {
+    if (argv[i] != NULL) {
       constructTree(argv[i]);
       numFiles++;
-      }
     }
+  }
 
   /*
      check we had a file name
@@ -126,7 +127,7 @@ int main(int argc, const char *argv[]){
 /*
     construct sphere-tree for the model
 */
-bool constructTree(const char *file){
+bool constructTree(const char *file) {
   printf("FileName : %s\n\n", file);
 
   /*
@@ -136,10 +137,10 @@ bool constructTree(const char *file){
   strcpy(inputFile, file);
   int len = strlen(inputFile);
   int i;
-  for (i = len-1; i >= 0; i--){
+  for (i = len - 1; i >= 0; i--) {
     if (inputFile[i] == '.')
       break;
-    }
+  }
 
   /*
       load the surface model
@@ -147,15 +148,15 @@ bool constructTree(const char *file){
   Surface sur;
 
   bool loaded = false;
-  if (strcompare("obj", &inputFile[len-3]) == 0)
+  if (strcompare("obj", &inputFile[len - 3]) == 0)
     loaded = loadOBJ(&sur, inputFile);
   else
     loaded = sur.loadSurface(inputFile);
 
-  if (!loaded){
+  if (!loaded) {
     printf("ERROR : Unable to load input file (%s)\n\n", inputFile);
     return false;
-    }
+  }
   if (i >= 0)
     inputFile[i] = '\0';
 
@@ -180,23 +181,23 @@ bool constructTree(const char *file){
 
   Array<Point3D> sphPts;
   SESphPt sphEval;
-  if (testerLevels > 0){   //  <= 0 will use convex tester
-    SSIsohedron::generateSamples(&sphPts, testerLevels-1);
+  if (testerLevels > 0) { //  <= 0 will use convex tester
+    SSIsohedron::generateSamples(&sphPts, testerLevels - 1);
     sphEval.setup(mt, sphPts);
     eval = &sphEval;
     printf("Using concave tester (%d)\n\n", sphPts.getSize());
-    }
+  }
 
   /*
       verify model
   */
-  if (verify){
+  if (verify) {
     bool ok = verifyModel(sur);
-    if (!ok){
+    if (!ok) {
       printf("ERROR : model is not usable\n\n");
       return false;
-      }
     }
+  }
 
   /*
       setup for the set of cover points
@@ -214,7 +215,7 @@ bool constructTree(const char *file){
   spawn.eval = eval;
 
   /*
-      setup SphereTree constructor - using dynamic construction 
+      setup SphereTree constructor - using dynamic construction
   */
   STGGeneric treegen;
   treegen.eval = eval;
@@ -226,7 +227,7 @@ bool constructTree(const char *file){
       make sphere-tree
   */
   SphereTree tree;
-  tree.setupTree(branch, depth+1);
+  tree.setupTree(branch, depth + 1);
 
   waitForKey();
   treegen.constructTree(&tree);
@@ -236,15 +237,15 @@ bool constructTree(const char *file){
   */
   char sphereFile[1024];
   sprintf(sphereFile, "%s-spawn.sph", inputFile);
-  if (tree.saveSphereTree(sphereFile, 1.0f/boxScale)){
+  if (tree.saveSphereTree(sphereFile, 1.0f / boxScale)) {
     Array<LevelEval> evals;
-    if (eval){
+    if (eval) {
       evaluateTree(&evals, tree, eval);
       writeEvaluation(stdout, evals);
-      }
+    }
 
     FILE *f = fopen(sphereFile, "a");
-    if (f){
+    if (f) {
       fprintf(f, "\n\n");
       fprintf(f, "Options : \n");
       writeParam(stdout, intParams);
@@ -252,19 +253,18 @@ bool constructTree(const char *file){
       fprintf(f, "\n\n");
       writeEvaluation(f, evals);
       fclose(f);
-      }
+    }
 
     return true;
-    }
-  else{
+  } else {
     return false;
-    }
+  }
 }
 
 /*
     error handler
 */
-int error(const char *errorMsg, const char *errorMsg1){
+int error(const char *errorMsg, const char *errorMsg1) {
   if (errorMsg1)
     printf("ERROR : %s (%s)\n", errorMsg, errorMsg1);
   else
@@ -274,10 +274,10 @@ int error(const char *errorMsg, const char *errorMsg1){
   exit(-1);
 }
 
-void waitForKey(){
-  if (!nopause){
+void waitForKey() {
+  if (!nopause) {
     printf("Press ENTER to continue....\n");
     char buffer[2];
     fread(buffer, 1, 1, stdin);
-    }
+  }
 }
