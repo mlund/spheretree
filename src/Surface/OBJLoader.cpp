@@ -88,8 +88,10 @@ bool loadOBJ(Surface *sur, const char *fileName, float boxSize) {
 
         //  decode token
         int a = 0, b = 0, c = 0;
-        if (token == NULL || (sscanf(token, "%d/%d/%d", &a, &b, &c) != 3 &&
-                              sscanf(token, "%d//%d", &a, &c) != 2)) {
+        if (token == NULL ||
+            (sscanf(token, "%d/%d/%d", &a, &b, &c) != 3  &&
+             sscanf(token, "%d//%d", &a, &c) != 2 &&
+             sscanf(token, "%d", &a) != 1)){
           fclose(f);
           return false;
         }
