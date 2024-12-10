@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -61,63 +61,59 @@
 #include "Transform3D.h"
 #include <math.h>
 
-struct Plane{
+struct Plane {
   REAL a, b, c, d;
 
   //  constructor
-  __inline Plane(){};
+  __inline Plane() {};
 
-  __inline Plane(REAL a, REAL b, REAL c, REAL d){
-    assign(a, b, c, d);
-    }
+  __inline Plane(REAL a, REAL b, REAL c, REAL d) { assign(a, b, c, d); }
 
-  __inline Plane(const Plane &p){
-    assign(p);
-    }
+  __inline Plane(const Plane &p) { assign(p); }
 
   //  assign
-  __inline void assign(const Plane &p){
+  __inline void assign(const Plane &p) {
     a = p.a;
     b = p.b;
     c = p.c;
     d = p.d;
-    }
+  }
 
-  __inline void assign(const Vector3D &v, const Point3D &p){
+  __inline void assign(const Vector3D &v, const Point3D &p) {
     Vector3D n;
     n.norm(v);
 
     a = n.x;
     b = n.y;
     c = n.z;
-    d = -(n.x*p.x + n.y*p.y + n.z*p.z);
-    }
+    d = -(n.x * p.x + n.y * p.y + n.z * p.z);
+  }
 
-  __inline void assign(REAL a, REAL b, REAL c, REAL d){
+  __inline void assign(REAL a, REAL b, REAL c, REAL d) {
     this->a = a;
     this->b = b;
     this->c = c;
     this->d = d;
-    }
+  }
 
   //  construct plane from 3 points
   void assign(const Point3D &p1, const Point3D &p2, const Point3D &p3);
-  
-  //  distance from plane
-  __inline REAL dist(const Point3D &pt) const{
-    return (a*pt.x + b*pt.y + c*pt.z + d) / sqrt(a*a + b*b + c*c);
-    }
 
-  __inline REAL absDist(const Point3D &pt) const {return fabs(dist(pt)); }
+  //  distance from plane
+  __inline REAL dist(const Point3D &pt) const {
+    return (a * pt.x + b * pt.y + c * pt.z + d) / sqrt(a * a + b * b + c * c);
+  }
+
+  __inline REAL absDist(const Point3D &pt) const { return fabs(dist(pt)); }
 
   //  normalize
   void normalise();
 
   //  vector intersection test
-  __inline REAL intersect(const Vector3D &v) const{
+  __inline REAL intersect(const Vector3D &v) const {
     //  vector is always coming from origin
-    return -d / (a*v.x + b*v.y + c*v.z);
-    }
+    return -d / (a * v.x + b * v.y + c * v.z);
+  }
 
   //  transform
   void transform(Plane *p, const Transform3D tr) const;
@@ -129,8 +125,8 @@ struct Plane{
   void getTransformTo2D(Transform3D *tr) const;
   void getNormal(Vector3D *v) const;
 
-  private:
-    void getPoint(Point3D *p, REAL u, REAL v) const;
+private:
+  void getPoint(Point3D *p, REAL u, REAL v) const;
 };
 
 #endif

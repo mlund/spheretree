@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -46,57 +46,69 @@
 #include "SFBase.h"
 #include "SEBase.h"
 
-class SOSimplex : public SOBase{
-  public:
-    //  parameters
-    SFBase *sphereFitter;
-    bool useErr, useVol;
+class SOSimplex : public SOBase {
+public:
+  //  parameters
+  SFBase *sphereFitter;
+  bool useErr, useVol;
 
-    //  constructor
-    SOSimplex();
+  //  constructor
+  SOSimplex();
 
-    //  optimise
-    void optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, float stopBelow = -1, const Sphere *parSph = NULL, int level = 0) const;
+  //  optimise
+  void optimise(Array<Sphere> *spheres, const SurfaceRep &surRep,
+                float stopBelow = -1, const Sphere *parSph = NULL,
+                int level = 0) const;
 
-  private:
-    struct OptInfo{
-      OptInfo(){}
+private:
+  struct OptInfo {
+    OptInfo() {}
 
-      const Array<Sphere> *srcSph;
-      const Array<double> *startErr;
-      const Array<Array<int>/**/> *sphInd;
-      const SurfaceRep *surRep;
-      const Sphere *parSph;
-      int repInd;                 //  sphere to be optimised
-      const SOSimplex *that;
+    const Array<Sphere> *srcSph;
+    const Array<double> *startErr;
+    const Array<Array<int> /**/> *sphInd;
+    const SurfaceRep *surRep;
+    const Sphere *parSph;
+    int repInd; //  sphere to be optimised
+    const SOSimplex *that;
 
-      //  minimum error configuration discovered during optimisation
-      double resErr;
-      Array<double> resErrors;
-      Array<Sphere> resSph;
-      Array<Array<int>/**/> resInd;
-      };
+    //  minimum error configuration discovered during optimisation
+    double resErr;
+    Array<double> resErrors;
+    Array<Sphere> resSph;
+    Array<Array<int> /**/> resInd;
+  };
 
-    static double computeErrorMetric(const Array<double> &err, const Array<Sphere> &sph);
-    static double configEval(double vals[], void *data, int *canFinish);
-    static double computeOverlap(const Array<Sphere> &sph, int J);
+  static double computeErrorMetric(const Array<double> &err,
+                                   const Array<Sphere> &sph);
+  static double configEval(double vals[], void *data, int *canFinish);
+  static double computeOverlap(const Array<Sphere> &sph, int J);
 
-    double evalSphere(const Sphere &s, const Sphere *parSph) const;
-    double myRefitSphere(Sphere *s, const Array<Surface::Point> &pts, const Array<int> &inds, const Point3D &pC) const;
+  double evalSphere(const Sphere &s, const Sphere *parSph) const;
+  double myRefitSphere(Sphere *s, const Array<Surface::Point> &pts,
+                       const Array<int> &inds, const Point3D &pC) const;
 
+  void generateNewPointConfig(Array<Array<int> /**/> *newSphInd,
+                              Array<bool> *changed,
+                              const Array<Array<int> /**/> &sphInd,
+                              const Array<Sphere> &srcSph,
+                              const SurfaceRep &surRep, const Sphere &repSph,
+                              int repInd) const;
+  void generateNewConfig(Array<Sphere> *newSph,
+                         Array<Array<int> /**/> *newSphInd,
+                         Array<double> *newErr, const Array<Sphere> &srcSph,
+                         const Array<Array<int> /**/> &srcSphInd,
+                         const Array<double> &srcErr, const SurfaceRep &surRep,
+                         const Sphere &repSph, int repInd,
+                         const Sphere *parSph) const;
 
-    void generateNewPointConfig(Array<Array<int>/**/> *newSphInd, Array<bool> *changed,
-                                           const Array<Array<int>/**/> &sphInd, const Array<Sphere> &srcSph, 
-                                           const SurfaceRep &surRep, const Sphere &repSph, int repInd) const;
-    void generateNewConfig(Array<Sphere> *newSph, Array<Array<int>/**/> *newSphInd, Array<double> *newErr, 
-                           const Array<Sphere> &srcSph, const Array<Array<int>/**/> &srcSphInd, 
-                           const Array<double> &srcErr, const SurfaceRep &surRep, 
-                           const Sphere &repSph, int repInd, const Sphere *parSph) const;
-
-    void assignPointsAndGetErr(Array<Array<int>/**/> *sphInd, Array<double> *initErr, 
-                               Array<Sphere> *sph, const SurfaceRep &surRep, const Sphere *parSph) const;
-    bool optimiseSphere(Array<Sphere> *sph, Array<Array<int>/**/> *sphInd, 
-                        Array<double> *initErr, const SurfaceRep &surRep, int optNum, const Sphere *parSph) const;
+  void assignPointsAndGetErr(Array<Array<int> /**/> *sphInd,
+                             Array<double> *initErr, Array<Sphere> *sph,
+                             const SurfaceRep &surRep,
+                             const Sphere *parSph) const;
+  bool optimiseSphere(Array<Sphere> *sph, Array<Array<int> /**/> *sphInd,
+                      Array<double> *initErr, const SurfaceRep &surRep,
+                      int optNum, const Sphere *parSph) const;
 };
 
 #endif

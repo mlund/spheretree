@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -44,7 +44,7 @@
 
 #define PTS_PER_CELL 10
 
-STGGeneric::STGGeneric(){
+STGGeneric::STGGeneric() {
   optimiser = NULL;
   reducer = NULL;
   eval = NULL;
@@ -55,7 +55,7 @@ STGGeneric::STGGeneric(){
 }
 
 //  generate recursively
-void STGGeneric::constructTreeRecursive(SphereTree *st) const{
+void STGGeneric::constructTreeRecursive(SphereTree *st) const {
   CHECK_DEBUG0(st != NULL && st->degree > 1 && st->levels >= 1);
   CHECK_DEBUG0(reducer != NULL);
   CHECK_DEBUG0(eval != NULL);
@@ -73,7 +73,7 @@ void STGGeneric::constructTreeRecursive(SphereTree *st) const{
   //  bounding sphere for root
   SFWhite::makeSphere(&st->nodes.index(0), *surfacePoints);
 
-  //  setup for the base level (should really do for 
+  //  setup for the base level (should really do for
   //  all levels - but doesn't fit in recursive form)
   reducer->setupForLevel(0, st->degree, &surRep);
 
@@ -82,7 +82,8 @@ void STGGeneric::constructTreeRecursive(SphereTree *st) const{
     makeChildren(st, 0, 1, surRep);
 }
 
-void STGGeneric::makeChildren(SphereTree *st, int node, int level, const SurfaceRep &surRep) const{
+void STGGeneric::makeChildren(SphereTree *st, int node, int level,
+                              const SurfaceRep &surRep) const {
   //  get the error of the parent
   Sphere parS = st->nodes.index(node);
   double parErr = eval->evalSphere(parS);
@@ -93,20 +94,21 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
 
   //  generate the set of child spheres
   Array<Sphere> initChildren, children;
-  reducer->getSpheres(&initChildren, st->degree, surRep, &boundingSphere, parErr);
+  reducer->getSpheres(&initChildren, st->degree, surRep, &boundingSphere,
+                      parErr);
 
   //  do sphere refit - local optimisation
-  if (useRefit){
+  if (useRefit) {
     OUTPUTINFO("Refitting\n");
     SOPerSphere perSphere;
     perSphere.numIter = 3;
     perSphere.eval = eval;
     perSphere.optimise(&initChildren, surRep);
-    }
+  }
 
   //  apply optimiser if required
   if (optimiser && (maxOptLevel < 0 || level <= maxOptLevel))
-    optimiser->optimise(&initChildren, surRep, -1, &parS, level-1);
+    optimiser->optimise(&initChildren, surRep, -1, &parS, level - 1);
 
   //  remove redundent spheres
   RELargest reLargest;
@@ -122,7 +124,7 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
   int numPts = surPts->getSize();
 
   //  info for areas to be covered by each sphere
-  Array<Array<Surface::Point> > subPts(numChildren);
+  Array<Array<Surface::Point>> subPts(numChildren);
   Array<bool> covered(numPts);
   covered.clear();
 
@@ -132,7 +134,7 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
 
   //  do the children
   int firstChild = st->getFirstChild(node);
-  for (int i = 0; i < numChildren; i++){
+  for (int i = 0; i < numChildren; i++) {
     //  get sphere
     Sphere s = children.index(i);
 
@@ -144,45 +146,45 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
     //  filter points
     Array<Surface::Point> *filterPts = &subPts.index(i);
     filterPts->resize(0);
-    for (int j = 0; j < numList; j++){
+    for (int j = 0; j < numList; j++) {
       //  get point
       int pI = listPoints.index(j);
       Surface::Point p = surPts->index(pI);
 
       //  check if it's in the region
-      if (surDiv.pointInRegion(p.p, i)){
+      if (surDiv.pointInRegion(p.p, i)) {
         covered.index(j) = true;
         filterPts->addItem() = p;
-        }
       }
     }
+  }
 
   //  count/cover uncovered points
-  for (int i = 0; i < numPts; i++){
-    if (!covered.index(i)){
+  for (int i = 0; i < numPts; i++) {
+    if (!covered.index(i)) {
       //  get the point
       Point3D p = surPts->index(i).p;
 
       //  find the closest sphere
       int closestJ = -1;
       float closestD = 0;
-      for (int j = 0; j < numChildren;  j++){
+      for (int j = 0; j < numChildren; j++) {
         Sphere s = children.index(j);
         float d = p.distance(s.c) - s.r;
-        if (d < closestD){
+        if (d < closestD) {
           closestJ = j;
           closestD = d;
-          }
         }
+      }
 
       subPts.index(closestJ).addItem() = surPts->index(i);
-      }
     }
+  }
 
-  //  store spheres & recurse to children 
+  //  store spheres & recurse to children
   int childNum = firstChild;
-  for (int i = 0; i < numChildren; i++){
-    if (subPts.index(i).getSize() > 1){
+  for (int i = 0; i < numChildren; i++) {
+    if (subPts.index(i).getSize() > 1) {
       //  recreate the sphere
       Sphere s = children.index(i);
 
@@ -190,7 +192,7 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
       st->nodes.index(childNum).c = s.c;
       st->nodes.index(childNum).r = s.r;
 
-      if (level < st->levels-1 && numChildren > 1){
+      if (level < st->levels - 1 && numChildren > 1) {
         const Array<Surface::Point> *pts = &subPts.index(i);
 
         //  make cells to have 10 pts each, most will have alot more
@@ -202,20 +204,20 @@ void STGGeneric::makeChildren(SphereTree *st, int node, int level, const Surface
         SurfaceRep subRep;
         subRep.setup(*pts, gridDim);
 
-        makeChildren(st, childNum, level+1, subRep);
-        }
+        makeChildren(st, childNum, level + 1, subRep);
+      }
 
       childNum++;
-      }
     }
+  }
 
   //  NULL out the rest of the spheres
   for (int i = childNum; i < st->degree; i++)
-    st->initNode(firstChild+i, level+1);
+    st->initNode(firstChild + i, level + 1);
 }
 
 //  generate breadth first
-void STGGeneric::constructTree(SphereTree *st) const{
+void STGGeneric::constructTree(SphereTree *st) const {
   CHECK_DEBUG0(st != NULL && st->degree > 1 && st->levels >= 1);
   CHECK_DEBUG0(reducer != NULL);
   CHECK_DEBUG0(eval != NULL);
@@ -237,8 +239,8 @@ void STGGeneric::constructTree(SphereTree *st) const{
 
   //  list of points to be covered by each node
   unsigned long start, num;
-  st->getRow(&start, &num, st->levels-1);
-  Array<Array<int>/**/> pointsInSpheres;
+  st->getRow(&start, &num, st->levels - 1);
+  Array<Array<int> /**/> pointsInSpheres;
   pointsInSpheres.resize(st->nodes.getSize() - num);
 
   //  initialise the list for the first node
@@ -250,7 +252,7 @@ void STGGeneric::constructTree(SphereTree *st) const{
 
   //  process the remaining levels
   int numLeaves = 0;
-  for (int level = 0; level < st->levels-1; level++){
+  for (int level = 0; level < st->levels - 1; level++) {
     //  get the positions of the nodes
     unsigned long start, num;
     st->getRow(&start, &num, level);
@@ -262,51 +264,48 @@ void STGGeneric::constructTree(SphereTree *st) const{
     int numActualSpheres = 0;
     double averageError = 0;
     Array<double> sphereErrors(num);
-    for (int i = 0; i < num; i++){
-      Sphere s = st->nodes.index(start+i);
-      if (s.r >= 0){
+    for (int i = 0; i < num; i++) {
+      Sphere s = st->nodes.index(start + i);
+      if (s.r >= 0) {
         double err = eval->evalSphere(s);
         sphereErrors.index(i) = err;
         averageError += err;
         numActualSpheres++;
-        }
-      else 
+      } else
         sphereErrors.index(i) = -1;
-      }
+    }
     averageError /= numActualSpheres;
-    if (level != 0 && numActualSpheres <= 1){
+    if (level != 0 && numActualSpheres <= 1) {
       numLeaves++;
-      continue;     //  there is only one sphere here - will never improve
-      }
+      continue; //  there is only one sphere here - will never improve
+    }
 
     //  process each node's to make children
     int maxNode = -1;
     double maxR = -1;
     int levelChildren = 0;
-    for (int nodeI = 0; nodeI < num; nodeI++){
-      //OUTPUTINFO("Level = %d, node = %d\n", level, nodeI);
+    for (int nodeI = 0; nodeI < num; nodeI++) {
+      // OUTPUTINFO("Level = %d, node = %d\n", level, nodeI);
       printf("Level = %d, node = %d\n", level, nodeI);
 
       int node = nodeI + start;
-      if (st->nodes.index(node).r <= 0){
-          OUTPUTINFO("R = %f\n", st->nodes.index(node).r);
-          st->initNode(node);
-          continue;
-          }
-
-/*
-      //  hack to do largest sphere at each run - gives guide to good params
-      double r = st->nodes.index(node).r;
-      if (r > maxR){
-        maxR = r;
-        maxNode = node;
-        }
+      if (st->nodes.index(node).r <= 0) {
+        OUTPUTINFO("R = %f\n", st->nodes.index(node).r);
+        st->initNode(node);
+        continue;
       }
 
-      nodeI = maxNode - start;
-      int node = maxNode;{
-      //  end hack
-*/
+      /*
+            //  hack to do largest sphere at each run - gives guide to good
+         params double r = st->nodes.index(node).r; if (r > maxR){ maxR = r;
+              maxNode = node;
+              }
+            }
+
+            nodeI = maxNode - start;
+            int node = maxNode;{
+            //  end hack
+      */
 
       //  make the set of surface poitns to be covered by this sphere
       Array<int> *selPtsI = &pointsInSpheres.index(node);
@@ -332,35 +331,36 @@ void STGGeneric::constructTree(SphereTree *st) const{
       //  compute error for this sphere
       double err = sphereErrors.index(nodeI);
       if (err > averageError)
-        err = averageError;  //  improve the bad ones a bit more
+        err = averageError; //  improve the bad ones a bit more
 
       //  generate the children nodes
       Array<Sphere> initChildren, children;
       reducer->getSpheres(&initChildren, st->degree, subRep, &s, err);
 
       //  apply optimiser if required
-      if (optimiser && (maxOptLevel < 0 || level <= maxOptLevel)){
-printf("RUNNING OPTIMISER...\n");
+      if (optimiser && (maxOptLevel < 0 || level <= maxOptLevel)) {
+        printf("RUNNING OPTIMISER...\n");
         optimiser->optimise(&initChildren, subRep, -1, &s, level);
-printf("DONE OPTIMISING...\n");
-        }
+        printf("DONE OPTIMISING...\n");
+      }
 
       //  do sphere refit - local optimisation
-      if (useRefit){
+      if (useRefit) {
         OUTPUTINFO("Refitting\n");
         SOPerSphere perSphere;
         perSphere.numIter = 3;
         perSphere.eval = eval;
         perSphere.optimise(&initChildren, subRep);
-        }
+      }
 
       //  remove redundent spheres
       RELargest reLargest;
       if (!reLargest.reduceSpheres(&children, initChildren, subRep))
         children.clone(initChildren);
 
-      //  setup the node's sub-division (make the regions to be covered by children)
-      //subDivs.index(node).setup(children, &selPts);
+      //  setup the node's sub-division (make the regions to be covered by
+      //  children)
+      // subDivs.index(node).setup(children, &selPts);
       SurfaceDivision surDiv;
       surDiv.setup(children, &selPts);
 
@@ -372,7 +372,7 @@ printf("DONE OPTIMISING...\n");
       int numChildren = children.getSize();
       int firstChild = st->getFirstChild(node);
       levelChildren += numChildren;
-      for (int i = 0; i < numChildren; i++){
+      for (int i = 0; i < numChildren; i++) {
         int childNum = firstChild + i;
 
         //  get sphere
@@ -382,7 +382,7 @@ printf("DONE OPTIMISING...\n");
         st->nodes.index(childNum).c = s.c;
         st->nodes.index(childNum).r = s.r;
 
-        if (level < st->levels-2){
+        if (level < st->levels - 2) {
           //  get the points in this sphere
           Array<int> pointsInS;
           subRep.listContainedPoints(&pointsInS, NULL, s);
@@ -390,56 +390,58 @@ printf("DONE OPTIMISING...\n");
 
           //  populate list of points in sphere
           Array<int> *pointsToCover = &pointsInSpheres.index(childNum);
-          pointsToCover->resize(0);   //  just in case
-          for (int j = 0; j < numInS; j++){
+          pointsToCover->resize(0); //  just in case
+          for (int j = 0; j < numInS; j++) {
             int pI = pointsInS.index(j);
-            if (surDiv.pointInRegion(selPts.index(pI).p, i)){
+            if (surDiv.pointInRegion(selPts.index(pI).p, i)) {
               pointsToCover->addItem() = selPtsI->index(pI);
               covered.index(pI) = true;
-              }
             }
           }
         }
+      }
 
       //  assign uncovered points
-      if (numChildren > 0 && level < st->levels-2){
-        for (int i = 0; i < numSelPts; i++){
-          if (!covered.index(i)){
+      if (numChildren > 0 && level < st->levels - 2) {
+        for (int i = 0; i < numSelPts; i++) {
+          if (!covered.index(i)) {
             //  get point
             Point3D pt = selPts.index(i).p;
 
             //  find the sphere
             int minJ = -1;
             float minD = FLT_MAX;
-            for (int j = 0; j < numChildren; j++){
+            for (int j = 0; j < numChildren; j++) {
               Sphere s = children.index(j);
-              float d = pt.distance(s.c);// - s.r;
-              if (d < minD){
+              float d = pt.distance(s.c); // - s.r;
+              if (d < minD) {
                 minD = d;
                 minJ = j;
-                }
               }
+            }
 
             //  add the point to the sphere's list
-            pointsInSpheres.index(firstChild+minJ).addItem() = selPtsI->index(i);
-            }
+            pointsInSpheres.index(firstChild + minJ).addItem() =
+                selPtsI->index(i);
           }
         }
+      }
 
       //  save after each child set
-      //st->saveSphereTree("saved.sph");
-      }
+      // st->saveSphereTree("saved.sph");
+    }
 
     //  save after each level
-    //st->saveSphereTree("saved.sph");
+    // st->saveSphereTree("saved.sph");
 
     //  see if we need to add another level
-    if (level == st->levels - 2 && minLeaves > 0 && numLeaves + levelChildren < minLeaves){
+    if (level == st->levels - 2 && minLeaves > 0 &&
+        numLeaves + levelChildren < minLeaves) {
       //  grow the tree
-      OUTPUTINFO("Growing the tree : %d-->%d\n", st->levels, st->levels+1);
+      OUTPUTINFO("Growing the tree : %d-->%d\n", st->levels, st->levels + 1);
       OUTPUTINFO("New Nodes : %d-->", st->nodes.getSize());
-      st->growTree(st->levels+1);
+      st->growTree(st->levels + 1);
       OUTPUTINFO("%d\n", st->nodes.getSize());
-      }
     }
+  }
 }

@@ -28,77 +28,77 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-//#include <GL/gl.h>   //  GRB Nov 2001
+// #include <GL/gl.h>   //  GRB Nov 2001
 #include "../OpenGL/GLsupport.h"
 
-#define GL2PS_VERSION                    0.42
-#define GL2PS_NONE                       0
+#define GL2PS_VERSION 0.42
+#define GL2PS_NONE 0
 
 /* Output file format */
 
-#define GL2PS_EPS                        1
+#define GL2PS_EPS 1
 
 /* Sorting algorithms */
 
-#define GL2PS_NO_SORT                    1
-#define GL2PS_SIMPLE_SORT                2
-#define GL2PS_BSP_SORT                   3
+#define GL2PS_NO_SORT 1
+#define GL2PS_SIMPLE_SORT 2
+#define GL2PS_BSP_SORT 3
 
 /* Options for gl2psBeginPage */
 
-#define GL2PS_DRAW_BACKGROUND            (1<<0)
-#define GL2PS_SIMPLE_LINE_OFFSET         (1<<1)
-#define GL2PS_SILENT                     (1<<2)
-#define GL2PS_BEST_ROOT                  (1<<3)
-#define GL2PS_OCCLUSION_CULL             (1<<4)
+#define GL2PS_DRAW_BACKGROUND (1 << 0)
+#define GL2PS_SIMPLE_LINE_OFFSET (1 << 1)
+#define GL2PS_SILENT (1 << 2)
+#define GL2PS_BEST_ROOT (1 << 3)
+#define GL2PS_OCCLUSION_CULL (1 << 4)
 
 /* Arguments for gl2psEnable/gl2psDisable */
 
-#define GL2PS_POLYGON_OFFSET_FILL        1
-#define GL2PS_POLYGON_BOUNDARY           2
-#define GL2PS_LINE_STIPPLE               3
+#define GL2PS_POLYGON_OFFSET_FILL 1
+#define GL2PS_POLYGON_BOUNDARY 2
+#define GL2PS_LINE_STIPPLE 3
 
 /* Magic numbers */
 
-#define GL2PS_EPSILON                    5.e-3
+#define GL2PS_EPSILON 5.e-3
 
 /* Message levels */
 
-#define GL2PS_INFO                       1
-#define GL2PS_WARNING                    2
-#define GL2PS_ERROR                      3
+#define GL2PS_INFO 1
+#define GL2PS_WARNING 2
+#define GL2PS_ERROR 3
 
 /* Error codes */
 
-#define GL2PS_SUCCESS                    0
-#define GL2PS_NO_FEEDBACK               -1
-#define GL2PS_OVERFLOW                  -2
+#define GL2PS_SUCCESS 0
+#define GL2PS_NO_FEEDBACK -1
+#define GL2PS_OVERFLOW -2
 
 /* Primitive types */
 
-#define GL2PS_TEXT                       1
-#define GL2PS_POINT                      2
-#define GL2PS_LINE                       3
-#define GL2PS_QUADRANGLE                 4
-#define GL2PS_TRIANGLE                   5
+#define GL2PS_TEXT 1
+#define GL2PS_POINT 2
+#define GL2PS_LINE 3
+#define GL2PS_QUADRANGLE 4
+#define GL2PS_TRIANGLE 5
 
 /* BSP tree primitive comparison */
 
-#define GL2PS_COINCIDENT                 1
-#define GL2PS_IN_FRONT_OF                2
-#define GL2PS_IN_BACK_OF                 3
-#define GL2PS_SPANNING                   4
+#define GL2PS_COINCIDENT 1
+#define GL2PS_IN_FRONT_OF 2
+#define GL2PS_IN_BACK_OF 3
+#define GL2PS_SPANNING 4
 
 /* Pass through options */
 
-#define GL2PS_BEGIN_POLYGON_OFFSET_FILL  1
-#define GL2PS_END_POLYGON_OFFSET_FILL    2
-#define GL2PS_BEGIN_POLYGON_BOUNDARY     3
-#define GL2PS_END_POLYGON_BOUNDARY       4
-#define GL2PS_BEGIN_LINE_STIPPLE         5
-#define GL2PS_END_LINE_STIPPLE           6
-#define GL2PS_SET_POINT_SIZE             7
-#define GL2PS_SET_LINE_WIDTH             8
+#define GL2PS_BEGIN_POLYGON_OFFSET_FILL 1
+#define GL2PS_END_POLYGON_OFFSET_FILL 2
+#define GL2PS_BEGIN_POLYGON_BOUNDARY 3
+#define GL2PS_END_POLYGON_BOUNDARY 4
+#define GL2PS_BEGIN_LINE_STIPPLE 5
+#define GL2PS_END_LINE_STIPPLE 6
+#define GL2PS_SET_POINT_SIZE 7
+#define GL2PS_SET_LINE_WIDTH 8
 
 typedef GLfloat GL2PSrgba[4];
 typedef GLfloat GL2PSxyz[3];
@@ -153,13 +153,12 @@ typedef struct {
   FILE *stream;
 } GL2PScontext;
 
-
 /* public functions */
 
-GLvoid gl2psBeginPage(char *title, char *producer, GLint sort, GLint options, 
-		      GLint colormode, GLint colorsize, GL2PSrgba *colormap, 
-		      GLint buffersize, FILE * stream);
-GLint  gl2psEndPage(GLvoid);
+GLvoid gl2psBeginPage(char *title, char *producer, GLint sort, GLint options,
+                      GLint colormode, GLint colorsize, GL2PSrgba *colormap,
+                      GLint buffersize, FILE *stream);
+GLint gl2psEndPage(GLvoid);
 GLvoid gl2psText(char *str, char *fontname, GLint size);
 GLvoid gl2psEnable(GLint mode);
 GLvoid gl2psDisable(GLint mode);

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -38,15 +38,15 @@
 
 #include "GLbitmap.h"
 
-bool createGLDIB(GL_DIB_Info *inf, int w, int h){
+bool createGLDIB(GL_DIB_Info *inf, int w, int h) {
   CHECK_DEBUG0(inf);
 
   //  create new 24Bit bitmap, same size as window
-  BITMAPINFOHEADER BIH ;
-  int iSize = sizeof(BITMAPINFOHEADER) ;
+  BITMAPINFOHEADER BIH;
+  int iSize = sizeof(BITMAPINFOHEADER);
   memset(&BIH, 0, iSize);
 
-  // Fill in the header info. 
+  // Fill in the header info.
   BIH.biSize = iSize;
   BIH.biWidth = w;
   BIH.biHeight = h;
@@ -55,7 +55,7 @@ bool createGLDIB(GL_DIB_Info *inf, int w, int h){
   BIH.biCompression = BI_RGB;
 
   // Create a new device context.
-  CDC *pDC = new CDC ;
+  CDC *pDC = new CDC;
   pDC->CreateCompatibleDC(NULL);
   HDC hdc = pDC->GetSafeHdc();
 
@@ -64,31 +64,27 @@ bool createGLDIB(GL_DIB_Info *inf, int w, int h){
 
   // Create the DIB section.
   void *pBits;
-  HBITMAP hBMP = CreateDIBSection(hdc,
-                                  (BITMAPINFO*) &BIH,
-                                  DIB_PAL_COLORS,
-                                  &pBits,
-                                  NULL,
-                                  0);
+  HBITMAP hBMP = CreateDIBSection(hdc, (BITMAPINFO *)&BIH, DIB_PAL_COLORS,
+                                  &pBits, NULL, 0);
 
-  if (!hBMP){
+  if (!hBMP) {
     delete pDC;
     return false;
-    }
+  }
 
   // Select the new bitmap into the buffer DC.
   HBITMAP hBMPold = (HBITMAP)::SelectObject(hdc, hBMP);
 
   // Fill in the pixel format descriptor.
-  PIXELFORMATDESCRIPTOR pfd ;
-  memset(&pfd,0, sizeof(PIXELFORMATDESCRIPTOR)) ;
-  pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR); 
-  pfd.nVersion = 1;                           // Version number
-  pfd.dwFlags =  PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL | PFD_SUPPORT_GDI;
+  PIXELFORMATDESCRIPTOR pfd;
+  memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+  pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+  pfd.nVersion = 1; // Version number
+  pfd.dwFlags = PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL | PFD_SUPPORT_GDI;
   pfd.iPixelType = PFD_TYPE_RGBA;
   pfd.cColorBits = 24;
-  pfd.cDepthBits = 32;                        // 32-bit depth buffer
-  pfd.iLayerType = PFD_MAIN_PLANE ;           // Layer type
+  pfd.cDepthBits = 32;             // 32-bit depth buffer
+  pfd.iLayerType = PFD_MAIN_PLANE; // Layer type
 
   // Choose the pixel format.
   int nPixelFormat = ChoosePixelFormat(hdc, &pfd);
@@ -114,7 +110,7 @@ bool createGLDIB(GL_DIB_Info *inf, int w, int h){
   return hRC != NULL && hBMP != NULL;
 }
 
-void destroyGLDIB(const GL_DIB_Info &inf){
+void destroyGLDIB(const GL_DIB_Info &inf) {
   //  unslect context
   if (wglGetCurrentContext() == inf.rc)
     wglMakeCurrent(NULL, NULL);

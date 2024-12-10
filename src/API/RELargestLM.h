@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -44,17 +44,18 @@
 
 #include "REBase.h"
 
-class RELargestLM : public REBase{
-  public:
-    bool reduceSpheres(Array<int> *inds, int maxNum = -1, Array<int> *destCounts = NULL,
-                       double maxMet = DBL_MAX, Array<double> *mets = NULL) const;
+class RELargestLM : public REBase {
+public:
+  bool reduceSpheres(Array<int> *inds, int maxNum = -1,
+                     Array<int> *destCounts = NULL, double maxMet = DBL_MAX,
+                     Array<double> *mets = NULL) const;
 
-    //  MSVC 6 problem - it only sees the above version, unless we put this in
-    bool reduceSpheres(Array<Sphere> *dest, const Array<Sphere> &src, 
-                       const SurfaceRep &surRep, int maxNum = -1, 
-                       Array<int> *counts = NULL, Array<int> *list = NULL){
-      return REBase::reduceSpheres(dest, src, surRep, maxNum, counts, list);
-      }
+  //  MSVC 6 problem - it only sees the above version, unless we put this in
+  bool reduceSpheres(Array<Sphere> *dest, const Array<Sphere> &src,
+                     const SurfaceRep &surRep, int maxNum = -1,
+                     Array<int> *counts = NULL, Array<int> *list = NULL) {
+    return REBase::reduceSpheres(dest, src, surRep, maxNum, counts, list);
+  }
 };
 
 #endif

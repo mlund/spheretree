@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -43,7 +43,7 @@
 #include <math.h>
 
 //  distance
-REAL LineSeg::distance(const Point2D &p) const{
+REAL LineSeg::distance(const Point2D &p) const {
   Line2D l;
   getLine(&l);
 
@@ -51,36 +51,35 @@ REAL LineSeg::distance(const Point2D &p) const{
   Point2D pProj;
   l.project(&pProj, p);
 
-  if (isInSegment(pProj)){
+  if (isInSegment(pProj)) {
     //  point projects onto line
     return fabs(l.distanceNorm(p));
-    }
-  else{
+  } else {
     REAL d0 = p0.distanceSQR(p);
     REAL d1 = p1.distanceSQR(p);
     if (d1 < d0)
       d0 = d1;
 
     return sqrt(d0);
-    }
+  }
 }
 
 //  distance
-REAL LineSeg::distanceFrom2DLine(const Point2D &p) const{
+REAL LineSeg::distanceFrom2DLine(const Point2D &p) const {
   Line2D l;
   getLine(&l);
   return fabs(l.distanceNorm(p));
 }
 
 //  transform
-void LineSeg::transform(LineSeg *seg, Transform2D tr) const{
+void LineSeg::transform(LineSeg *seg, Transform2D tr) const {
   CHECK_DEBUG(seg != NULL, "NULL destination");
   tr.transform(&seg->p0, p0);
   tr.transform(&seg->p1, p1);
 }
 
 //  bounding box
-void LineSeg::getBoundingBox(Point2D *pMin, Point2D *pMax) const{
+void LineSeg::getBoundingBox(Point2D *pMin, Point2D *pMax) const {
   CHECK_DEBUG(pMin != NULL && pMax != NULL, "NULL destination");
 
   *pMin = p0;
@@ -90,13 +89,13 @@ void LineSeg::getBoundingBox(Point2D *pMin, Point2D *pMax) const{
   pMax->storeMax(p1);
 }
 
-bool LineSeg::isInSegment(const Point2D &p) const{
-/*  Point2D pMin, pMax;
-  getBoundingBox(&pMin, &pMax);
+bool LineSeg::isInSegment(const Point2D &p) const {
+  /*  Point2D pMin, pMax;
+    getBoundingBox(&pMin, &pMax);
 
-  return p.x >= pMin.x-EPSILON && p.x <= pMax.x+EPSILON && 
-         p.y >= pMin.y-EPSILON && p.y <= pMax.y+EPSILON;
-*/
+    return p.x >= pMin.x-EPSILON && p.x <= pMax.x+EPSILON &&
+           p.y >= pMin.y-EPSILON && p.y <= pMax.y+EPSILON;
+  */
   REAL d0 = p0.distance(p);
   REAL d1 = p1.distance(p);
   REAL len = p0.distance(p1);
@@ -105,7 +104,7 @@ bool LineSeg::isInSegment(const Point2D &p) const{
 }
 
 //  intersection
-bool LineSeg::intersect(Point2D *p, const LineSeg &other) const{
+bool LineSeg::intersect(Point2D *p, const LineSeg &other) const {
   CHECK_DEBUG(p != NULL, "NULL Destination");
 
   Line2D l1, l2;
@@ -115,7 +114,7 @@ bool LineSeg::intersect(Point2D *p, const LineSeg &other) const{
   return l1.intersect(p, l2) && isInSegment(*p) && other.isInSegment(*p);
 }
 
-REAL LineSeg::closestPoint(Point2D *p, const Point2D &other) const{
+REAL LineSeg::closestPoint(Point2D *p, const Point2D &other) const {
   CHECK_DEBUG(p != NULL, "NULL Destination");
 
   //  project onto line
@@ -132,7 +131,7 @@ REAL LineSeg::closestPoint(Point2D *p, const Point2D &other) const{
 }
 
 //  project
-bool LineSeg::projectOnto(Point2D *p, const Point2D &q) const{
+bool LineSeg::projectOnto(Point2D *p, const Point2D &q) const {
   Vector2D v0, v1;
   v0.difference(p1, p0);
   v1.difference(q, p0);

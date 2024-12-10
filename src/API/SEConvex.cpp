@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -39,21 +39,15 @@
 #include "SEConvex.h"
 
 //  constructor
-SEConvex::SEConvex(){
-  st = NULL;
-}
+SEConvex::SEConvex() { st = NULL; }
 
-SEConvex::SEConvex(const SurfaceTester &st){
-  setTester(st);
-}
+SEConvex::SEConvex(const SurfaceTester &st) { setTester(st); }
 
 //  setup
-void SEConvex::setTester(const SurfaceTester &st){
-  this->st = &st;
-}
+void SEConvex::setTester(const SurfaceTester &st) { this->st = &st; }
 
 //  evaluate the fit of the given sphere
-float SEConvex::evalSphere(const Sphere &s) const{
+float SEConvex::evalSphere(const Sphere &s) const {
   CHECK_DEBUG(st != NULL, "Tester needed : use setTester");
 
   Point3D pClose;
@@ -62,11 +56,11 @@ float SEConvex::evalSphere(const Sphere &s) const{
 
   float d = pClose.distance(s.c);
   float err = s.r + d;
-  if (internal){
+  if (internal) {
     err = s.r - d;
     if (err < 0)
-      err = 0;    //  completely contained
-    }
+      err = 0; //  completely contained
+  }
 
   return err;
 }

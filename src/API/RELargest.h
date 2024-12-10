@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,20 +37,21 @@
 \**************************************************************************/
 
 /*
-    Redundency Eliminator which picks the sphere which covers the most uncovered surface
-    at each iteration until the entire surface is covered.
+    Redundency Eliminator which picks the sphere which covers the most uncovered
+   surface at each iteration until the entire surface is covered.
 */
 #ifndef _API_LARGEST_FIRST_REDUNDENCY_ELIMINATOR_H_
 #define _API_LARGEST_FIRST_REDUNDENCY_ELIMINATOR_H_
 
 #include "RESelect.h"
 
-class RELargest : public RESelect{
-  protected:
-    virtual int selectSphere(const Array<int> &counts, 
-                             const Array<bool> &coveredPts, 
-                             const Array<Array<int>/**/> &pointsPerSphere,
-                             double *selMet = NULL, double maxMet = DBL_MAX) const;
+class RELargest : public RESelect {
+protected:
+  virtual int selectSphere(const Array<int> &counts,
+                           const Array<bool> &coveredPts,
+                           const Array<Array<int> /**/> &pointsPerSphere,
+                           double *selMet = NULL,
+                           double maxMet = DBL_MAX) const;
 };
 
 #endif

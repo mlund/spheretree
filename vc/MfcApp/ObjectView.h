@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -50,23 +50,23 @@
 #include "../../src/Geometry/Vector3D.h"
 #include "../OpenGL/GLSupport.h"
 
-class CObjectView : public CView
-{
-// Construction
+class CObjectView : public CView {
+  // Construction
 public:
-	CObjectView();
+  CObjectView();
   bool save(const char *fileName);
   bool saveEPS(const char *fileName);
-	DECLARE_DYNCREATE(CObjectView)
+  DECLARE_DYNCREATE(CObjectView)
 
-// Attributes
+  // Attributes
 public:
-  enum MODE {PAN, ROTATE, ZOOM, LIGHT, POINT, NEXT_MODE};
+  enum MODE { PAN, ROTATE, ZOOM, LIGHT, POINT, NEXT_MODE };
   MODE getMode() const;
   void setMode(MODE newMode);
   void resetView();
   void setupTexture(const char *fileName = NULL, float scale = 1.0f);
-  void setupSurface(COLORREF col, COLORREF bkCol, float hilite = -1, float shinyness = -1);  // -1 for off
+  void setupSurface(COLORREF col, COLORREF bkCol, float hilite = -1,
+                    float shinyness = -1); // -1 for off
 
   COLORREF getRGB() const;
   COLORREF getBkRGB() const;
@@ -75,86 +75,85 @@ public:
   float getHilite() const;
   float getShinyness() const;
 
-// Operations
+  // Operations
 public:
-
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CObjectView)
-	protected:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	virtual void OnDraw(CDC* pDC);
-	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
-	//}}AFX_VIRTUAL
-
-// Implementation
-public:
-	virtual ~CObjectView();
-
-	// Generated message map functions
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CObjectView)
 protected:
-	//{{AFX_MSG(CObjectView)
-	afx_msg void OnPan();
-	afx_msg void OnUpdatePan(CCmdUI* pCmdUI);
-	afx_msg void OnRotate();
-	afx_msg void OnUpdateRotate(CCmdUI* pCmdUI);
-	afx_msg void OnZoom();
-	afx_msg void OnUpdateZoom(CCmdUI* pCmdUI);
-	afx_msg void OnLighting();
-	afx_msg void OnUpdateLighting(CCmdUI* pCmdUI);
-	afx_msg void OnReset();
-	afx_msg void OnSaveImage();
-	afx_msg void OnSaveImagePS();
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-	afx_msg void OnRButtonDblClk(UINT nFlags, CPoint point);
-	afx_msg BOOL OnSetCursor(CView* pWnd, UINT nHitTest, UINT message);
-	afx_msg void OnDestroy();
-	afx_msg void OnModePoint();
-	afx_msg void OnUpdateModePoint(CCmdUI* pCmdUI);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  virtual BOOL PreCreateWindow(CREATESTRUCT &cs);
+  virtual void OnDraw(CDC *pDC);
+  virtual void OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint);
+  //}}AFX_VIRTUAL
 
-  GLInfo glInfo;                 //  OpenGL support
+  // Implementation
+public:
+  virtual ~CObjectView();
+
+  // Generated message map functions
+protected:
+  //{{AFX_MSG(CObjectView)
+  afx_msg void OnPan();
+  afx_msg void OnUpdatePan(CCmdUI *pCmdUI);
+  afx_msg void OnRotate();
+  afx_msg void OnUpdateRotate(CCmdUI *pCmdUI);
+  afx_msg void OnZoom();
+  afx_msg void OnUpdateZoom(CCmdUI *pCmdUI);
+  afx_msg void OnLighting();
+  afx_msg void OnUpdateLighting(CCmdUI *pCmdUI);
+  afx_msg void OnReset();
+  afx_msg void OnSaveImage();
+  afx_msg void OnSaveImagePS();
+  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg BOOL OnEraseBkgnd(CDC *pDC);
+  afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+  afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+  afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+  afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+  afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+  afx_msg void OnRButtonDblClk(UINT nFlags, CPoint point);
+  afx_msg BOOL OnSetCursor(CView *pWnd, UINT nHitTest, UINT message);
+  afx_msg void OnDestroy();
+  afx_msg void OnModePoint();
+  afx_msg void OnUpdateModePoint(CCmdUI *pCmdUI);
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()
+
+  GLInfo glInfo; //  OpenGL support
   virtual void drawObject(bool sel);
   void drawScene(GLint *dList, GLuint tex);
-  bool loadTexture(const char *file,  GLuint *tex);
-  virtual void drawExtraObjects(){}
+  bool loadTexture(const char *file, GLuint *tex);
+  virtual void drawExtraObjects() {}
 
-  GLint dList;                  // display list
+  GLint dList; // display list
   void clearDisplayList();
 
-  CPoint lastPt;                //  tracking and mode
+  CPoint lastPt; //  tracking and mode
   MODE mode;
 
-                                //  transformations
-  float tr[3], scale;           //    translation and scale
-  float fTr[3], fScale;         //    FULL scane and center
-  float m[16], mL[16];          //    object & light orientation
+  //  transformations
+  float tr[3], scale;   //    translation and scale
+  float fTr[3], fScale; //    FULL scane and center
+  float m[16], mL[16];  //    object & light orientation
   void applyRotation(float m[16], float a, const Vector3D &v);
   void clearMatrix(float m[16]);
-                                //  mapping
+  //  mapping
   void screenToFrustum(Point2D *p, const CPoint &pt) const;
   void screenToVector(Vector3D *v, const CPoint &pt) const;
 
-  HCURSOR hCursor;              //  cursor support
+  HCURSOR hCursor; //  cursor support
   void setNewCursor(UINT nID);
   void setNewCursor(const char *res);
 
-  float col[3], bkCol[3];       //  color
-  float hilite, shine;          //  lighting
+  float col[3], bkCol[3]; //  color
+  float hilite, shine;    //  lighting
 
-  GLuint tex;                   //  texture
+  GLuint tex; //  texture
   CString textureFile;
   float texScale;
 
-  int selID;                    //  selection
+  int selID; //  selection
 
   void setupPerspective(bool select = FALSE, int x = 0, int y = 0);
   void setupModelView();

@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -50,54 +50,47 @@ const int CModelDoc::DEFAULT_BOX_SIZE = 1000;
 
 IMPLEMENT_DYNCREATE(CModelDoc, CDocument)
 
-CModelDoc::CModelDoc()
-{
-  scaleFactor = -1;
-}
+CModelDoc::CModelDoc() { scaleFactor = -1; }
 
-CModelDoc::~CModelDoc()
-{
-}
+CModelDoc::~CModelDoc() {}
 
 BEGIN_MESSAGE_MAP(CModelDoc, CDocument)
-	//{{AFX_MSG_MAP(CModelDoc)
-	//}}AFX_MSG_MAP
+//{{AFX_MSG_MAP(CModelDoc)
+//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CModelDoc commands
 
-BOOL CModelDoc::OnOpenDocument(LPCTSTR lpszPathName) 
-{
+BOOL CModelDoc::OnOpenDocument(LPCTSTR lpszPathName) {
   int len = strlen(lpszPathName);
-  if (stricmp(lpszPathName+len-4, ".3dm") == 0){
+  if (stricmp(lpszPathName + len - 4, ".3dm") == 0) {
     char *err = NULL;
-    if (!surface.loadRhinoSurface(lpszPathName, &err)){
+    if (!surface.loadRhinoSurface(lpszPathName, &err)) {
       CString msg;
       msg.Format("ERROR in RhinoIO : %s", err);
       return FALSE;
-      }
     }
-  else if (stricmp(lpszPathName+len-4, ".obj") == 0){
-    if (!loadOBJ(&surface, lpszPathName)){
+  } else if (stricmp(lpszPathName + len - 4, ".obj") == 0) {
+    if (!loadOBJ(&surface, lpszPathName)) {
       CString msg;
       msg.Format("ERROR loading %s", lpszPathName);
       AfxMessageBox(msg);
       return FALSE;
-      }
     }
-  else if (!surface.loadSurface(lpszPathName)){
+  } else if (!surface.loadSurface(lpszPathName)) {
     CString msg;
     msg.Format("ERROR loading %s", lpszPathName);
     AfxMessageBox(msg);
     return FALSE;
-    }
+  }
 
   //  scale the figure to fit standard box
   this->scaleFactor = surface.fitIntoBox(DEFAULT_BOX_SIZE);
 
   CString msg;
-  msg.Format("%ld points, %ld triangles", surface.vertices.getSize(), surface.triangles.getSize());
+  msg.Format("%ld points, %ld triangles", surface.vertices.getSize(),
+             surface.triangles.getSize());
   AfxMessageBox(msg);
   return TRUE;
 }

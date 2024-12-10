@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -40,7 +40,8 @@
 #include "../Geometry/Plane.h"
 #include "../Base/Defs.h"
 
-void getClusters(Array<Array<int>/**/> *clusters, const Surface &sur, float tol){
+void getClusters(Array<Array<int> /**/> *clusters, const Surface &sur,
+                 float tol) {
   int numTri = sur.triangles.getSize();
 
   Array<bool> clustered;
@@ -49,7 +50,7 @@ void getClusters(Array<Array<int>/**/> *clusters, const Surface &sur, float tol)
 
   clusters->setSize(0);
   int numUnclustered = numTri;
-  while (numUnclustered){
+  while (numUnclustered) {
     //  find the first unclustered triangle
     int i;
     for (i = 0; i < numTri; i++)
@@ -73,18 +74,18 @@ void getClusters(Array<Array<int>/**/> *clusters, const Surface &sur, float tol)
 
     //  setup the list of neighbours to be considered
     Array<int> neighbours;
-    for (int j = 0; j < 3; j++){
+    for (int j = 0; j < 3; j++) {
       int triJ = tri->f[j];
       if (!clustered.index(triJ))
         neighbours.addItem() = triJ;
-      }
+    }
 
     //  process neighbours and work out way out
-    while (neighbours.getSize()){
+    while (neighbours.getSize()) {
       int triN = neighbours.index(0);
       neighbours.removeItem(0);
 
-      if (!clustered.index(triN)){
+      if (!clustered.index(triN)) {
         //  do planar check
         const Surface::Triangle *tri = &sur.triangles.index(triN);
         int j;
@@ -92,64 +93,66 @@ void getClusters(Array<Array<int>/**/> *clusters, const Surface &sur, float tol)
           if (fabs(clusterPlane.dist(sur.vertices.index(tri->v[j]).p)) > tol)
             break;
 
-        if (j == 3){
+        if (j == 3) {
           //  add to cluster
           newCluster->addItem() = triN;
           clustered.index(triN) = true;
           numUnclustered--;
 
           //  add neighbours for processing
-          for (int k = 0; k < 3; k++){
+          for (int k = 0; k < 3; k++) {
             int triK = tri->f[k];
-            if (triK >= 0 && !clustered.index(triK))   // could also check inList but clustered.index 
-              neighbours.addItem() = triK;             // later on is more efficient
-            }
+            if (triK >= 0 &&
+                !clustered.index(
+                    triK)) // could also check inList but clustered.index
+              neighbours.addItem() = triK; // later on is more efficient
           }
         }
       }
     }
+  }
 
   OUTPUTINFO("%d clusters\n", clusters->getSize());
 }
 
-bool hasEdge(const Array<int> &cluster, const Surface &sur, int v1, int v2){
+bool hasEdge(const Array<int> &cluster, const Surface &sur, int v1, int v2) {
   int numTri = cluster.getSize();
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     const Surface::Triangle *tri = &sur.triangles.index(cluster.index(i));
-    for (int j = 0; j < 3; j++){
+    for (int j = 0; j < 3; j++) {
       int u1 = tri->v[j];
-      int u2 = tri->v[(j+1)%3];
+      int u2 = tri->v[(j + 1) % 3];
 
-      if (u1 == v1 && u2 == v2 ||
-          u1 == v2 && u2 == v1)
+      if (u1 == v1 && u2 == v2 || u1 == v2 && u2 == v1)
         return true;
-      }
     }
+  }
 
   return false;
 }
 
-bool areNeighbours(const Array<Array<int>/**/> &clusters, const Surface &sur, int I1, int I2){
+bool areNeighbours(const Array<Array<int> /**/> &clusters, const Surface &sur,
+                   int I1, int I2) {
   //  look to see if there is a common edge
   const Array<int> *c1 = &clusters.index(I1);
   const Array<int> *c2 = &clusters.index(I2);
 
   int numTri = c1->getSize();
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     const Surface::Triangle *tri = &sur.triangles.index(c1->index(i));
-    for (int j = 0; j < 3; j++){
+    for (int j = 0; j < 3; j++) {
       int v1 = tri->v[j];
-      int v2 = tri->v[(j+1)%3];
+      int v2 = tri->v[(j + 1) % 3];
       if (hasEdge(*c2, sur, v1, v2))
         return true;
-      }
     }
+  }
 
   return false;
 }
 
-void getClusterInfo(ClusterInfo *inf, const Surface &sur, float tol){
-  //  make the clusters 
+void getClusterInfo(ClusterInfo *inf, const Surface &sur, float tol) {
+  //  make the clusters
   getClusters(&inf->clusters, sur, tol);
   int numClusters = inf->clusters.getSize();
 
@@ -159,9 +162,9 @@ void getClusterInfo(ClusterInfo *inf, const Surface &sur, float tol){
     inf->neighbours.index(i).setSize(0);
 
   for (int i = 0; i < numClusters; i++)
-    for (int j = i+1; j < numClusters; j++)
-      if (areNeighbours(inf->clusters, sur, i, j)){
+    for (int j = i + 1; j < numClusters; j++)
+      if (areNeighbours(inf->clusters, sur, i, j)) {
         inf->neighbours.index(i).addItem() = j;
         inf->neighbours.index(j).addItem() = i;
-        }
+      }
 }

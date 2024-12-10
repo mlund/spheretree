@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -55,12 +55,12 @@
 /*
     options and their default values
 */
-int branch = 8;             //  branching factor of the sphere-tree
-int depth = 3;              //  depth of the sphere-tree
-int numSamples = 500;       //  number of samples to put on surface for static medial
-int minSamples = 1;         //  minimum number of points per triangle for static medial
-bool verify = false;        //  verify model before construction
-bool nopause = false;       //  will we pause before starting
+int branch = 8;       //  branching factor of the sphere-tree
+int depth = 3;        //  depth of the sphere-tree
+int numSamples = 500; //  number of samples to put on surface for static medial
+int minSamples = 1;  //  minimum number of points per triangle for static medial
+bool verify = false; //  verify model before construction
+bool nopause = false; //  will we pause before starting
 
 /*
     info for decoding parameters
@@ -71,9 +71,8 @@ const IntParam intParams[] = {{"branch", &branch},
                               {"minSamples", &minSamples},
                               {NULL, NULL}};
 
-const BoolParam boolParams[] = {{"verify", &verify, TRUE},
-                                {"nopause", &nopause, TRUE},
-                                {NULL, NULL}};
+const BoolParam boolParams[] = {
+    {"verify", &verify, TRUE}, {"nopause", &nopause, TRUE}, {NULL, NULL}};
 
 /*
     forward declarations
@@ -85,7 +84,7 @@ bool constructTree(const char *file);
 /*
     MAINLINE
 */
-int main(int argc, const char *argv[]){
+int main(int argc, const char *argv[]) {
   printf("MakeTreeMain - Gareth Bradshaw Feb 2003\n");
 
   /*
@@ -101,12 +100,12 @@ int main(int argc, const char *argv[]){
      look for filenames and construct trees
   */
   int numFiles = 0;
-  for (int i = 1; i < argc; i++){
-    if (argv[i] != NULL){
+  for (int i = 1; i < argc; i++) {
+    if (argv[i] != NULL) {
       constructTree(argv[i]);
       numFiles++;
-      }
     }
+  }
 
   /*
      check we had a file name
@@ -120,7 +119,7 @@ int main(int argc, const char *argv[]){
 /*
     construct sphere-tree for the model
 */
-bool constructTree(const char *file){
+bool constructTree(const char *file) {
   printf("FileName : %s\n\n", file);
 
   /*
@@ -130,10 +129,10 @@ bool constructTree(const char *file){
   strcpy(inputFile, file);
   int len = strlen(inputFile);
   int i;
-  for (i = len-1; i >= 0; i--){
+  for (i = len - 1; i >= 0; i--) {
     if (inputFile[i] == '.')
       break;
-    }
+  }
 
   /*
       load the surface model
@@ -141,15 +140,15 @@ bool constructTree(const char *file){
   Surface sur;
 
   bool loaded = false;
-  if (strcompare("obj", &inputFile[len-3]) == 0)
+  if (strcompare("obj", &inputFile[len - 3]) == 0)
     loaded = loadOBJ(&sur, inputFile);
   else
     loaded = sur.loadSurface(inputFile);
 
-  if (!loaded){
+  if (!loaded) {
     printf("ERROR : Unable to load input file (%s)\n\n", inputFile);
     return false;
-    }
+  }
   if (i >= 0)
     inputFile[i] = '\0';
 
@@ -168,13 +167,13 @@ bool constructTree(const char *file){
   /*
       verify model
   */
-  if (verify){
+  if (verify) {
     bool ok = verifyModel(sur);
-    if (!ok){
+    if (!ok) {
       printf("ERROR : model is not usable\n\n");
       return false;
-      }
     }
+  }
 
   /*
       generate the set of sample points
@@ -183,16 +182,16 @@ bool constructTree(const char *file){
   MSGrid::generateSamples(&samplePts, numSamples, sur, TRUE, minSamples);
   printf("%d sample points\n", samplePts.getSize());
 
-//  SurfaceRep coverRep;
-//  coverRep.setup(coverPts);
+  //  SurfaceRep coverRep;
+  //  coverRep.setup(coverPts);
 
   /*
      Setup voronoi diagram
   */
   Point3D pC;
-  pC.x = (sur.pMax.x + sur.pMin.x)/2.0f;  
-  pC.y = (sur.pMax.y + sur.pMin.y)/2.0f;  
-  pC.z = (sur.pMax.z + sur.pMin.z)/2.0f;  
+  pC.x = (sur.pMax.x + sur.pMin.x) / 2.0f;
+  pC.y = (sur.pMax.y + sur.pMin.y) / 2.0f;
+  pC.z = (sur.pMax.z + sur.pMin.z) / 2.0f;
 
   Voronoi3D vor;
   vor.initialise(pC, 1.5f * sur.pMin.distance(pC));
@@ -201,14 +200,14 @@ bool constructTree(const char *file){
   /*
       setup HUBBARD's algorithm
   */
-	STGHubbard hubbard;
+  STGHubbard hubbard;
   hubbard.setup(&vor, &mt);
-  
+
   /*
       make sphere-tree
   */
   SphereTree tree;
-  tree.setupTree(branch, depth+1);
+  tree.setupTree(branch, depth + 1);
   hubbard.constructTree(&tree);
 
   /*
@@ -216,9 +215,9 @@ bool constructTree(const char *file){
   */
   char sphereFile[1024];
   sprintf(sphereFile, "%s-hubbard.sph", inputFile);
-  if (tree.saveSphereTree(sphereFile, 1.0f/boxScale)){
+  if (tree.saveSphereTree(sphereFile, 1.0f / boxScale)) {
     FILE *f = fopen(sphereFile, "a");
-    if (f){
+    if (f) {
       //  write parameters
       fprintf(f, "\n\n");
       fprintf(f, "Options : \n");
@@ -228,27 +227,27 @@ bool constructTree(const char *file){
       //  count medial spheres and output info
       int numMed = 0;
       int numVert = vor.vertices.getSize();
-      for (int a = 0; a < numVert; a++){
+      for (int a = 0; a < numVert; a++) {
         Voronoi3D::Vertex *vert = &vor.vertices.index(a);
         if (mt.isMedial(vert))
           numMed++;
-        }
-      fprintf(f, "\n\n\n%d samples, %d medial spheres\n", samplePts.getSize(), numMed);
+      }
+      fprintf(f, "\n\n\n%d samples, %d medial spheres\n", samplePts.getSize(),
+              numMed);
 
       fclose(f);
-      }
+    }
 
     return true;
-    }
-  else{
+  } else {
     return false;
-    }
+  }
 }
 
 /*
     error handler
 */
-int error(const char *errorMsg, const char *errorMsg1){
+int error(const char *errorMsg, const char *errorMsg1) {
   if (errorMsg1)
     printf("ERROR : %s (%s)\n", errorMsg, errorMsg1);
   else
@@ -258,10 +257,10 @@ int error(const char *errorMsg, const char *errorMsg1){
   exit(-1);
 }
 
-void waitForKey(){
-  if (!nopause){
+void waitForKey() {
+  if (!nopause) {
     printf("Press ENTER to continue....\n");
     char buffer[2];
     fread(buffer, 1, 1, stdin);
-    }
+  }
 }

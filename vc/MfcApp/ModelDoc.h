@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -47,14 +47,12 @@
 // CModelDoc document
 #include "../../src/Surface/Surface.h"
 
-
-class CModelDoc : public CDocument
-{
+class CModelDoc : public CDocument {
 protected:
-	CModelDoc();           // protected constructor used by dynamic creation
-	DECLARE_DYNCREATE(CModelDoc)
+  CModelDoc(); // protected constructor used by dynamic creation
+  DECLARE_DYNCREATE(CModelDoc)
 
-// Attributes
+  // Attributes
 public:
   const static int DEFAULT_BOX_SIZE;
 
@@ -62,30 +60,27 @@ private:
   Surface surface;
   float scaleFactor;
 
-// Operations
+  // Operations
 public:
-
-// Overrides
-	//{{AFX_VIRTUAL(CModelDoc)
-	public:
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-	//}}AFX_VIRTUAL
-
-// Implementation
+  // Overrides
+  //{{AFX_VIRTUAL(CModelDoc)
 public:
-	virtual ~CModelDoc();
+  virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+  //}}AFX_VIRTUAL
 
-	// Generated message map functions
+  // Implementation
+public:
+  virtual ~CModelDoc();
+
+  // Generated message map functions
 protected:
-	//{{AFX_MSG(CModelDoc)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  //{{AFX_MSG(CModelDoc)
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()
 
 public:
   //  get the scale factor used to load the model
-  float getScaleFactor() const{
-    return scaleFactor;
-    }
+  float getScaleFactor() const { return scaleFactor; }
 
   friend class CModelView;
 };

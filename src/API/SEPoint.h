@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,10 +37,12 @@
 \**************************************************************************/
 
 /*
-    Sphere Evaluator which defines the error in a sphere to be the worst distance 
-    from a set of sample points to the sphere along the surface normals at that point.
+    Sphere Evaluator which defines the error in a sphere to be the worst
+   distance from a set of sample points to the sphere along the surface normals
+   at that point.
 
-    As HUBBARD except we consider all surface points from which are contained in the sphere
+    As HUBBARD except we consider all surface points from which are contained in
+   the sphere
 */
 #ifndef _SPHERE_EVAL_POINT_H_
 #define _SPHERE_EVAL_POINT_H_
@@ -48,25 +50,26 @@
 #include "SEBase.h"
 #include "../Surface/Surface.h"
 
-class SEPoint : public SEBase{
-  public:
-    //  constructors
-    SEPoint();
-    SEPoint(const Array<Surface::Point> &samples);
+class SEPoint : public SEBase {
+public:
+  //  constructors
+  SEPoint();
+  SEPoint(const Array<Surface::Point> &samples);
 
-    //  evaluate the fit of the given sphere
-    float evalSphere(const Sphere &s) const;    
-    float evalSphere(const Sphere &s, const Array<Surface::Point> &surPts, const Array<int> &inds) const;
+  //  evaluate the fit of the given sphere
+  float evalSphere(const Sphere &s) const;
+  float evalSphere(const Sphere &s, const Array<Surface::Point> &surPts,
+                   const Array<int> &inds) const;
 
-    //  setup the set of sample points
-    void setSurfaceSamples(const Array<Surface::Point> &samples);
+  //  setup the set of sample points
+  void setSurfaceSamples(const Array<Surface::Point> &samples);
 
-  private:
-    //  reference to the set of samples to use for the evaluations
-    const Array<Surface::Point> *samples;
+private:
+  //  reference to the set of samples to use for the evaluations
+  const Array<Surface::Point> *samples;
 
-    //  eval for a single point
-    float eval(const Sphere &s, const Point3D &p, const Vector3D &n) const;
+  //  eval for a single point
+  float eval(const Sphere &s, const Point3D &p, const Vector3D &n) const;
 };
 
 #endif

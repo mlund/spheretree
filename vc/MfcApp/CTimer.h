@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -44,35 +44,32 @@
 #include <windows.h>
 
 class CTimer {
-  public:
-    CTimer(){
-      LARGE_INTEGER Frequency;
-      int Status = QueryPerformanceFrequency(&Frequency);
-      assert(Status);  //This will be 0 if the CPU doesn't support this
-      CountPerSec = Frequency.LowPart; 
-    }
+public:
+  CTimer() {
+    LARGE_INTEGER Frequency;
+    int Status = QueryPerformanceFrequency(&Frequency);
+    assert(Status); // This will be 0 if the CPU doesn't support this
+    CountPerSec = Frequency.LowPart;
+  }
 
-    void StartTimer(){ 
-      QueryPerformanceCounter(&start); 
-      }
+  void StartTimer() { QueryPerformanceCounter(&start); }
 
-    void StopTimer(){ 
-      QueryPerformanceCounter(&finish); 
-      }
+  void StopTimer() { QueryPerformanceCounter(&finish); }
 
-    double GetTime(){
-      return (((finish.HighPart - start.HighPart) * (double)UINT_MAX + 
-                (finish.LowPart - start.LowPart)) / (double)CountPerSec);
-      }
+  double GetTime() {
+    return (((finish.HighPart - start.HighPart) * (double)UINT_MAX +
+             (finish.LowPart - start.LowPart)) /
+            (double)CountPerSec);
+  }
 
-    double GetElapse(){
-      StopTimer();
-      return GetTime();   //  hack - but ok
-      }
+  double GetElapse() {
+    StopTimer();
+    return GetTime(); //  hack - but ok
+  }
 
-  private:
-    unsigned long CountPerSec;
-    LARGE_INTEGER start, finish;
+private:
+  unsigned long CountPerSec;
+  LARGE_INTEGER start, finish;
 };
 
 #endif

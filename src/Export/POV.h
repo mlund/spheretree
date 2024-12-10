@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -44,10 +44,14 @@
 #include "../Surface/Surface.h"
 #include "../SphereTree/SphereTree.h"
 
-bool exportSpheresPOV(const char *fileName, const Array<Sphere> &sph, float scale, bool useDefFile = false, float *m = NULL, Array<int> *sel = NULL, float selColor[] = NULL, Array<int> *sel1 = NULL, float selColor1[] = NULL);
+bool exportSpheresPOV(const char *fileName, const Array<Sphere> &sph,
+                      float scale, bool useDefFile = false, float *m = NULL,
+                      Array<int> *sel = NULL, float selColor[] = NULL,
+                      Array<int> *sel1 = NULL, float selColor1[] = NULL);
 
 bool exportModelPOV(const char *fileName, const Surface &sur, float scale);
 
-bool exportSphereTreePOV(const char *fileName, const SphereTree &st, bool topLevel, float scale, bool useDefFile = false);
+bool exportSphereTreePOV(const char *fileName, const SphereTree &st,
+                         bool topLevel, float scale, bool useDefFile = false);
 
 #endif

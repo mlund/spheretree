@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -41,24 +41,31 @@
 #include "../Export/POV.h"
 
 //  constructor
-VFAdaptive::VFAdaptive(){
+VFAdaptive::VFAdaptive() {
   mt = NULL;
   eval = NULL;
   coverRep = NULL;
 }
 
-void VFAdaptive::adaptiveSample(Voronoi3D *vor, float maxErr, int maxSam, int maxSph, int minSph, const SurfaceRep *coverRep, const Sphere *filterSphere, bool countOnlyCoverSpheres, int maxLoop){
+void VFAdaptive::adaptiveSample(Voronoi3D *vor, float maxErr, int maxSam,
+                                int maxSph, int minSph,
+                                const SurfaceRep *coverRep,
+                                const Sphere *filterSphere,
+                                bool countOnlyCoverSpheres, int maxLoop) {
   CHECK_DEBUG0(mt != NULL);
   const SurfaceRep *rep = coverRep;
   if (rep == NULL)
     rep = this->coverRep;
 
-  VFAdaptive::adaptiveSample(vor, *mt, rep, maxErr, maxSam, maxSph, minSph, filterSphere, eval, countOnlyCoverSpheres, maxLoop);
+  VFAdaptive::adaptiveSample(vor, *mt, rep, maxErr, maxSam, maxSph, minSph,
+                             filterSphere, eval, countOnlyCoverSpheres,
+                             maxLoop);
 }
 
-double VFAdaptive::getErr(Voronoi3D::Vertex *vert, const SEBase *eval, const MedialTester *mt, const Voronoi3D *vor){
-  if (vert->err < 0){
-    if (!eval){                 //  no evaluator - use convex approx
+double VFAdaptive::getErr(Voronoi3D::Vertex *vert, const SEBase *eval,
+                          const MedialTester *mt, const Voronoi3D *vor) {
+  if (vert->err < 0) {
+    if (!eval) { //  no evaluator - use convex approx
       //  get closest point
       Point3D pClose;
       mt->closestPoint(&pClose, vert);
@@ -68,45 +75,47 @@ double VFAdaptive::getErr(Voronoi3D::Vertex *vert, const SEBase *eval, const Med
 
       //  evaluate fit
       float dSur = pClose.distance(vert->s.c);
-      if (vert->flag == VOR_FLAG_COVER){
-        vert->err = vert->s.r + dSur;    //  sphere center is outside surface 
-        }
-      else{
-        vert->err = vert->s.r - dSur;    //  sphere center is inside surface
+      if (vert->flag == VOR_FLAG_COVER) {
+        vert->err = vert->s.r + dSur; //  sphere center is outside surface
+      } else {
+        vert->err = vert->s.r - dSur; //  sphere center is inside surface
         if (vert->err < 0)
           vert->err = 0;
-        }
       }
-    else{
+    } else {
       vert->err = eval->evalSphere(vert->s);
-      }
     }
+  }
 
   return vert->err;
 }
 
-int VFAdaptive::findWorstSphere(Voronoi3D *vor, const MedialTester &mt, const SEBase *eval, const Sphere *filterSphere, float *resultErr, int *numMedial, bool includeCover){
+int VFAdaptive::findWorstSphere(Voronoi3D *vor, const MedialTester &mt,
+                                const SEBase *eval, const Sphere *filterSphere,
+                                float *resultErr, int *numMedial,
+                                bool includeCover) {
   int worstI = -1;
   float errSofar = -1;
   int numInternal = 0;
 
   //  find the worst approximated point
   int numVerts = vor->vertices.getSize();
-  for (int i = 0; i < numVerts; i++){
+  for (int i = 0; i < numVerts; i++) {
     Voronoi3D::Vertex *v = &vor->vertices.index(i);
     if (filterSphere)
       if (!filterSphere->overlap(v->s))
         continue;
 
-    if (v->flag == VOR_FLAG_INTERNAL || (includeCover && v->flag == VOR_FLAG_COVER)){
+    if (v->flag == VOR_FLAG_INTERNAL ||
+        (includeCover && v->flag == VOR_FLAG_COVER)) {
       numInternal++;
       float err = getErr(v, eval, &mt, vor);
-      if (err > errSofar){
+      if (err > errSofar) {
         errSofar = err;
         worstI = i;
-        }
       }
     }
+  }
 
   if (resultErr)
     *resultErr = errSofar;
@@ -116,30 +125,29 @@ int VFAdaptive::findWorstSphere(Voronoi3D *vor, const MedialTester &mt, const SE
   return worstI;
 }
 
-void saveSpheres(Voronoi3D *vor, const MedialTester &mt, int sel){
+void saveSpheres(Voronoi3D *vor, const MedialTester &mt, int sel) {
   //  selected sphere is the one about to be replaced
   Array<int> selList, selList1;
 
   //  make list of spheres
   Array<Sphere> spheres;
   int numVert = vor->vertices.getSize();
-  for (int i = 0; i < numVert; i++){
+  for (int i = 0; i < numVert; i++) {
     Voronoi3D::Vertex *vert = &vor->vertices.index(i);
     int isNew = vert->flag == VOR_FLAG_UNKNOWN;
 
-    if (mt.isMedial(vert)/* && (vert->flag != VOR_FLAG_COVER || i == sel)*/){
+    if (mt.isMedial(vert) /* && (vert->flag != VOR_FLAG_COVER || i == sel)*/) {
       spheres.addItem() = vert->s;
 
       //  stuff for displaying which sphere is about to be removed
-      if (sel < 0){
-	      if (isNew)
-	        selList.addItem() = spheres.getSize()-1;
+      if (sel < 0) {
+        if (isNew)
+          selList.addItem() = spheres.getSize() - 1;
+      } else if (i == sel) {
+        selList.addItem() = spheres.getSize() - 1;
       }
-      else if (i == sel){
-	      selList.addItem() = spheres.getSize()-1;
-	      }
       if (vert->flag == VOR_FLAG_COVER)
-        selList1.addItem() = spheres.getSize()-1;
+        selList1.addItem() = spheres.getSize() - 1;
     }
   }
 
@@ -148,21 +156,26 @@ void saveSpheres(Voronoi3D *vor, const MedialTester &mt, int sel){
   else
     printf("%d SELECTED\n", selList.getSize());
 
-  if (spheres.getSize() > 0){
+  if (spheres.getSize() > 0) {
     //  export scene for rendering
     static int fn = 0;
     char buffer[1024];
     sprintf(buffer, "povs/adapt-%0.6d.pov", fn++);
     printf("Saving as : %s\n");
 
-    float selColor[3] = {1,0,0};
-    float selColor1[3] = {0,1,0};
+    float selColor[3] = {1, 0, 0};
+    float selColor1[3] = {0, 1, 0};
     float selColor2[3] = {1, 1, 0};
-    exportSpheresPOV(buffer, spheres, 1.0/1000.0, true, NULL, &selList, sel < 0? selColor1:selColor, &selList1, selColor2);
+    exportSpheresPOV(buffer, spheres, 1.0 / 1000.0, true, NULL, &selList,
+                     sel < 0 ? selColor1 : selColor, &selList1, selColor2);
   }
 }
 
-void VFAdaptive::adaptiveSample(Voronoi3D *vor, const MedialTester &mt, const SurfaceRep *coverRep, float maxErr, int maxSam, int maxSph, int minSph, const Sphere *filterSphere, const SEBase *eval, bool countOnlyCoverSpheres, int maxLoops){
+void VFAdaptive::adaptiveSample(Voronoi3D *vor, const MedialTester &mt,
+                                const SurfaceRep *coverRep, float maxErr,
+                                int maxSam, int maxSph, int minSph,
+                                const Sphere *filterSphere, const SEBase *eval,
+                                bool countOnlyCoverSpheres, int maxLoops) {
   if (maxErr < 0.0f)
     return;
 
@@ -172,111 +185,114 @@ void VFAdaptive::adaptiveSample(Voronoi3D *vor, const MedialTester &mt, const Su
   OUTPUTINFO("Initial Error Sofar : %f\n", errSofar);
 
   //  label the vertices
-  int numCover = mt.processMedial(vor, coverRep, filterSphere, countOnlyCoverSpheres);
+  int numCover =
+      mt.processMedial(vor, coverRep, filterSphere, countOnlyCoverSpheres);
 
   //  work out maximum loops alowed
-  if (maxLoops <= 0){
+  if (maxLoops <= 0) {
     if (maxSam > 0)
-      maxLoops = maxSam*3;
+      maxLoops = maxSam * 3;
     else if (maxSph)
-      maxLoops = maxSph*3;
-    }
+      maxLoops = maxSph * 3;
+  }
 
   //  find the starting error
   int loop = 0;
-  while (true){
+  while (true) {
     loop++;
 
     //  find the worst approximated point
     int numInt = 0;
     float worstD = -1;
-    int worstI = findWorstSphere(vor, mt, eval, filterSphere, &worstD, &numInt, true);
+    int worstI =
+        findWorstSphere(vor, mt, eval, filterSphere, &worstD, &numInt, true);
     if (countOnlyCoverSpheres)
       numInt = numCover;
-    if (worstI < 0){
+    if (worstI < 0) {
       //  clear the ban flags and try again
       int numVert = vor->vertices.getSize();
-      for (int i = 0; i < numVert; i++){
+      for (int i = 0; i < numVert; i++) {
         Voronoi3D::Vertex *vert = &vor->vertices.index(i);
         if (filterSphere && !vert->s.overlap(*filterSphere))
           continue;
         vor->resetFlag(vert);
-        }
+      }
 
       //  update medial/coverage spheres
       numCover = mt.processMedial(vor, coverRep, filterSphere);
-      worstI = findWorstSphere(vor, mt, eval, filterSphere, &worstD, &numInt, true);
+      worstI =
+          findWorstSphere(vor, mt, eval, filterSphere, &worstD, &numInt, true);
       if (worstI < 0)
-          break;  //  nothing more we can do
-      }
+        break; //  nothing more we can do
+    }
 
     //  enable this to output POV files
-    //saveSpheres(vor, mt, worstI);
+    // saveSpheres(vor, mt, worstI);
 
-    if ((loop %25) ==0)
-      OUTPUTINFO("NumSpheres : %4d  \tErr : %10.6f  \terrSofar : %10.6f\n", numInt, worstD, errSofar);
+    if ((loop % 25) == 0)
+      OUTPUTINFO("NumSpheres : %4d  \tErr : %10.6f  \terrSofar : %10.6f\n",
+                 numInt, worstD, errSofar);
 
-    if (errSofar < 0)                       //  first iteration to have some spheres
-      errSofar = worstD;  
+    if (errSofar < 0) //  first iteration to have some spheres
+      errSofar = worstD;
 
-    //  is it worth continuing ?? 
+    //  is it worth continuing ??
     if (worstD < maxErr && numInt > minSph)
       break;
-    else if ((maxSam > 0 && vor->formingPoints.getSize()-9 >= maxSam*2) ||
-             (maxSph > 0 && numInt >= maxSph*2) ||
-             (maxLoops > 0 && loop > maxLoops)){
-        //  normally we would wait until we get back down to the correct error
-        //  but this CAN mean the algorithm will NEVER terminate
-        //  so guard against that happening
+    else if ((maxSam > 0 && vor->formingPoints.getSize() - 9 >= maxSam * 2) ||
+             (maxSph > 0 && numInt >= maxSph * 2) ||
+             (maxLoops > 0 && loop > maxLoops)) {
+      //  normally we would wait until we get back down to the correct error
+      //  but this CAN mean the algorithm will NEVER terminate
+      //  so guard against that happening
 
-        //  remove BAD cover spheres i.e. those with error > minError sofar
-        //  otherwise this will cause major problems for Merge/Burst
-        int numVerts = vor->vertices.getSize();
-        for (int i = 0; i < numVerts; i++){
-          Voronoi3D::Vertex *v = &vor->vertices.index(i);
-          if (v->flag == VOR_FLAG_COVER){
-            float err = getErr(v, eval, &mt, vor);
-            if (err > errSofar)
-              v->flag = VOR_FLAG_EXTERNAL;
-            }
-          }
-
-        break;
+      //  remove BAD cover spheres i.e. those with error > minError sofar
+      //  otherwise this will cause major problems for Merge/Burst
+      int numVerts = vor->vertices.getSize();
+      for (int i = 0; i < numVerts; i++) {
+        Voronoi3D::Vertex *v = &vor->vertices.index(i);
+        if (v->flag == VOR_FLAG_COVER) {
+          float err = getErr(v, eval, &mt, vor);
+          if (err > errSofar)
+            v->flag = VOR_FLAG_EXTERNAL;
         }
-    else if (worstD <= errSofar || worstD <= EPSILON_LARGE){
+      }
+
+      break;
+    } else if (worstD <= errSofar || worstD <= EPSILON_LARGE) {
       if (worstD > EPSILON_LARGE)
         errSofar = worstD;
       else
         errSofar = EPSILON_LARGE;
 
-      if ((maxSam > 0 && vor->formingPoints.getSize()-9 >= maxSam) ||
-          (maxSph > 0 && numInt >= maxSph) ||
-          (maxLoops > 0 && loop > maxLoops))
+      if ((maxSam > 0 && vor->formingPoints.getSize() - 9 >= maxSam) ||
+          (maxSph > 0 && numInt >= maxSph) || (maxLoops > 0 && loop > maxLoops))
         break;
-      }
+    }
 
     //  flag the vertex so that we cannot consider it in the future
     //  just in case the vertex isn't removed
     Voronoi3D::Vertex *v = &vor->vertices.index(worstI);
     mt.blockMedial(v);
 
-    //  get the closest surface point to the vertex 
+    //  get the closest surface point to the vertex
     Vector3D n;
     Point3D pClose;
     mt.closestPointNormal(&pClose, &n, v);
 
     //  check if the new point will improve the approximation
-    if (pClose.distanceSQR(v->s.c) > v->s.r*v->s.r)
-      OUTPUTINFO("WARNING : the closest point is further away than it should be\n");
+    if (pClose.distanceSQR(v->s.c) > v->s.r * v->s.r)
+      OUTPUTINFO(
+          "WARNING : the closest point is further away than it should be\n");
 
     //  add the point to the Voronoi diagram
     vor->insertPoint(pClose, n, worstI);
 
     // save off the results of adding the new sphere
     //  uncomment this to save POV files
-    //saveSpheres(vor, mt, -1);
+    // saveSpheres(vor, mt, -1);
 
     //  update medial/coverage spheres
     numCover = mt.processMedial(vor, coverRep, filterSphere);
-    }
+  }
 }

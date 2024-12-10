@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -38,11 +38,12 @@
 
 #include "EvalTree.h"
 
-void evaluateTree(Array<LevelEval> *res, const SphereTree &st, const SEBase *eval){
+void evaluateTree(Array<LevelEval> *res, const SphereTree &st,
+                  const SEBase *eval) {
   int numLevels = st.levels;
   res->resize(numLevels);
 
-  for (int i = 0; i < numLevels; i++){
+  for (int i = 0; i < numLevels; i++) {
     LevelEval *le = &res->index(i);
 
     unsigned long start, num;
@@ -53,9 +54,9 @@ void evaluateTree(Array<LevelEval> *res, const SphereTree &st, const SEBase *eva
     le->worstError = -FLT_MAX;
     le->avgError = 0;
 
-    for (int j = 0; j < num; j++){
-      const Sphere s = st.nodes.index(start+j);
-      if (s.r > 0){
+    for (int j = 0; j < num; j++) {
+      const Sphere s = st.nodes.index(start + j);
+      if (s.r > 0) {
         double err = eval->evalSphere(s);
 
         le->numSph++;
@@ -66,17 +67,17 @@ void evaluateTree(Array<LevelEval> *res, const SphereTree &st, const SEBase *eva
 
         if (err < le->bestError)
           le->bestError = err;
-        }
       }
+    }
 
     le->avgError /= le->numSph;
-    }
+  }
 }
 
-void writeEvaluation(FILE *f, const Array<LevelEval> &res){
+void writeEvaluation(FILE *f, const Array<LevelEval> &res) {
   fprintf(f, "Evaluation :\n");
   int numLevels = res.getSize();
-  for (int i = 0; i < numLevels; i++){
+  for (int i = 0; i < numLevels; i++) {
     const LevelEval *le = &res.index(i);
 
     fprintf(f, "\tLevel %d\n", i);
@@ -84,5 +85,5 @@ void writeEvaluation(FILE *f, const Array<LevelEval> &res){
     fprintf(f, "\t\tWorst\t: %.3f\n", le->worstError);
     fprintf(f, "\t\tBest\t: %.3f\n", le->bestError);
     fprintf(f, "\t\tMean\t: %.3f\n", le->avgError);
-    }
+  }
 }

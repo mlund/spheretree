@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -41,24 +41,26 @@
 #include "SRMerge.h"
 #include "SFWhite.h"
 
-SOBalance::SOBalance(){
+SOBalance::SOBalance() {
   A = 1;
   V = 0;
   B = 0;
 }
 
-float SOBalance::computeWorstErr(Array<Sphere> &sph) const{
+float SOBalance::computeWorstErr(Array<Sphere> &sph) const {
   int numSph = sph.getSize();
   float worstErr = -1;
-  for (int i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++) {
     float e = sphereEval->evalSphere(sph.index(i));
     if (e > worstErr)
       worstErr = e;
-    }
+  }
   return worstErr;
 }
 
-void SOBalance::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, float stopBelow, const Sphere *parSph, int level) const{
+void SOBalance::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep,
+                         float stopBelow, const Sphere *parSph,
+                         int level) const {
   //  optimise the set of spheres to start with
   optimiser->optimise(spheres, surRep, -1, parSph);
   int initNum = spheres->getSize();
@@ -78,12 +80,13 @@ void SOBalance::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, float
   //  successive bursts
   bool fullyOpt = true;
   double vComp = V;
-  for (int i = initNum-1; i > 2; i--){
+  for (int i = initNum - 1; i > 2; i--) {
     //  work out the allowed error
-    double allowExtra = (V < EPSILON)? (0):((double)(initNum-i)/(A*initNum) * vComp);
+    double allowExtra =
+        (V < EPSILON) ? (0) : ((double)(initNum - i) / (A * initNum) * vComp);
     double divFact = 1;
     OUTPUTINFO("DivFact = %d\n", divFact);
-    double allowError = firstErr * (1 + (allowExtra + B)/divFact);
+    double allowError = firstErr * (1 + (allowExtra + B) / divFact);
     vComp *= V;
 
     //  do reduction
@@ -95,26 +98,25 @@ void SOBalance::optimise(Array<Sphere> *spheres, const SurfaceRep &surRep, float
     //  compute error
     bool thisSetOpt = false;
     float err = computeWorstErr(testSph);
-    if (err >= allowError){
+    if (err >= allowError) {
       OUTPUTINFO("Error is too large trying to optimise %f\n", err);
       optimiser->optimise(&testSph, surRep, allowError, parSph);
       err = computeWorstErr(testSph);
       thisSetOpt = true;
-      }
+    }
     OUTPUTINFO("allowErr = %f (%f)\n", allowError, allowExtra);
     OUTPUTINFO("numSph = %d err = %f\n", numSph, err);
 
-    if (err > allowError){
+    if (err > allowError) {
       //  can't accept that change as too much error is introduced
-      OUTPUTINFO("Nah we will stick with what we had (%d)\n", numSph+1);
+      OUTPUTINFO("Nah we will stick with what we had (%d)\n", numSph + 1);
       break;
-      }
-    else{
+    } else {
       //  change is ok - save spheres
       spheres->clone(testSph);
       fullyOpt = thisSetOpt;
-      }
     }
+  }
 
   if (!fullyOpt)
     optimiser->optimise(spheres, surRep, -1, parSph);

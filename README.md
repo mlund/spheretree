@@ -1,3 +1,5 @@
+[![Build](https://github.com/mlund/spheretree/actions/workflows/cmake-single-platform.yml/badge.svg)](https://github.com/mlund/spheretree/actions/workflows/cmake-single-platform.yml)
+
 # SPHERE TREE CONSTRUCTION TOOLKIT
 
 Copyright 2003 Image Synthesis Group, Trinity College Dublin, Ireland.
@@ -290,7 +292,7 @@ code which is distributed with the program.  However, the numerical recipes
 code is not allowed to be redistributed and so you have to find the following
 files yourself.  An althernative might be to port the NR dependent code to use
 freely available code - if you do this i would be most interested in finding out.
-The following files are needed: complex.c complex.h nrutils.c nrutils.h svd.c svd.h
+The following files are needed: `complex.c`, `complex.h`, `nrutils.c`, `nrutils.h`, `svd.c`, `svd.h`
 (some of these can be downloaded for free from http://www.nr.com/public-domain.html)
 
 The distribution also contains the following sources from other people:
@@ -306,10 +308,10 @@ Every effort has been made to ensure that we are not distributing copyrighted
 material.  However, if you find that we are distributing something against its
 copyright policy please let us know and we will gladly rectify it.
 
-### Windows
+### Windows and MS Visual Studio
 
 The distribution contains workspace files for Microsoft Visual C++ v6.  These
-files are located in the vc directory.  The spheretree.dsw contains all the
+files are located in the `vc/` directory.  The spheretree.dsw contains all the
 projects which can used to build the GUI and command line programs.  The GUI
 program requires MFC and OpenGL to compile.  The windows code is also capable
 of loading Rhino3D files using the RhinoIO API.  Uncomment `#define USE_RHINO_IO`
@@ -320,10 +322,19 @@ IMsupport.h (you'll definitely need to know what you are doing with the librarie
 and headers for this one). The EXE files for the programs will be put in the
 build folder under either debug or release.
 
-### UNIX
+### Unix-like systems
 
-To compile the programs in a UNIX-like environment simply go into the directory
-where you extracted the archive, run the configure script using `./configure` and
-then build the programs using the command "make".  The command line programs will
-be built in the "src" directory.
+A CMake build configuration is provided by `yixuanzhou@sjtu.edu.cn`, using the fantastic
+[cmake-template](https://github.com/cpp-best-practices/cmake_template/tree/main). 
+
+```console
+cmake -B build .
+cmake --build build
+```
+
+For a debug build, add `-DCMAKE_BUILD_TYPE=Debug` and `-DENABLE_SANITIZER=ON` to the cmake step above.
+The purpose of enabling sanitizers in a project is to detect and debug runtime issues during program execution.
+Sanitizers are a set of tools provided by e.g. GCC and Clang and instrument the code to catch memory-related, threading, and other runtime bugs which may not be easily detectable during regular testing. 
+
+When `ENABLE_SANITIZER` is enabled, `address`, `leak`, `undefined_behavior`, `memory` are enabled.
 

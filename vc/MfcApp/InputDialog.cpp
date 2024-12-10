@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -52,31 +52,26 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CInputDialog dialog
 
-
-CInputDialog::CInputDialog(CWnd* pParent /*=NULL*/)
-	: CDialog(CInputDialog::IDD, pParent)
-{
-	//{{AFX_DATA_INIT(CInputDialog)
-	m_message = _T("");
-	m_input = 0.0f;
-	//}}AFX_DATA_INIT
+CInputDialog::CInputDialog(CWnd *pParent /*=NULL*/)
+    : CDialog(CInputDialog::IDD, pParent) {
+  //{{AFX_DATA_INIT(CInputDialog)
+  m_message = _T("");
+  m_input = 0.0f;
+  //}}AFX_DATA_INIT
 }
 
-
-void CInputDialog::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CInputDialog)
-	DDX_Text(pDX, IDC_MESSAGE, m_message);
-	DDX_Text(pDX, IDC_INPUT, m_input);
-	//}}AFX_DATA_MAP
+void CInputDialog::DoDataExchange(CDataExchange *pDX) {
+  CDialog::DoDataExchange(pDX);
+  //{{AFX_DATA_MAP(CInputDialog)
+  DDX_Text(pDX, IDC_MESSAGE, m_message);
+  DDX_Text(pDX, IDC_INPUT, m_input);
+  //}}AFX_DATA_MAP
 }
-
 
 BEGIN_MESSAGE_MAP(CInputDialog, CDialog)
-	//{{AFX_MSG_MAP(CInputDialog)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+//{{AFX_MSG_MAP(CInputDialog)
+// NOTE: the ClassWizard will add message map macros here
+//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

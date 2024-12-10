@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -39,7 +39,7 @@
 /*
     SphereSetReducer which uses merging algorithm
 
-    Beneficial Merges (i.e. those with reduce error) DOESN'T work well for the 
+    Beneficial Merges (i.e. those with reduce error) DOESN'T work well for the
     merge algorithm and therefore is OFF by default.
 */
 #ifndef _API_MERGE_SPHERE_REDUCER_H_
@@ -50,52 +50,65 @@
 #include "SEBase.h"
 #include "REBase.h"
 
-class SRMerge : public SRVoronoi{
-  public:
-    //  parameters
-    const SFBase *sphereFitter;
-    const SEBase *sphereEval;
+class SRMerge : public SRVoronoi {
+public:
+  //  parameters
+  const SFBase *sphereFitter;
+  const SEBase *sphereEval;
 
-    //  use forming points instead of surRep for coverage (for comparisons)
-    bool useFormingPoints;
+  //  use forming points instead of surRep for coverage (for comparisons)
+  bool useFormingPoints;
 
-    //  consider ALL pairs below this number of spheres
-    int doAllBelow;
+  //  consider ALL pairs below this number of spheres
+  int doAllBelow;
 
-    //  eliminate redundent spheres during merge (will affect later processing)
-    int doRedundantCheckBelow;
-    REBase *redElim;                      //  uses RELargest if none given
+  //  eliminate redundent spheres during merge (will affect later processing)
+  int doRedundantCheckBelow;
+  REBase *redElim; //  uses RELargest if none given
 
-    //  use beneficial merges
-    bool useBeneficial;
+  //  use beneficial merges
+  bool useBeneficial;
 
-    //  constructor
-    SRMerge();
+  //  constructor
+  SRMerge();
 
-    //  reduce sphere set
-    virtual void getSpheres(Array<Sphere> *spheres, int n, const SurfaceRep &surRep, const Sphere *filterSphere = NULL, float parSphereErr = -1) const;
+  //  reduce sphere set
+  virtual void getSpheres(Array<Sphere> *spheres, int n,
+                          const SurfaceRep &surRep,
+                          const Sphere *filterSphere = NULL,
+                          float parSphereErr = -1) const;
 
-  private:
-    //  internals
-    struct Merger{
-      int i1, i2;
-      Sphere s;
-      float cost;
-      float newErr;
-      };
+private:
+  //  internals
+  struct Merger {
+    int i1, i2;
+    Sphere s;
+    float cost;
+    float newErr;
+  };
 
-    void constructMerger(Merger *merger, const Array<MedialSphere> &medialSpheres, const Array<Surface::Point> *surPts, int i1, int i2) const;
-    void constructMergers(Array<Merger> *mergers, const Array<MedialSphere> &medialSpheres, const Array<Surface::Point> *surPts) const;
-    void constructAllMergers(Array<Merger> *mergers, const Array<MedialSphere> &medialSpheres, const Array<Surface::Point> *surPts) const;
-    void applyMerger(Array<Merger> *mergers, Array<MedialSphere> *medialSpheres, const Array<Surface::Point> *surPts, int mergI, bool updateHouseKeeping) const;
+  void constructMerger(Merger *merger, const Array<MedialSphere> &medialSpheres,
+                       const Array<Surface::Point> *surPts, int i1,
+                       int i2) const;
+  void constructMergers(Array<Merger> *mergers,
+                        const Array<MedialSphere> &medialSpheres,
+                        const Array<Surface::Point> *surPts) const;
+  void constructAllMergers(Array<Merger> *mergers,
+                           const Array<MedialSphere> &medialSpheres,
+                           const Array<Surface::Point> *surPts) const;
+  void applyMerger(Array<Merger> *mergers, Array<MedialSphere> *medialSpheres,
+                   const Array<Surface::Point> *surPts, int mergI,
+                   bool updateHouseKeeping) const;
 
-    void saveImage(const Array<MedialSphere> &medialSpheres, const Merger &merger, int numMax) const;
+  void saveImage(const Array<MedialSphere> &medialSpheres, const Merger &merger,
+                 int numMax) const;
 
-    //  statics
-    static void mergeLists(Array<int> *dest, const Array<int> &l);
-    static void combineLists(Array<int> *dest, const Array<int> &l1, const Array<int> &l2);
+  //  statics
+  static void mergeLists(Array<int> *dest, const Array<int> &l);
+  static void combineLists(Array<int> *dest, const Array<int> &l1,
+                           const Array<int> &l2);
 
-    friend class STGHubbard;
+  friend class STGHubbard;
 };
 
 #endif

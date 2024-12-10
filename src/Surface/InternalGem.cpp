@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -37,24 +37,20 @@
 \**************************************************************************/
 
 /*
-    Ported from Graphics Gems V Point in Polyhedron Testing using Sphereical Polygons
-    Paulo Cezar Pinto Carvalho and Paulo Roma Cavalcanti (Pages 42-49)
+    Ported from Graphics Gems V Point in Polyhedron Testing using Sphereical
+   Polygons Paulo Cezar Pinto Carvalho and Paulo Roma Cavalcanti (Pages 42-49)
 */
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#define min(a,b) ((a)<(b)?(a):(b))
-#endif
 
 #define PI 3.141592653589793324
 
 #include "InternalGem.h"
-
+#include <algorithm>
 /*=========================  geo_solid_angle  =========================
-  Calculates the solid angle given by the spherical projection of 
+  Calculates the solid angle given by the spherical projection of
   a 3D plane polygon
 */
-double geo_solid_angle (const Point3D &pTest, const Point3D p[3]){
-  int      i;
+double geo_solid_angle(const Point3D &pTest, const Point3D p[3]) {
+  int i;
   double area = 0.0, ang, s, l1, l2;
   Vector3D r1, b, n1, n2, tmp;
 
@@ -65,11 +61,11 @@ double geo_solid_angle (const Point3D &pTest, const Point3D p[3]){
   plane.cross(e1, e2);
   plane.norm();
 
-  /* 
+  /*
     WARNING: at this point, a practical implementation should check
     whether p is too close to the polygon plane. If it is, then
-    there are two possibilities: 
-      a) if the projection of p onto the plane is outside the 
+    there are two possibilities:
+      a) if the projection of p onto the plane is outside the
          polygon, then area zero should be returned;
       b) otherwise, p is on the polyhedron boundary.
   */
@@ -78,9 +74,9 @@ double geo_solid_angle (const Point3D &pTest, const Point3D p[3]){
   Vector3D a;
   a.difference(p2, p1);
 
-  for (i = 0; i < 3; i++){
+  for (i = 0; i < 3; i++) {
     r1.difference(pTest, p1);
-    p2 = p[(i+1)%3];
+    p2 = p[(i + 1) % 3];
     b.difference(p2, p1);
 
     n1.cross(a, r1);
@@ -89,8 +85,8 @@ double geo_solid_angle (const Point3D &pTest, const Point3D p[3]){
     n2.cross(r1, b);
     float l2 = n2.mag();
 
-    float s = n1.dot(n2) / (l1*l2);
-    float ang = acos(max(-1.0, min(1.0,s)));
+    float s = n1.dot(n2) / (l1 * l2);
+    float ang = acos(std::max(-1.0f, std::min(1.0f, s)));
 
     tmp.cross(b, a);
     s = tmp.dot(plane);
@@ -98,16 +94,16 @@ double geo_solid_angle (const Point3D &pTest, const Point3D p[3]){
 
     a.scale(b, -1);
     p1 = p2;
-    }
- area -= PI;
+  }
+  area -= PI;
 
- return (plane.dot(r1) > 0.0) ? -area : area; 
+  return (plane.dot(r1) > 0.0) ? -area : area;
 }
 
-bool insideSurfaceGem(const Point3D &p, const Surface &s){
+bool insideSurfaceGem(const Point3D &p, const Surface &s) {
   double area = 0;
   int numTri = s.triangles.getSize();
-  for (int i = 0; i < numTri; i++){
+  for (int i = 0; i < numTri; i++) {
     const Surface::Triangle *tri = &s.triangles.index(i);
 
     Point3D P[3];
@@ -115,8 +111,8 @@ bool insideSurfaceGem(const Point3D &p, const Surface &s){
     P[1] = s.vertices.index(tri->v[1]).p;
     P[2] = s.vertices.index(tri->v[2]).p;
 
-    area += geo_solid_angle(p, P); 
-    }
+    area += geo_solid_angle(p, P);
+  }
 
-  return (area > 2*PI) || (area < -2*PI);
+  return (area > 2 * PI) || (area < -2 * PI);
 }

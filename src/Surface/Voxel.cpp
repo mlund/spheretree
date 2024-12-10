@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -43,29 +43,28 @@
 /*
     Level of the Voxel Tree
 */
-VoxelLevel::VoxelLevel(){
+VoxelLevel::VoxelLevel() {
   d = 0;
   l = 0;
 }
 
-void VoxelLevel::setup(const Point3D pMin, float l, int d){
-  flags.resize(d*d*d);
+void VoxelLevel::setup(const Point3D pMin, float l, int d) {
+  flags.resize(d * d * d);
   this->d = d;
   this->l = l;
   this->pMin = pMin;
 }
 
-char VoxelLevel::getFlag(int x, int y, int z) const{
-  return flags.index(x*d*d + y*d + z);
+char VoxelLevel::getFlag(int x, int y, int z) const {
+  return flags.index(x * d * d + y * d + z);
 }
 
-void VoxelLevel::setFlag(int x, int y, int z, char val){
-  flags.index(x*d*d + y*d + z) = val;
+void VoxelLevel::setFlag(int x, int y, int z, char val) {
+  flags.index(x * d * d + y * d + z) = val;
 }
 
-char VoxelLevel::getFlag(const Point3D &p) const{
-  if (p.x < pMin.x || p.x > pMin.x + l ||
-      p.y < pMin.y || p.y > pMin.y + l ||
+char VoxelLevel::getFlag(const Point3D &p) const {
+  if (p.x < pMin.x || p.x > pMin.x + l || p.y < pMin.y || p.y > pMin.y + l ||
       p.z < pMin.z || p.z > pMin.z + l)
     return VL_FLAG_OUTSIDE;
 
@@ -82,41 +81,40 @@ char VoxelLevel::getFlag(const Point3D &p) const{
     return VL_FLAG_OUTSIDE;
 }
 
-void VoxelLevel::getMinPt(Point3D *p, int x, int y, int z) const{
+void VoxelLevel::getMinPt(Point3D *p, int x, int y, int z) const {
   float cL = getLength();
-  p->x = pMin.x + x*cL;
-  p->y = pMin.y + y*cL;
-  p->z = pMin.z + z*cL;
+  p->x = pMin.x + x * cL;
+  p->y = pMin.y + y * cL;
+  p->z = pMin.z + z * cL;
 }
 
-void VoxelLevel::getMaxPt(Point3D *p, int x, int y, int z) const{
+void VoxelLevel::getMaxPt(Point3D *p, int x, int y, int z) const {
   float cL = getLength();
-  p->x = pMin.x + (x+1)*cL;
-  p->y = pMin.y + (y+1)*cL;
-  p->z = pMin.z + (z+1)*cL;
+  p->x = pMin.x + (x + 1) * cL;
+  p->y = pMin.y + (y + 1) * cL;
+  p->z = pMin.z + (z + 1) * cL;
 }
 
-void VoxelLevel::getMidPt(Point3D *p, int x, int y, int z) const{
+void VoxelLevel::getMidPt(Point3D *p, int x, int y, int z) const {
   float cL = getLength();
-  p->x = pMin.x + (x+0.5)*cL;
-  p->y = pMin.y + (y+0.5)*cL;
-  p->z = pMin.z + (z+0.5)*cL;
+  p->x = pMin.x + (x + 0.5) * cL;
+  p->y = pMin.y + (y + 0.5) * cL;
+  p->z = pMin.z + (z + 0.5) * cL;
 }
 
-float VoxelLevel::getLength() const{
-  return l / (float) d;
-}
+float VoxelLevel::getLength() const { return l / (float)d; }
 
 /*
     Voxel Tree
 */
-VoxelTree::VoxelTree(){
+VoxelTree::VoxelTree() {
   sur = NULL;
   faceHash = NULL;
   faceHashHiRes = NULL;
 }
 
-void VoxelTree::setup(const Surface &sur, const SpacialHash &faceHash, const SpacialHash &faceHashHiRes, int numLevels){
+void VoxelTree::setup(const Surface &sur, const SpacialHash &faceHash,
+                      const SpacialHash &faceHashHiRes, int numLevels) {
   this->sur = &sur;
   this->faceHash = &faceHash;
   this->faceHashHiRes = &faceHashHiRes;
@@ -144,61 +142,65 @@ void VoxelTree::setup(const Surface &sur, const SpacialHash &faceHash, const Spa
     tris.index(i) = i;
 
   //  fill the levels
-  fillChildren(sur, faceHash, faceHashHiRes, 0, 0, 0, 0, tris, numLevels, pMin, l/2.0);
+  fillChildren(sur, faceHash, faceHashHiRes, 0, 0, 0, 0, tris, numLevels, pMin,
+               l / 2.0);
 
   //  verify lowest set of cells
-/*{
-  const VoxelLevel *vl = &level;
-  float eL = vl->getLength();
-  int d = vl->getD();
-  OUTPUTINFO("d = %d\n", d);
-  for (int i = 0; i < d; i++){
-    for (int j = 0; j < d; j++){
-      for (int k = 0; k < d; k++){
-        char flag = vl->getFlag(i, j, k);
+  /*{
+    const VoxelLevel *vl = &level;
+    float eL = vl->getLength();
+    int d = vl->getD();
+    OUTPUTINFO("d = %d\n", d);
+    for (int i = 0; i < d; i++){
+      for (int j = 0; j < d; j++){
+        for (int k = 0; k < d; k++){
+          char flag = vl->getFlag(i, j, k);
 
-        Point3D pMin;
-        vl->getMinPt(&pMin, i, j, k);
-        Point3D pMid;
-        vl->getMidPt(&pMid, i, j, k);
+          Point3D pMin;
+          vl->getMinPt(&pMin, i, j, k);
+          Point3D pMid;
+          vl->getMidPt(&pMid, i, j, k);
 
-        char flag1 = vl->getFlag(pMid);
-        if (flag1 != flag)
-          OUTPUTINFO("Test Fail : %d %d\n", flag, flag1);
+          char flag1 = vl->getFlag(pMid);
+          if (flag1 != flag)
+            OUTPUTINFO("Test Fail : %d %d\n", flag, flag1);
 
-        Array<int> selTri;
-        filterTriangles(&selTri, tris, sur, pMin, eL);
-        OUTPUTINFO("%d Triangles\n", selTri.getSize());
-        if (selTri.getSize()){
-          //  EDGE
-          if (flag != VL_FLAG_EDGE)
-            OUTPUTINFO("Should be VL_FLAG_EDGE was (%d)\n", flag);
-          }
-        else{
-          //  IN/OUT
-          bool in = ::insideSurface(pMid, sur, sh);
+          Array<int> selTri;
+          filterTriangles(&selTri, tris, sur, pMin, eL);
+          OUTPUTINFO("%d Triangles\n", selTri.getSize());
+          if (selTri.getSize()){
+            //  EDGE
+            if (flag != VL_FLAG_EDGE)
+              OUTPUTINFO("Should be VL_FLAG_EDGE was (%d)\n", flag);
+            }
+          else{
+            //  IN/OUT
+            bool in = ::insideSurface(pMid, sur, sh);
 
-          if (in && flag != VL_FLAG_INTERNAL)
-            OUTPUTINFO("Should be VL_FLAG_INTERNAL was (%d)\n", flag);
-          else if (!in && flag != VL_FLAG_OUTSIDE)
-            OUTPUTINFO("Should be VL_FLAG_INTERNAL was (%d)\n", flag);
+            if (in && flag != VL_FLAG_INTERNAL)
+              OUTPUTINFO("Should be VL_FLAG_INTERNAL was (%d)\n", flag);
+            else if (!in && flag != VL_FLAG_OUTSIDE)
+              OUTPUTINFO("Should be VL_FLAG_INTERNAL was (%d)\n", flag);
+            }
           }
         }
       }
-    }
-  }*/
+    }*/
 }
 
-void VoxelTree::fillChildren(const Surface &sur, const SpacialHash &faceHash, const SpacialHash &faceHashHiRes, int levelNum, int pX, int pY, int pZ, const Array<int> &tris, int numLevels, const Point3D &PMIN, float eL){
+void VoxelTree::fillChildren(const Surface &sur, const SpacialHash &faceHash,
+                             const SpacialHash &faceHashHiRes, int levelNum,
+                             int pX, int pY, int pZ, const Array<int> &tris,
+                             int numLevels, const Point3D &PMIN, float eL) {
   //  for each voxel
-  for (int x = 0; x < 2; x++){
-    int cX = pX*2 + x;
+  for (int x = 0; x < 2; x++) {
+    int cX = pX * 2 + x;
 
-    for (int y = 0; y < 2; y++){  
-      int cY = pY*2 + y;
+    for (int y = 0; y < 2; y++) {
+      int cY = pY * 2 + y;
 
-      for (int z = 0; z < 2; z++){
-        int cZ = pZ*2 + z;
+      for (int z = 0; z < 2; z++) {
+        int cZ = pZ * 2 + z;
 
         Point3D pMin;
         pMin.x = PMIN.x + cX * eL;
@@ -208,57 +210,60 @@ void VoxelTree::fillChildren(const Surface &sur, const SpacialHash &faceHash, co
         //  test if the cell is an edge cell
         Array<int> subTris;
         filterTriangles(&subTris, tris, sur, pMin, eL);
-        if (subTris.getSize()){
-          if (levelNum == numLevels-1)
+        if (subTris.getSize()) {
+          if (levelNum == numLevels - 1)
             level.setFlag(cX, cY, cZ, VL_FLAG_EDGE);
           else
-            fillChildren(sur, faceHash, faceHashHiRes, levelNum+1, cX, cY, cZ, subTris, numLevels, PMIN, eL/2.0);
-          }
-        else{
+            fillChildren(sur, faceHash, faceHashHiRes, levelNum + 1, cX, cY, cZ,
+                         subTris, numLevels, PMIN, eL / 2.0);
+        } else {
           //  test if the cell is inside the object
           Point3D pMid;
-          pMid.x = PMIN.x + (cX + 0.5)* eL;
-          pMid.y = PMIN.y + (cY + 0.5)* eL;
-          pMid.z = PMIN.z + (cZ + 0.5)* eL;
+          pMid.x = PMIN.x + (cX + 0.5) * eL;
+          pMid.y = PMIN.y + (cY + 0.5) * eL;
+          pMid.z = PMIN.z + (cZ + 0.5) * eL;
 
           bool in = ::insideSurface(pMid, sur, faceHash, faceHashHiRes);
-          char flag = in? VL_FLAG_INTERNAL : VL_FLAG_OUTSIDE;
-          if (levelNum == numLevels-1)
+          char flag = in ? VL_FLAG_INTERNAL : VL_FLAG_OUTSIDE;
+          if (levelNum == numLevels - 1)
             level.setFlag(cX, cY, cZ, flag);
           else
-            fillFlags(levelNum+1, cX, cY, cZ, flag, numLevels);
-          }
+            fillFlags(levelNum + 1, cX, cY, cZ, flag, numLevels);
         }
       }
     }
+  }
 }
 
-void VoxelTree::fillFlags(int levelNum, int pX, int pY, int pZ, int flag, int numLevels){
+void VoxelTree::fillFlags(int levelNum, int pX, int pY, int pZ, int flag,
+                          int numLevels) {
   //  left over from the days of having multiple levels - TIDY UP
 
   //  for each voxel
-  for (int x = 0; x < 2; x++){
-    int cX = pX*2 + x;
+  for (int x = 0; x < 2; x++) {
+    int cX = pX * 2 + x;
 
-    for (int y = 0; y < 2; y++){  
-      int cY = pY*2 + y;
+    for (int y = 0; y < 2; y++) {
+      int cY = pY * 2 + y;
 
-      for (int z = 0; z < 2; z++){
-        int cZ = pZ*2 + z;
-        if (levelNum == numLevels-1)
+      for (int z = 0; z < 2; z++) {
+        int cZ = pZ * 2 + z;
+        if (levelNum == numLevels - 1)
           level.setFlag(cX, cY, cZ, flag);
         else
-          fillFlags(levelNum+1, cX, cY, cZ, flag, numLevels);
-        }
+          fillFlags(levelNum + 1, cX, cY, cZ, flag, numLevels);
       }
     }
+  }
 }
 
-void VoxelTree::filterTriangles(Array<int> *selTris, const Array<int> &srcTris, const Surface &sur, const Point3D &pMin, float edgeLength){
+void VoxelTree::filterTriangles(Array<int> *selTris, const Array<int> &srcTris,
+                                const Surface &sur, const Point3D &pMin,
+                                float edgeLength) {
   selTris->setSize(0);
 
   int numTris = srcTris.getSize();
-  for (int i = 0; i < numTris; i++){
+  for (int i = 0; i < numTris; i++) {
     //  get triangle
     int tNum = srcTris.index(i);
     const Surface::Triangle *tri = &sur.triangles.index(tNum);
@@ -270,20 +275,19 @@ void VoxelTree::filterTriangles(Array<int> *selTris, const Array<int> &srcTris, 
 
     if (overlapTest(pMin, edgeLength, pTri))
       selTris->addItem() = tNum;
-    }
+  }
 }
 
-bool VoxelTree::insideSurface(const Point3D &p, ClosestPointInfo *inf) const{
+bool VoxelTree::insideSurface(const Point3D &p, ClosestPointInfo *inf) const {
   if (inf)
     inf->type = DIST_TYPE_INVALID;
 
   //  index the bottom level directly
   const VoxelLevel *vl = &level;
   char flag = vl->getFlag(p);
-  if (flag == VL_FLAG_EDGE){
+  if (flag == VL_FLAG_EDGE) {
     return ::insideSurface(p, *sur, *faceHash, *faceHashHiRes, inf);
-    }
-  else{
+  } else {
     return (flag == VL_FLAG_INTERNAL);
-    }
+  }
 }

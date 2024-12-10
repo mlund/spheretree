@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -38,24 +38,24 @@
 
 #include "RELargest.h"
 
-int RELargest::selectSphere(const Array<int> &counts, 
-                            const Array<bool> &coveredPts, 
-                            const Array<Array<int>/**/> &contPts, 
-                            double *selMet, double maxMet) const{
+int RELargest::selectSphere(const Array<int> &counts,
+                            const Array<bool> &coveredPts,
+                            const Array<Array<int> /**/> &contPts,
+                            double *selMet, double maxMet) const {
   //  find the valid sphere with most uncovered points
   int maxI = -1;
   float maxNum = 0;
   int numSph = counts.getSize();
-  for (int i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++) {
     int count = counts.index(i);
-    if (count > maxNum && count < maxMet){
+    if (count > maxNum && count < maxMet) {
       maxI = i;
       maxNum = count;
-      }
     }
+  }
 
-  //if (selMet)       //  used internally so we are safe enough
-    *selMet = maxNum;
+  // if (selMet)       //  used internally so we are safe enough
+  *selMet = maxNum;
 
   return maxI;
 }

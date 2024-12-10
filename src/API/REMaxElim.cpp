@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -38,16 +38,16 @@
 
 #include "REMaxElim.h"
 
-int REMaxElim::selectSphere(const Array<int> &counts, 
-                            const Array<bool> &coveredPts, 
-                            const Array<Array<int>/**/> &pointsPerSphere,
-                            double *selMet, double maxMet) const{
+int REMaxElim::selectSphere(const Array<int> &counts,
+                            const Array<bool> &coveredPts,
+                            const Array<Array<int> /**/> &pointsPerSphere,
+                            double *selMet, double maxMet) const {
   const Array<Surface::Point> *surPts = surRep->getSurPts();
 
   int maxI = -1, maxCount = 0;
   int numSph = srcSpheres->getSize();
   int numPts = surPts->getSize();
-  for (int i = 0; i < numSph; i++){
+  for (int i = 0; i < numSph; i++) {
     //  only do valid spheres
     if (counts.index(i) <= 0)
       continue;
@@ -57,21 +57,21 @@ int REMaxElim::selectSphere(const Array<int> &counts,
     tmpCover.clone(coveredPts);
     const Array<int> *list = &pointsPerSphere.index(i);
     int numList = list->getSize();
-    for (int j = 0; j < numList; j++){
+    for (int j = 0; j < numList; j++) {
       int num = list->index(j);
       tmpCover.index(num) = true;
-      }
+    }
 
     //  count the spheres that will be removed
     int count = 0;
-    for (int j = 0; j < numSph; j++){
+    for (int j = 0; j < numSph; j++) {
       //  only do valid spheres
       if (j == i || counts.index(j) <= 0)
         continue;
 
       //  early terminate
       if (count + (numSph - j) < maxCount)
-        break;  //  not enough sphere to break current max
+        break; //  not enough sphere to break current max
       else if (count > maxMet)
         break;
 
@@ -79,22 +79,22 @@ int REMaxElim::selectSphere(const Array<int> &counts,
       const Array<int> *list = &pointsPerSphere.index(j);
       int numList = list->getSize();
       int k;
-      for (k = 0; k < numList; k++){
+      for (k = 0; k < numList; k++) {
         int num = list->index(k);
         if (!tmpCover.index(num))
           break;
-        }
+      }
 
       if (k == numList)
         count++;
-      }
+    }
 
     //  update max
-    if (count > maxCount && count < maxMet){
+    if (count > maxCount && count < maxMet) {
       maxCount = count;
       maxI = i;
-      }
     }
+  }
 
   if (selMet)
     *selMet = maxCount;

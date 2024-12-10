@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -45,60 +45,56 @@
 #include "Point2D.h"
 #include <math.h>
 
-class Line2D{
-  public:
-    REAL a, b, c;
+class Line2D {
+public:
+  REAL a, b, c;
 
-    //  constructor
-    __inline Line2D(){}
+  //  constructor
+  __inline Line2D() {}
 
-    __inline Line2D(REAL a, REAL b, REAL c){
-      this->a = a;
-      this->b = b;
-      this->c = c;
-      }
+  __inline Line2D(REAL a, REAL b, REAL c) {
+    this->a = a;
+    this->b = b;
+    this->c = c;
+  }
 
-    __inline Line2D(const Line2D &l){
-      assign(l);
-      }
+  __inline Line2D(const Line2D &l) { assign(l); }
 
-    __inline Line2D(const Point2D &p0, const Point2D &p1){
-      assign(p0, p1);
-      }
+  __inline Line2D(const Point2D &p0, const Point2D &p1) { assign(p0, p1); }
 
-    //  assignment
-    __inline void assign(REAL a, REAL b, REAL c){
-      this->a = a;
-      this->b = b;
-      this->c = c;
-      }
+  //  assignment
+  __inline void assign(REAL a, REAL b, REAL c) {
+    this->a = a;
+    this->b = b;
+    this->c = c;
+  }
 
-    __inline void assign(const Line2D &l){
-      a = l.a;
-      b = l.b;
-      c = l.c;
-      }
+  __inline void assign(const Line2D &l) {
+    a = l.a;
+    b = l.b;
+    c = l.c;
+  }
 
-    __inline void assign(const Point2D &p0, const Point2D &p1){
-      a = p0.y - p1.y;
-      b = p1.x - p0.x;
-      c = p1.y*p0.x - p1.x*p0.y;
-      }
+  __inline void assign(const Point2D &p0, const Point2D &p1) {
+    a = p0.y - p1.y;
+    b = p1.x - p0.x;
+    c = p1.y * p0.x - p1.x * p0.y;
+  }
 
-    //  intersection
-    bool intersect(Point2D *p, const Line2D &l) const;
+  //  intersection
+  bool intersect(Point2D *p, const Line2D &l) const;
 
-    //  distance
-    __inline REAL distance(const Point2D &p) const{
-      return p.x*a + p.y*b + c;
-      }
+  //  distance
+  __inline REAL distance(const Point2D &p) const {
+    return p.x * a + p.y * b + c;
+  }
 
-    __inline REAL distanceNorm(const Point2D &p) const{
-      return (p.x*a + p.y*b + c)/sqrt(a*a + b*b);
-      }
+  __inline REAL distanceNorm(const Point2D &p) const {
+    return (p.x * a + p.y * b + c) / sqrt(a * a + b * b);
+  }
 
-    //  projection
-    void project(Point2D *p, const Point2D &q) const;
+  //  projection
+  void project(Point2D *p, const Point2D &q) const;
 };
 
 #endif

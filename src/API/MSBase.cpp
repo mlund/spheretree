@@ -13,15 +13,15 @@
 
                              D I S C L A I M E R
 
-  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR 
+  IN NO EVENT SHALL TRININTY COLLEGE DUBLIN BE LIABLE TO ANY PARTY FOR
   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING,
-  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE 
-  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF 
+  BUT NOT LIMITED TO, LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+  AND ITS DOCUMENTATION, EVEN IF TRINITY COLLEGE DUBLIN HAS BEEN ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGES.
 
-  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED 
-  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
-  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY 
+  TRINITY COLLEGE DUBLIN DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE.  THE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND TRINITY
   COLLEGE DUBLIN HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
   ENHANCEMENTS, OR MODIFICATIONS.
 
@@ -41,19 +41,16 @@
 #include "../Base/Defs.h"
 
 //  constructor
-MSBase::MSBase(){
-  sur = NULL;
-}
+MSBase::MSBase() { sur = NULL; }
 
 // setup
-void MSBase::setSurface(const Surface &sur){
-  this->sur = &sur;
-}
+void MSBase::setSurface(const Surface &sur) { this->sur = &sur; }
 
 /*
     Area of Triangle (half base * perpendicular height) p0->p1 is the base
 */
-float MSBase::areaTriangle(const Point3D &p0, const Point3D &p1, const Point3D &p2){
+float MSBase::areaTriangle(const Point3D &p0, const Point3D &p1,
+                           const Point3D &p2) {
   //  size of sides
   Vector3D v1, v2;
   v1.difference(p1, p0);
@@ -72,33 +69,34 @@ float MSBase::areaTriangle(const Point3D &p0, const Point3D &p1, const Point3D &
   float theta = acos(d);
   float H = A * sin(theta);
 
-  float AREA = B*H/2.0f;
+  float AREA = B * H / 2.0f;
   return AREA;
-/*
-  //  vectors for vertices
-  Vector3D V0(p0), V1(p1), V2(p2);
-  Vector3D V20, V01, V12;
-  V20.cross(V2, V0);
-  V01.cross(V0, V1);
-  V12.cross(V1, V2);
+  /*
+    //  vectors for vertices
+    Vector3D V0(p0), V1(p1), V2(p2);
+    Vector3D V20, V01, V12;
+    V20.cross(V2, V0);
+    V01.cross(V0, V1);
+    V12.cross(V1, V2);
 
-  Vector3D Va, Vb;
-  Va.difference(p1, p0);
-  Vb.difference(p2, p0);
+    Vector3D Va, Vb;
+    Va.difference(p1, p0);
+    Vb.difference(p2, p0);
 
-  Vector3D N;
-  N.cross(Va, Vb);
-  N.norm();
+    Vector3D N;
+    N.cross(Va, Vb);
+    N.norm();
 
-  V20.add(V01);
-  V20.add(V12);
+    V20.add(V01);
+    V20.add(V12);
 
-  float AREA1 = fabs(N.dot(V20)) * 0.5;
-  OUTPUTINFO("Area1 = %f\n", AREA1);
-  return AREA1;*/
+    float AREA1 = fabs(N.dot(V20)) * 0.5;
+    OUTPUTINFO("Area1 = %f\n", AREA1);
+    return AREA1;*/
 }
 
-void MSBase::attributeCountsToFaces(Array<int> *counts, const Surface &sur, int numSam){
+void MSBase::attributeCountsToFaces(Array<int> *counts, const Surface &sur,
+                                    int numSam) {
   /*
     Sample triangulated surface,
     probability of placing a point in a triangle
@@ -107,28 +105,29 @@ void MSBase::attributeCountsToFaces(Array<int> *counts, const Surface &sur, int 
 
   //  setup areas
   int numTris = sur.triangles.getSize();
-  SamplerInfo *infos = new SamplerInfo[numTris]; 
-  try{
-    for (int i = 0; i < numTris; i++){
+  SamplerInfo *infos = new SamplerInfo[numTris];
+  try {
+    for (int i = 0; i < numTris; i++) {
       const Surface::Triangle *tr = &sur.triangles.index(i);
-      float area = areaTriangle(sur.vertices.index(tr->v[1]).p, sur.vertices.index(tr->v[2]).p, sur.vertices.index(tr->v[0]).p);
+      float area = areaTriangle(sur.vertices.index(tr->v[1]).p,
+                                sur.vertices.index(tr->v[2]).p,
+                                sur.vertices.index(tr->v[0]).p);
       infos[i].val = area;
-      }
+    }
 
     sampleDomain(counts, infos, numTris, numSam);
-    }
-  catch(...){
-    delete [] infos;
+  } catch (...) {
+    delete[] infos;
     throw;
-    }
+  }
 
-  delete [] infos;
+  delete[] infos;
 }
 
-bool MSBase::inTriangle(const Point2D &p, const Line2D l[3]){
-  for (int i = 0; i < 3; i++){
+bool MSBase::inTriangle(const Point2D &p, const Line2D l[3]) {
+  for (int i = 0; i < 3; i++) {
     if (l[i].distance(p) < -EPSILON_LARGE)
       return FALSE;
-    }
+  }
   return TRUE;
 }
