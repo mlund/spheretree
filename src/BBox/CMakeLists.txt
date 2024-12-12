@@ -13,3 +13,5 @@ add_library(${BOT_LIB_NAME} STATIC
 
 target_link_libraries(${BOT_LIB_NAME} qHull MVBB)
 
+
+SET(BBox_LIBS_OUT MVBB qHull ${BOT_LIB_NAME} PARENT_SCOPE)

@@ -7,3 +7,5 @@ add_subdirectory(pcube)
 
 target_link_libraries(${BOT_LIB_NAME} pcube Matrix)
 
+
+SET(Geometry_LIBS_OUT pcube ${BOT_LIB_NAME} PARENT_SCOPE)

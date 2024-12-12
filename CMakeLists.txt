@@ -34,7 +34,10 @@ add_subdirectory(src/Surface)
 add_subdirectory(src/Export)
 
 # Create STG library
-add_library(STG STATIC src/null.c)
+add_library(STG STATIC
+        "src/DecodeParam.cpp"
+        "src/VerifyModel.cpp"
+        "src/EvalTree.cpp")
 
 # Include compiler warnings module
 include(CompilerWarnings)
@@ -44,21 +47,21 @@ endif()
 
 # Link dependent libraries to STG
 set(LIBS_TO_LINK
-    API
-    Base
-    BBox
-    Exceptions
-    Geometry
-    Matrix
-    MedialAxis
-    MinMax
-    SphereTree
-    Storage
-    Surface
-    Export
+        ${API_LIBS_OUT}
+        Base
+        ${BBox_LIBS_OUT}
+        Exceptions
+        ${Geometry_LIBS_OUT}
+        Matrix
+        MedialAxis
+        MinMax
+        SphereTree
+        Storage
+        Surface
+        Export
 )
+set(LIBS_TO_LINK_OUT STG ${LIBS_TO_LINK} PARENT_SCOPE)
 target_link_libraries(STG PUBLIC ${LIBS_TO_LINK})
-
 
 # Enable sanitizers
 if(ENABLE_SANITIZER)
@@ -85,34 +88,22 @@ endfunction()
 # Add executables
 add_custom_executable(makeTreeMedial
     "src/makeTreeMedial.cpp"
-    "src/DecodeParam.cpp"
-    "src/EvalTree.cpp"
-    "src/VerifyModel.cpp"
 )
 
 add_custom_executable(makeTreeHubbard
     "src/makeTreeHubbard.cpp"
-    "src/DecodeParam.cpp"
-    "src/VerifyModel.cpp"
 )
 
 add_custom_executable(makeTreeOctree
     "src/makeTreeOctree.cpp"
-    "src/DecodeParam.cpp"
 )
 
 add_custom_executable(makeTreeGrid
     "src/makeTreeGrid.cpp"
-    "src/DecodeParam.cpp"
-    "src/VerifyModel.cpp"
-    "src/EvalTree.cpp"
 )
 
 add_custom_executable(makeTreeSpawn
     "src/makeTreeSpawn.cpp"
-    "src/DecodeParam.cpp"
-    "src/VerifyModel.cpp"
-    "src/EvalTree.cpp"
 )
 
 # Include project-specific and external dependencies
