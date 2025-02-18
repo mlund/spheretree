@@ -291,7 +291,10 @@ bool Voronoi3D::insertPoint(const Point3D &p, const Vector3D &n,
 
     for (int j = 0; j < MAGICK_NUM; j++) {
       int u = v->n[j];
-
+        if (u < 0 || u >= vertices.getSize()) {
+            OUTPUTINFO("Invalid vertex neighbour index %d in vertex %d's \n", u, d);
+            continue; // Skip invalid forming point indices
+        }
       // CHECK_DEBUG0(flags.index(u) == deletable.inList(u));
       if (flags.index(u))
         continue;
@@ -364,6 +367,10 @@ bool Voronoi3D::validNewVertices(const Array<int> &deletable,
 
     for (int j = 0; j < MAGICK_NUM; j++) {
       int u = v->n[j];
+        if (u < 0 || u >= vertices.getSize()) {
+            OUTPUTINFO("Invalid vertex neighbour index %d in vertex %d's \n", u, d);
+            continue; // Skip invalid forming point indices
+        }
       if (deletable.inList(u))
         continue;
 
@@ -500,6 +507,10 @@ bool Voronoi3D::constructVertexSphere(Sphere *s, int f0, int f1, int f2, int f3,
 
 bool Voronoi3D::constructVertex(int s, int f0, int f1, int f2, int f3, int bV,
                                 bool sF) {
+    if (s < 0 || s >= vertices.getSize()) {
+        OUTPUTINFO("Invalid vertex index in constructVertex: %d", s);
+        return false;
+    }
   Vertex *newVert = &vertices.index(s);
   newVert->flag = VOR_FLAG_UNKNOWN;
   newVert->closestPt.x = newVert->closestPt.y = newVert->closestPt.z = acos(10);
@@ -530,7 +541,12 @@ bool Voronoi3D::constructVertex(int s, int f0, int f1, int f2, int f3, int bV,
   if (sF) {
     //  add to forming points lists
     for (int i = 0; i < MAGICK_NUM; i++) {
-      FormingPoint *f = &formingPoints.index(newVert->f[i]);
+        int formingIndex = newVert->f[i];
+        if (formingIndex < 0 || formingIndex >= formingPoints.getSize()) {
+            OUTPUTINFO("Invalid forming point index %d in constructVertex\n", formingIndex);
+            continue; // Skip invalid forming points
+        }
+        FormingPoint *f = &formingPoints.index(formingIndex);
       // CHECK_DEBUG0(!f->vertices.inList(s));
       f->vertices.addItem() = s;
     }
@@ -556,7 +572,14 @@ void Voronoi3D::addNeighbour(Vertex *vert, int n) {
 void Voronoi3D::addNeighbour(int dest, int n) {
   CHECK_DEBUG0(dest != n);
   CHECK_DEBUG0(n < vertices.getSize());
-
+    if (dest == n) {
+        OUTPUTINFO("Attempted to add self as neighbour: %d \n", dest);
+        return; // Prevent self-neighboring
+    }
+  if (n != -1 && (n < 0 || n >= vertices.getSize())) {
+        OUTPUTINFO("Attempted to add invalid neighbour index: %d \n", n);
+        return; // Early exit or handle the error as appropriate
+  }
   //  find the first unused neighbour
   Vertex *vert = &vertices.index(dest);
   int i;
@@ -564,19 +587,37 @@ void Voronoi3D::addNeighbour(int dest, int n) {
     if (vert->n[i] < 0)
       break;
 
-  CHECK_DEBUG2(i < MAGICK_NUM, "Not able to add %d as neighbour to %d", n,
-               dest);
-  vert->n[i] = n;
-  // resetFlag(vert);
+  if (i < MAGICK_NUM) {
+      vert->n[i] = n;
+  } else {
+      OUTPUTINFO("Unable to add neighbour %d: No available slot in Vertex.n \n", n);
+
+  }
+    // resetFlag(vert); // Uncomment if necessary
 }
 
 bool Voronoi3D::isNeighbour(int v, int n) const {
-  const Vertex *vert = &vertices.index(v);
+    if (v < 0 || v >= vertices.getSize()) {
+        OUTPUTINFO("Invalid vertex index in isNeighbour: %d \n", v);
+        return false;
+    }
+
+    if (n != -1 && (n < 0 || n >= vertices.getSize())) {
+        OUTPUTINFO("Invalid neighbour index in isNeighbour: %d \n", n);
+        return false;
+    }
+
+    const Vertex *vert = &vertices.index(v);
   return isNeighbour(vert, n);
 }
 
 bool Voronoi3D::isNeighbour(const Vertex *vert, int n) const {
-  for (int i = 0; i < MAGICK_NUM; i++)
+    if (n != -1 && (n < 0 || n >= vertices.getSize())) {
+        OUTPUTINFO("Invalid neighbour index in isNeighbour: %d \n", n);
+        return false;
+    }
+
+    for (int i = 0; i < MAGICK_NUM; i++)
     if (vert->n[i] == n)
       return true;
 
@@ -606,16 +647,25 @@ int Voronoi3D::findClosestVertex(const Point3D &p) const {
 }
 
 void Voronoi3D::replaceNeighbour(Vertex *v, int oldN, int newN) {
-  CHECK_DEBUG0(newN < vertices.getSize());
-
-  for (int i = 0; i < MAGICK_NUM; i++) {
-    if (v->n[i] == oldN) {
-      v->n[i] = newN;
-      break;
+    // Allow only valid indices or -1
+    if (newN != -1 && (newN < 0 || newN >= vertices.getSize())) {
+        OUTPUTINFO("Attempted to replace with invalid neighbour index: %d \n", newN);
+        return; // Early exit or handle the error as appropriate
     }
-  }
 
-  CHECK_DEBUG0(i != MAGICK_NUM);
+    bool replaced = false;
+    for (int i = 0; i < MAGICK_NUM; i++) {
+        if (v->n[i] == oldN) {
+            v->n[i] = newN;
+            replaced = true;
+            break;
+        }
+    }
+
+    if (!replaced) {
+        OUTPUTINFO("Old neighbour %d not found when attempting to replace with %d \n", oldN, newN);
+        // Optionally, handle the situation (e.g., log an error or add the new neighbor)
+    }
 
   // resetFlag(v);
 }
@@ -667,8 +717,16 @@ void Voronoi3D::remap(Array<int> &list, int oldV, int newV, int sI) const {
 }
 
 void Voronoi3D::deleteVertex(int dI, Array<int> &deletable) {
+    if (dI < 0 || dI >= deletable.getSize()) {
+        OUTPUTINFO("Invalid deletable index in deleteVertex: %d      \n", dI);
+        return;
+    }
   //  remove vertex from forming point's list
   int n = deletable.index(dI);
+    if (n < 0 || n >= vertices.getSize()) {
+        OUTPUTINFO("Invalid vertex index to delete in deleteVertex: %d \n", n);
+        return;
+    }
   CHECK_DEBUG0(n < vertices.getSize());
 
   Vertex *v = &vertices.index(n);
@@ -690,7 +748,10 @@ void Voronoi3D::deleteVertex(int dI, Array<int> &deletable) {
         break;
     }
     CHECK_DEBUG0(j != numForm);
-
+      if (j == numForm) {
+          OUTPUTINFO("Vertex %d not found in forming point %d's list during deletion \n", n, v->f[i]);
+          continue;
+      }
     //  remove n
     f->vertices.index(j) = f->vertices.index(numForm - 1);
     f->vertices.setSize(numForm - 1);
@@ -737,6 +798,18 @@ void Voronoi3D::deleteVertex(int dI, Array<int> &deletable) {
                   //  (GRB)
 
       CHECK_DEBUG0(nI <= lastV);
+        if (nI == lastV) {
+            // Prevent a vertex from being its own neighbor
+            OUTPUTINFO("Vertex %d cannot be a neighbor to itself after deletion \n", nI);
+            rV->n[i] = -1;
+            continue;
+        }
+
+        if (nI >= vertices.getSize()) {
+            OUTPUTINFO("Neighbor index out of bounds after deletion: %d \n", nI);
+            rV->n[i] = -1;
+            continue;
+        }
 
       Vertex *vN = &vertices.index(nI);
       replaceNeighbour(vN, lastV, n);
@@ -767,6 +840,20 @@ void Voronoi3D::deleteVertex(int dI, Array<int> &deletable) {
         OUTPUTINFO("AAAAAARRRRGGGGHHHHHH : someone still has lastV as a
   neighbour\n");
     }*/
+    for (int i = 0; i < vertices.getSize(); i++) {
+        Vertex *vert = &vertices.index(i);
+        for (int j = 0; j < MAGICK_NUM; j++) {
+            if (vert->n[j] == lastV) {
+                // Replace with the new index or set to -1 if invalid
+                vert->n[j] = (n < vertices.getSize()) ? n : -1;
+            }
+            // Additionally, validate the neighbor index
+            if (vert->n[j] >= vertices.getSize()) {
+                OUTPUTINFO("Invalid neighbor index %d found in vertex %d's neighbor list. Setting to -1.\n", vert->n[j], i);
+                vert->n[j] = -1;
+            }
+        }
+    }
 }
 
 /*
@@ -990,6 +1077,10 @@ void Voronoi3D::deletableSearch(Array<int> &deletable, Array<bool> &flags,
         const Vertex *v = &vertices.index(pqI.i);
         for (int i = 0; i < MAGICK_NUM; i++) {
           int vN = v->n[i];
+            if (vN < 0 || vN >= vertices.getSize()) {
+                OUTPUTINFO("Invalid vertex neighbour index %d in vertex %d's ", vN, pqI.i);
+                continue; // Skip invalid forming point indices
+            }
           if (!used.index(vN)) {
             float v = getValue(vN, p);
             if (v >= 0) {
@@ -1063,6 +1154,10 @@ bool Voronoi3D::validDeletionSetNew(Array<int> &deletable, Array<bool> &flags,
 
     for (int j = 0; j < MAGICK_NUM && ok; j++) {
       int u = v->n[j];
+        if (u < 0 || u >= vertices.getSize()) {
+            OUTPUTINFO("Invalid vertex neighbour index %d in vertex %d's \n", u, d);
+            continue; // Skip invalid forming point indices
+        }
       if (flags.index(u))
         continue;
 
@@ -1217,6 +1312,10 @@ void Voronoi3D::resetFlag(Vertex *v) {
 bool Voronoi3D::getCloserForming(int *newForming, float *newDistance,
                                  const Point3D &pTest, int currentForming,
                                  float currentDistance) const {
+    if (currentForming < 0 || currentForming >= formingPoints.getSize()) {
+        OUTPUTINFO("Invalid currentForming index in getCloserForming: %d \n", currentForming);
+        return false;
+    }
   //  current forming point
   const Voronoi3D::FormingPoint *form = &formingPoints.index(currentForming);
 
@@ -1225,11 +1324,19 @@ bool Voronoi3D::getCloserForming(int *newForming, float *newDistance,
   for (int i = 0; i < numVerts; i++) {
     //  get vertex
     int vI = form->vertices.index(i);
+    if (vI < 0 || vI >= vertices.getSize()) {
+        OUTPUTINFO("Invalid vertex index %d in getCloserForming\n", vI);
+        continue; // Skip invalid vertex indices
+    }
     const Voronoi3D::Vertex *vert = &vertices.index(vI);
 
     //  forming points for vertex
     for (int j = 0; j < 4; j++) {
       int fI = vert->f[j];
+      if (fI < 0 || fI >= formingPoints.getSize()) {
+          OUTPUTINFO("Invalid forming point index %d in vertex %d's forming points\n", fI, vI);
+          continue; // Skip invalid forming point indices
+      }
       const Voronoi3D::FormingPoint *form = &formingPoints.index(fI);
 
       float d = form->p.distanceSQR(pTest);

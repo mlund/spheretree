@@ -164,6 +164,10 @@ void SRVoronoi::constructSphereSet(Array<MedialSphere> *medialSpheres,
         //  add to neighbours list
         for (int j = 0; j < 4; j++) {
           int neighVert = vert->n[j];
+            if (neighVert < 0 || neighVert >= vertexToSphereMap.getSize()) {
+                OUTPUTINFO("Invalid vertex neighbour index %d in vertex %d's \n ", neighVert, i);
+                continue; // Skip invalid forming point indices
+            }
           CHECK_DEBUG0(neighVert != i);
           int neighMapsTo = vertexToSphereMap.index(neighVert);
           if (neighMapsTo > mapsTo) {

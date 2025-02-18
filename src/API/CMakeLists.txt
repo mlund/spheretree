@@ -6,3 +6,5 @@ add_library(${BOT_LIB_NAME} STATIC
 )
 
 target_link_libraries(${BOT_LIB_NAME} SFWhite)
+
+SET(API_LIBS_OUT SFWhite ${BOT_LIB_NAME} PARENT_SCOPE)

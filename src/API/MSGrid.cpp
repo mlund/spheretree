@@ -85,8 +85,8 @@ void MSGrid::generateSamplesInternal(Array<Surface::Point> *pts, int numSamples,
     //  get normal
     Vector3D n;
     sur.getTriangleNormal(&n, i);
-
-    if (num > 1) {
+    float tArea = areaTriangle(p[0], p[1], p[2]);
+    if (num > 1 && tArea >= 1e-6) {
       //  generate random samples on the triangle
       Array<Point3D> points;
       sampleTriangleGrid(&points, num, p);
@@ -98,7 +98,7 @@ void MSGrid::generateSamplesInternal(Array<Surface::Point> *pts, int numSamples,
         p->p = points.index(j);
         p->n = n;
       }
-    } else /*if (num == 1)*/ {
+    } else /*if (num == 1 || tArea < 1e-6)*/ {
       //  should we use incenter ??
       Surface::Point *s = &pts->addItem();
       s->n = n;
