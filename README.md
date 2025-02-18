@@ -5,7 +5,9 @@
 Copyright 2003 Image Synthesis Group, Trinity College Dublin, Ireland.
 All Rights Reserved.  Please read COPYRIGHT.TXT before using this software.
 
-
+This GitHub repository is _unofficial_ and is an attempt to keep
+the software alive on modern hardware. The build system has been
+updated to CMake; warnings fixed etc.
 
 ## INTRODUCTION
 
